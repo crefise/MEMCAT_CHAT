@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../inc/header.h"
 
 char* i_to_s(int n) {
    int length = snprintf(NULL, 0, "%d", n);

@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../inc/header.h"
 
 static int callback(void *data, int argc, char **argv, char **azColName){
    int i;
@@ -26,7 +26,7 @@ void close_db(sqlite3* db) {
    sqlite3_close(db);
 }
 
-void add_user(int* id, char* login, char* password, sqlite3* db) {
+void add_user_db(int* id, char* login, char* password, sqlite3* db) {
    (*id)++;
    char* id_s = i_to_s(*id);
 
@@ -43,7 +43,7 @@ void add_user(int* id, char* login, char* password, sqlite3* db) {
    free(id_s);
 }
 
-int access(char* login, char* password, sqlite3* db) {
+int access_db(char* login, char* password, sqlite3* db) {
    sqlite3_stmt *result;
    char* statement = "SELECT ID from USERS where LOGIN='";
    statement = concat(statement, login);
@@ -59,13 +59,15 @@ int access(char* login, char* password, sqlite3* db) {
    } 
    rc = sqlite3_step(result);
    if (rc == SQLITE_ROW) {
+      /*
       char* ID_c = sqlite3_column_text(result, 0);
       int ID = 0;
       //printf("USER ID = %s\n", sqlite3_column_text(result, 0));
       sqlite3_finalize(result);
+      */
       free(statement);
       
-      free(ID_c);
+      //free(ID_c);
       return true;
    }
    else {
@@ -76,8 +78,8 @@ int access(char* login, char* password, sqlite3* db) {
 }
 
 void init_db(sqlite3* users_db, sqlite3* chats_db) {
-   open_db("databases/users.db", &users_db);
-   open_db("databases/chats.db", &chats_db);
+   open_db("Server/databases/users.db", &users_db);
+   open_db("Server/databases/chats.db", &chats_db);
 
    exec_db("CREATE TABLE USERS("\
            "ID             INT PRIMARY KEY     NOT NULL,"\
