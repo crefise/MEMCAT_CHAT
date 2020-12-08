@@ -6,15 +6,15 @@ GTK_COMPILE_FLAG = -I"Client/Libs/gtk/include" -L"Client/Libs/gtk/lib" -lgtk-3 -
 
 GTK_FILES = Client/src/gtk.c
 
-SERVER_FILES = Server/src/test_SERVER.c
+SERVER_FILES = Server/src/*.c
 
 CLIENT_FILES = Client/src/test_CLIENT.c
 
 comp_s:
-	@clang $(SERVER_FILES) -o server_run
+	@clang $(SERVER_FILES) -l sqlite3 -o server_run
 
 comp_c:
-	@clang $(CLIENT_FILES) -o client_run
+	@clang $(CLIENT_FILES) -l sqlite3 -o client_run
 
 comp_g:
 	@clang $(GTK_FILES) -o gtk_run $(GTK_COMPILE_FLAG)
