@@ -1,9 +1,8 @@
 #include "../inc/header.h"
+
 #define BUF_SIZE 256;
-int ph_count = 0; // количество подключенных клиентов
-// massage[id][id].....
-// dialogs[id]
-// text_massages[id]
+int ph_count = 0; 
+
 int parse_solution(char *text) {
     if (text[0] == 'm')
         return 1;
