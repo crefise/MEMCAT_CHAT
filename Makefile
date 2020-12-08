@@ -1,13 +1,30 @@
-all: run
+all: compile_all
 
 ORACLE_FLAG = -std=c11 -Wall -Wextra -Wpedantic
 
-GTK_COMPILE_FLAG = -I"Libs/gtk/include" -L"Libs/gtk/lib" -lgtk-3 -lgdk-3 -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,CoreGraphics -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 #-lintl
+GTK_COMPILE_FLAG = -I"Client/Libs/gtk/include" -L"Client/Libs/gtk/lib" -lgtk-3 -lgdk-3 -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,CoreGraphics -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 #-lintl
 
-FILES = main.c
+GTK_FILES = Client/src/gtk.c
 
-run:
-	clang $(FILES) -o test $(GTK_COMPILE_FLAG)
+SERVER_FILES = Server/src/test_SERVER.c
+
+CLIENT_FILES = Client/src/test_CLIENT.c
+
+comp_s:
+	@clang $(SERVER_FILES) -o server_run
+
+comp_c:
+	@clang $(CLIENT_FILES) -o client_run
+
+comp_g:
+	@clang $(GTK_FILES) -o gtk_run $(GTK_COMPILE_FLAG)
+
+compile_all: comp_s comp_c comp_g
 
 install_lib:
-	sh Libs/install_lib_gtk+3.sh
+	sh Client/Libs/install_lib_gtk+3.sh
+
+clear:
+	@rm -rf server_run
+	@rm -rf client_run
+	@rm -rf gtk_run
