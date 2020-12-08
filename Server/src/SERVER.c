@@ -71,6 +71,10 @@ int parse_solution(char *text) {
         return 2;
     if (text[0] == 't')
         return 3;
+    if (text[0] == 'r')
+        return 4;
+    if (text[0] == 'l')
+        return 5;
     return -1;
 }
 
@@ -109,6 +113,14 @@ void *user_connect(void* sock) {
                     break;
                 case 3: // Хотим обновить сообщения в диалоге
                     write(2, "UPPDATE TEXT IN DIALOG\n",23);
+                    exit = 1;
+                    break;
+                case 4: // We wanna register
+                    write(2, "HOTIM  REGISTRAtSIYA\n",21);
+                    exit = 1;
+                    break;
+                case 5: // We wanna login
+                    write(2, "HOTIM  LOGIN\n",21);
                     exit = 1;
                     break;
                 case -1: // ошибка сообщения
