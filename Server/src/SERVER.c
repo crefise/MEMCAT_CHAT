@@ -5,6 +5,8 @@ int parse_solution(char *text);
 int ph_count = 0; 
 
 int main() {
+
+    
     /**** START DATABASE BLOCK ****/
     int count_users = 1;
     sqlite3* users_db;
