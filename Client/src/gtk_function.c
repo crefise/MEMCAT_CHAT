@@ -7,12 +7,16 @@ void visible_pasword(GtkWidget *button, gpointer password_entry) {
     gtk_entry_set_visibility(GTK_ENTRY(password_entry), !gtk_entry_get_visibility(password_entry));
 }
 
-void get_login(GtkWidget *button, gpointer data) {
-    login = (char*) gtk_entry_get_text(GTK_ENTRY((GtkWidget *)data));
+void login_connect(GtkWidget *button, gpointer data) {
+    struct user_info *temp = data;
+    login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->username_entry));
+    password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->password_entry));
+    // write(2, login, strlen(login));
+    //write(2, password, strlen(password));
 }
 
-void get_password(GtkWidget *button, gpointer data) {
-    password = (char*) gtk_entry_get_text(GTK_ENTRY((GtkWidget *)data));
+void register_connect(GtkWidget *button, gpointer data) {
+    
 }
 
 void go_to_log(GtkWidget *button, gpointer window1) {
@@ -78,6 +82,7 @@ void reg_window(GtkWidget *button, gpointer window) {
 
     gtk_widget_hide(window);
 
+    //g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(go_to_log), window1);
     g_signal_connect(G_OBJECT(exit), "clicked", G_CALLBACK(go_to_log), window1);
     g_signal_connect(G_OBJECT(window1), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window1);
@@ -85,13 +90,18 @@ void reg_window(GtkWidget *button, gpointer window) {
 }
 
 void main_loop() {
+
+    struct user_info *user_login_info = malloc(sizeof(struct user_info));
     GtkWidget *window;
-    GtkWidget *username_label, *username_entry;
-    GtkWidget *password_label, *password_entry;
+    GtkWidget *username_label;
+    GtkWidget *password_label;
     GtkWidget *hbox1, *hbox2, *hbox3;
     GtkWidget *vbox;
     GtkWidget *login_button, *reg_button;
     GtkWidget *checkbutton;
+
+    //for_test = malloc(sizeof(struct test*));
+
     bool visible = false;
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  
@@ -103,12 +113,12 @@ void main_loop() {
  
     // Создаем ярлык и поле ввода логина
     username_label = gtk_label_new("Введите логин:");
-    username_entry = gtk_entry_new();
+    user_login_info->username_entry  = gtk_entry_new();
  
     // Создаем ярлык и поле ввода пароля
     password_label = gtk_label_new("Введите пароль:");
-    password_entry = gtk_entry_new();
-    gtk_entry_set_visibility(GTK_ENTRY(password_entry), visible);//видимость пароля
+     user_login_info->password_entry = gtk_entry_new();
+    gtk_entry_set_visibility(GTK_ENTRY( user_login_info->password_entry), visible);//видимость пароля
     
     //кнопки
     login_button = gtk_button_new_with_label("Авторизоваться");
@@ -118,13 +128,13 @@ void main_loop() {
      //добавили в первую коробку username_label и username_entry и в основную коробку добавили первую
     hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox1), username_label, TRUE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(hbox1), username_entry, TRUE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(hbox1), user_login_info->username_entry , TRUE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox1, TRUE, FALSE, 5);
  
     //сделали также для пароля
     hbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox2), password_label, TRUE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(hbox2), password_entry, TRUE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(hbox2),  user_login_info->password_entry, TRUE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox2, TRUE, FALSE, 5);
 
     hbox3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -134,12 +144,9 @@ void main_loop() {
     gtk_box_pack_start(GTK_BOX(vbox), hbox3, TRUE, FALSE, 5);
 
     gtk_container_add(GTK_CONTAINER(window), vbox);
- 
     g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(reg_window), window);
-    g_signal_connect(G_OBJECT(login_button), "clicked", G_CALLBACK(get_login), username_entry);
-    g_signal_connect(G_OBJECT(login_button), "clicked", G_CALLBACK(get_password), password_entry);
-    g_signal_connect(G_OBJECT(checkbutton), "clicked", G_CALLBACK(visible_pasword), password_entry);
+    g_signal_connect(G_OBJECT(login_button), "clicked", G_CALLBACK(login_connect), user_login_info );
+    g_signal_connect(G_OBJECT(checkbutton), "clicked", G_CALLBACK(visible_pasword),  user_login_info->password_entry);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window);
-
 }
