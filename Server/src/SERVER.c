@@ -3,19 +3,18 @@
 void *user_connect(void* sock);
 int parse_solution(char *text);
 int ph_count = 0; 
+sqlite3* users_db;
+sqlite3* chats_db;
 
 int main() {
     /**** START DATABASE BLOCK ****/
     write(1, "####### DATABASE BLOCK ######\n", 30);
-    int count_users = 1;
-    sqlite3* users_db;
-    sqlite3* chats_db;
 
     open_db("Server/databases/users.db", &users_db);
     open_db("Server/databases/chats.db", &chats_db);
 
     exec_db("CREATE TABLE USERS("\
-           "ID             INT PRIMARY KEY     NOT NULL,"\
+           "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
            "LOGIN          TEXT                NOT NULL,"\
            "PASSWORD       TEXT                NOT NULL,"\
            "UNIQUE (ID, LOGIN));", users_db);
@@ -25,17 +24,9 @@ int main() {
            "USER1_ID       INT                 NOT NULL,"\
            "USER2_ID       INT                 NOT NULL,"\
            "PATH           TEXT                NOT NULL);", chats_db);
+
+    exec_db("SELECT * FROM USERS", users_db);
     
-    char** login_password;
-    char** message;
-
-    login_password = ps_registration("registration[5][10]PetroPoroshenko");
-    printf("login: %s\nPass: %s\n", login_password[0], login_password[1]);
-
-    message = ps_message("message[1][2]hello Penis Dushilin");
-    printf("ID1: %s\nID2: %s\nMessage: %s\n", message[0], message[1], message[2]);
-
-    add_user_db(&count_users, login_password[0], login_password[1], users_db);
     write(1, "####### DATABASE BLOCK ######\n", 30);
     /**** END DATABASE BLOCK ****/
 
@@ -85,15 +76,10 @@ int main() {
     close(sock);
 
     /**** START DATABASE BLOCK ****/
+    exec_db("SELECT * FROM USERS", users_db);
     close_db(users_db);
     close_db(chats_db);
-    free(login_password[0]);
-    free(login_password[1]);
-    free(login_password);
-    free(message[0]);
-    free(message[1]);
-    free(message[2]);
-    free(message);
+
     /**** END DATABASE BLOCK ****/
     return 0;
 }

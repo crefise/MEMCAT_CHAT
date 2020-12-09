@@ -7,6 +7,29 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
+int get_maxID_db(sqlite3* db) {
+   int max_id = 0;
+   sqlite3_stmt *result;
+   char* statement = "SELECT MAX(ID) FROM USERS";
+
+   int rc = sqlite3_prepare_v2(db, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+      sqlite3_close(db);
+      return false;
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) {
+      char* IDs = concat(IDs, (char*)sqlite3_column_text(result, 0));
+      max_id = atoi(IDs);
+      free(IDs);
+   }
+   
+   sqlite3_finalize(result);
+   free(statement);
+   return max_id;
+}
+
 void open_db(char* path, sqlite3** db) {
    int rc = sqlite3_open(path, db);
    if (rc) fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(*db));
@@ -26,13 +49,9 @@ void close_db(sqlite3* db) {
    sqlite3_close(db);
 }
 
-void add_user_db(int* id, char* login, char* password, sqlite3* db) {
-   (*id)++;
-   char* id_s = i_to_s(*id);
-
-   char* statement = "INSERT INTO USERS (ID,LOGIN,PASSWORD) VALUES (";
-   statement = concat(statement, id_s);
-   statement = concat(statement, ", '");
+void add_user_db(char* login, char* password, sqlite3* db) {
+   //char* statement = "INSERT INTO USERS (ID,LOGIN,PASSWORD) VALUES (";
+   char* statement = "INSERT INTO USERS (LOGIN,PASSWORD) VALUES ('";
    statement = concat(statement, login);
    statement = concat(statement, "', '");
    statement = concat(statement, password);
@@ -40,7 +59,6 @@ void add_user_db(int* id, char* login, char* password, sqlite3* db) {
 
    exec_db(statement, db);
    free(statement);
-   free(id_s);
 }
 
 int access_db(char* login, char* password, sqlite3* db) {
