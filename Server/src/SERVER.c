@@ -7,8 +7,8 @@ int ph_count = 0;
 int main() {
 
     
-    /**** START DATABASE BLOCK ****/
-    int count_users = 1;
+    /**** START DATABASE 15 BLOCK ****/
+    int count_users = 15;
     sqlite3* users_db;
     sqlite3* chats_db;
     init_db(users_db, chats_db);
