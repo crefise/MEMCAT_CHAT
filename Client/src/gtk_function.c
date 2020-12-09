@@ -1,5 +1,5 @@
 #include "../inc/header.h"
-#define test_cout
+//#define test_cout
 char *login;
 char *password;
 
@@ -19,7 +19,19 @@ void login_connect(GtkWidget *button, gpointer data) {
     write(2,"\n",1);
     write(2,"\n",1);
     write(2,"\n",1);
+
+    
     #endif
+    
+    char *str = concat((char*)"login[", (char*)i_to_s(strlen(login)));
+    str = concat(str, "][");
+    str = concat(str, (char*)i_to_s(strlen(password)));
+    str = concat(str, "]");
+    str = concat(str,login);
+    str = concat(str,password);
+
+    send(sock, str, strlen(str), 0); // send data to server
+    close(sock);
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
@@ -47,6 +59,7 @@ void register_connect(GtkWidget *button, gpointer data) {
         #ifdef test_cout
         write(2, "\nPASS REPEAT OKAY\n",18);
         #endif
+        // SEND INFO TO SERVER
     }
 }
 

@@ -13,6 +13,7 @@
 #include<stdbool.h>
 #include <netdb.h>
 #include "gtk/gtk.h"
+extern int sock;
 
 struct user_info {
     GtkWidget *username_entry;
@@ -27,5 +28,9 @@ void register_connect(GtkWidget *button, gpointer data); //функция выз
 void go_to_log(GtkWidget *button, gpointer window1);
 void reg_window(GtkWidget *button, gpointer window);
 void main_loop();
+
+
+char* concat(char* s1, char* s2);
+char* i_to_s(int n);
 
 #endif
