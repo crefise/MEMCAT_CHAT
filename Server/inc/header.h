@@ -23,7 +23,7 @@ int parse_solution(char *text); // Функция которая определ�
 void open_db(char* path, sqlite3** db); // ready
 void exec_db(char* statement, sqlite3* db); // ready
 void close_db(sqlite3* db); // ready
-void init_db(sqlite3* users_db, sqlite3* chats_db); //
+//void init_db(sqlite3* users_db, sqlite3* chats_db); //
 void add_user_db(int* id, char* login, char* password, sqlite3* db); // ready
 int access_db(char* login, char* password, sqlite3* db); // ready
 void delete_user(int id, sqlite3* db);
@@ -36,6 +36,7 @@ int get_users_ID(char* login, sqlite3* db);
 /* Parsing */
 char** ps_registration(char* src);
 char** ps_login(char* src);
+char** ps_message(char* src);
 
 /* string */
 char* i_to_s(int n);
