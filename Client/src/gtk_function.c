@@ -1,37 +1,26 @@
-#include <gtk/gtk.h>
-#include<stdbool.h>
+#include "../inc/header.h"
 
-static void main_loop();
+char *login;
+char *password;
 
-static char *login;
-static char *password;
-
-static void visible_pasword(GtkWidget *button, gpointer password_entry)
-{
+void visible_pasword(GtkWidget *button, gpointer password_entry) {
     gtk_entry_set_visibility(GTK_ENTRY(password_entry), !gtk_entry_get_visibility(password_entry));
 }
 
-static void get_login(GtkWidget *button, gpointer data)
-{
+void get_login(GtkWidget *button, gpointer data) {
     login = (char*) gtk_entry_get_text(GTK_ENTRY((GtkWidget *)data));
-    printf("%s", login);
-    printf("\n");
 }
 
-static void get_password(GtkWidget *button, gpointer data)
-{
+void get_password(GtkWidget *button, gpointer data) {
     password = (char*) gtk_entry_get_text(GTK_ENTRY((GtkWidget *)data));
-    printf("%s", password);
 }
 
-static void go_to_log(GtkWidget *button, gpointer window1) 
-{
+void go_to_log(GtkWidget *button, gpointer window1) {
     gtk_widget_hide(window1);
     main_loop();
 }
 
-static void reg_window(GtkWidget *button, gpointer window)
-{
+void reg_window(GtkWidget *button, gpointer window) {
     GtkWidget *window1;
     GtkWidget *username_label, *username_entry;
     GtkWidget *password_label, *password_label1, *password_entry, *password_entry1;
@@ -95,8 +84,7 @@ static void reg_window(GtkWidget *button, gpointer window)
 
 }
 
-static void main_loop()
-{
+void main_loop() {
     GtkWidget *window;
     GtkWidget *username_label, *username_entry;
     GtkWidget *password_label, *password_entry;
@@ -154,15 +142,4 @@ static void main_loop()
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window);
 
-}
-
-int main (int argc, char *argv[])
-{
-    gtk_init (&argc, &argv);
-
-    main_loop();
- 
-    gtk_main ();
-
-    return 0;
 }

@@ -40,6 +40,7 @@ char** ps_register(char* src);
 char* i_to_s(int n);
 char* concat(char* s1, char* s2);
 
+/* GTK */
 
 
 #endif
