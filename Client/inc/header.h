@@ -28,6 +28,7 @@ void register_connect(GtkWidget *button, gpointer data); //функция выз
 void go_to_log(GtkWidget *button, gpointer window1);
 void reg_window(GtkWidget *button, gpointer window);
 void main_loop();
+void close_all();
 
 
 char* concat(char* s1, char* s2);

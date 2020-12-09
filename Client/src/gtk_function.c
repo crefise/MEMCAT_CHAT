@@ -34,7 +34,6 @@ void login_connect(GtkWidget *button, gpointer data) {
     send(sock, str, strlen(str), 0); // send data to server
     free(str);
     // А тут мы ждем ответа от сервера/ можно ли нам менять окно!
-    close(sock);
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
@@ -136,11 +135,15 @@ void reg_window(GtkWidget *button, gpointer window) {
 
     g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(register_connect), user_login_info);
     g_signal_connect(G_OBJECT(exit), "clicked", G_CALLBACK(go_to_log), window1);
-    g_signal_connect(G_OBJECT(window1), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(G_OBJECT(window1), "destroy", G_CALLBACK(close_all), NULL);
     gtk_widget_show_all(window1);
 
 }
 
+void close_all(){
+    close(sock);
+    gtk_main_quit();
+}
 void main_loop() {
 
     struct user_info *user_login_info = malloc(sizeof(struct user_info));
@@ -202,6 +205,6 @@ void main_loop() {
     g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(reg_window), window);
     g_signal_connect(G_OBJECT(login_button), "clicked", G_CALLBACK(login_connect), user_login_info );
     g_signal_connect(G_OBJECT(checkbutton), "clicked", G_CALLBACK(visible_pasword),  user_login_info->password_entry);
-    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(close_all), NULL);
     gtk_widget_show_all(window);
 }
