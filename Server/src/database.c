@@ -77,6 +77,8 @@ int access_db(char* login, char* password, sqlite3* db) {
    }
 }
 
+
+/*
 void init_db(sqlite3* users_db, sqlite3* chats_db) {
    open_db("Server/databases/users.db", &users_db);
    open_db("Server/databases/chats.db", &chats_db);
@@ -93,3 +95,4 @@ void init_db(sqlite3* users_db, sqlite3* chats_db) {
            "USER2_ID       INT                 NOT NULL,"\
            "PATH           TEXT                NOT NULL);", chats_db);
 }
+*/

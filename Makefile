@@ -14,7 +14,7 @@ comp_s:
 	@clang $(SERVER_FILES) -l sqlite3 -o server_run
 
 comp_c:
-#clang $(CLIENT_FILES) -l sqlite3 -o client_run
+	@clang $(CLIENT_FILES) -l sqlite3 -o client_run
 
 comp_g:
 	@clang $(GTK_FILES) -o gtk_run $(GTK_COMPILE_FLAG)
