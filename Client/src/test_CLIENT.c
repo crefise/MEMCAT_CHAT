@@ -1,7 +1,7 @@
 #include "../inc/header.h"
 
-//#define SERVERADDR "127.0.0.1"
-#define SERVERADDR "10.11.6.1" // Айпи для моего ПК
+#define SERVERADDR "127.0.0.1"
+//#define SERVERADDR "10.11.6.1" // Айпи для моего ПК
 
 int main() { 
     char buff[256]; // Для передаваемого текста

@@ -13,7 +13,11 @@
 #include <stdlib.h>
 #include <sqlite3.h> 
 
+extern int ph_count;
 #define BUF_SIZE 256;
+/* SERVER FUNCTION*/
+void *user_connect(void* sock); // функция оброботки каждого клиента
+int parse_solution(char *text); // Функция которая определяем что именно хочет клиент
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready
@@ -28,6 +32,9 @@ char* get_users_password(int id, sqlite3* db);
 void set_users_login(int id, char* login, sqlite3* db);
 void set_users_password(int id, char* password, sqlite3* db);
 int get_users_ID(char* login, sqlite3* db);
+
+/* Parsing */
+char** ps_register(char* src);
 
 /* string */
 char* i_to_s(int n);
