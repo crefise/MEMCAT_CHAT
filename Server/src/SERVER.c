@@ -7,11 +7,16 @@ int ph_count = 0;
 int main() {
 
     
-    /**** START DATABASE 15 BLOCK ****/
-    int count_users = 15;
+    /**** START DATABASE BLOCK ****/
+    int count_users = 1;
     sqlite3* users_db;
     sqlite3* chats_db;
     init_db(users_db, chats_db);
+
+    char** lp;
+    lp = ps_login("login[5][10]PetroPoroshenko");
+    printf("login: %s\nPass: %s\n", lp[0], lp[1]);
+
     /**** END DATABASE BLOCK ****/
 
     // Инициализируем сокет!

@@ -34,7 +34,8 @@ void set_users_password(int id, char* password, sqlite3* db);
 int get_users_ID(char* login, sqlite3* db);
 
 /* Parsing */
-char** ps_register(char* src);
+char** ps_registration(char* src);
+char** ps_login(char* src);
 
 /* string */
 char* i_to_s(int n);
