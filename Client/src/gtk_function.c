@@ -1,5 +1,5 @@
 #include "../inc/header.h"
-
+//#define test_cout;
 char *login;
 char *password;
 
@@ -11,12 +11,43 @@ void login_connect(GtkWidget *button, gpointer data) {
     struct user_info *temp = data;
     login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->username_entry));
     password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->password_entry));
-    // write(2, login, strlen(login));
-    //write(2, password, strlen(password));
+    #ifdef test_cout
+    write(2,"LOGIN CHECK:\n", 16);
+    write(2,login, strlen(login));
+    write(2,"\n",1);
+    write(2,password, strlen(password));
+    write(2,"\n",1);
+    write(2,"\n",1);
+    write(2,"\n",1);
+    #endif
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
-    
+    struct user_info *temp = data;
+    login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->username_entry));
+    password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->password_entry));
+    char *password_repeat = (char*) gtk_entry_get_text(GTK_ENTRY(temp->password_entry_repeat));
+    #ifdef test_cout
+    write(2,"REGISTER CHECK:\n", 16);
+    write(2,login, strlen(login));
+    write(2,"\n",1);
+    write(2,password, strlen(password));
+    write(2,"\n",1);
+    write(2,password_repeat, strlen(password_repeat));
+    write(2,"\n",1);
+    write(2,"\n",1);
+    write(2,"\n",1);
+    #endif
+    if (strcmp(password, password_repeat) != 0) {
+        #ifdef test_cout
+        write(2, "\nPASS REPEAT ERROR\n",19);
+        #endif
+    }
+    else {
+        #ifdef test_cout
+        write(2, "\nPASS REPEAT OKAY\n",18);
+        #endif
+    }
 }
 
 void go_to_log(GtkWidget *button, gpointer window1) {
@@ -25,9 +56,10 @@ void go_to_log(GtkWidget *button, gpointer window1) {
 }
 
 void reg_window(GtkWidget *button, gpointer window) {
+    struct user_info *user_login_info = malloc(sizeof(struct user_info));
     GtkWidget *window1;
-    GtkWidget *username_label, *username_entry;
-    GtkWidget *password_label, *password_label1, *password_entry, *password_entry1;
+    GtkWidget *username_label;// *username_entry;
+    GtkWidget *password_label, *password_label1; //*password_entry, *password_entry1;
     GtkWidget *hbox1, *hbox2, *hbox3, *hbox4;
     GtkWidget *vbox;
     GtkWidget *exit, *reg_button;
@@ -42,16 +74,16 @@ void reg_window(GtkWidget *button, gpointer window) {
  
     // Создаем ярлык и поле ввода логина
     username_label = gtk_label_new("Введите логин:");
-    username_entry = gtk_entry_new();
+    user_login_info->username_entry = gtk_entry_new();
  
     // Создаем ярлык и поле ввода пароля
     password_label = gtk_label_new("Введите пароль:");
-    password_entry = gtk_entry_new();
-    gtk_entry_set_visibility(GTK_ENTRY(password_entry), FALSE);//видимость пароля
+    user_login_info->password_entry = gtk_entry_new();
+    gtk_entry_set_visibility(GTK_ENTRY(user_login_info->password_entry), FALSE);//видимость пароля
 
     password_label1 = gtk_label_new("Повторите пароль:");
-    password_entry1 = gtk_entry_new();
-    gtk_entry_set_visibility(GTK_ENTRY(password_entry1), FALSE);
+    user_login_info->password_entry_repeat = gtk_entry_new();
+    gtk_entry_set_visibility(GTK_ENTRY(user_login_info->password_entry_repeat), FALSE);
 
     reg_button = gtk_button_new_with_label("Зарегистрироваться");
     exit = gtk_button_new_with_label("Ввойти");
@@ -59,18 +91,18 @@ void reg_window(GtkWidget *button, gpointer window) {
     //добавили в первую коробку username_label и username_entry и в основную коробку добавили первую
     hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox1), username_label, TRUE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(hbox1), username_entry, TRUE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(hbox1), user_login_info->username_entry, TRUE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox1, TRUE, FALSE, 5);
  
     //сделали также для пароля
     hbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox2), password_label, TRUE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(hbox2), password_entry, TRUE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(hbox2), user_login_info->password_entry, TRUE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox2, TRUE, FALSE, 5);
 
     hbox3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox3), password_label1, TRUE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(hbox3), password_entry1, TRUE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(hbox3), user_login_info->password_entry_repeat, TRUE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox3, TRUE, FALSE, 5);
 
     hbox4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -82,7 +114,7 @@ void reg_window(GtkWidget *button, gpointer window) {
 
     gtk_widget_hide(window);
 
-    //g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(go_to_log), window1);
+    g_signal_connect(G_OBJECT(reg_button), "clicked", G_CALLBACK(register_connect), user_login_info);
     g_signal_connect(G_OBJECT(exit), "clicked", G_CALLBACK(go_to_log), window1);
     g_signal_connect(G_OBJECT(window1), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window1);
