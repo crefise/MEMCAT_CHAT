@@ -22,7 +22,7 @@ void login_connect(GtkWidget *button, gpointer data) {
 
     
     #endif
-    
+
     char *str = concat((char*)"login[", (char*)i_to_s(strlen(login)));
     str = concat(str, "][");
     str = concat(str, (char*)i_to_s(strlen(password)));
@@ -31,6 +31,8 @@ void login_connect(GtkWidget *button, gpointer data) {
     str = concat(str,password);
 
     send(sock, str, strlen(str), 0); // send data to server
+
+    // А тут мы ждем ответа от сервера/ можно ли нам менять окно!
     close(sock);
 }
 
