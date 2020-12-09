@@ -57,6 +57,7 @@ void go_to_log(GtkWidget *button, gpointer window1) {
 
 void reg_window(GtkWidget *button, gpointer window) {
     struct user_info *user_login_info = malloc(sizeof(struct user_info));
+    GtkWidget *memcat;
     GtkWidget *window1;
     GtkWidget *username_label;// *username_entry;
     GtkWidget *password_label, *password_label1; //*password_entry, *password_entry1;
@@ -65,6 +66,7 @@ void reg_window(GtkWidget *button, gpointer window) {
     GtkWidget *exit, *reg_button;
 
     window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    memcat = gtk_label_new("MEMCAT(ˆ_ˆ)");
 
     gtk_window_set_title (GTK_WINDOW (window1), "MEMCAT(ˆ_ˆ)");
     gtk_window_set_position(GTK_WINDOW(window1), GTK_WIN_POS_CENTER);
@@ -88,6 +90,8 @@ void reg_window(GtkWidget *button, gpointer window) {
     reg_button = gtk_button_new_with_label("Зарегистрироваться");
     exit = gtk_button_new_with_label("Ввойти");
  
+    gtk_container_add(GTK_CONTAINER(vbox), memcat);
+    
     //добавили в первую коробку username_label и username_entry и в основную коробку добавили первую
     hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox1), username_label, TRUE, FALSE, 5);
@@ -124,6 +128,7 @@ void reg_window(GtkWidget *button, gpointer window) {
 void main_loop() {
 
     struct user_info *user_login_info = malloc(sizeof(struct user_info));
+    GtkWidget *memcat;
     GtkWidget *window;
     GtkWidget *username_label;
     GtkWidget *password_label;
@@ -132,10 +137,10 @@ void main_loop() {
     GtkWidget *login_button, *reg_button;
     GtkWidget *checkbutton;
 
-    //for_test = malloc(sizeof(struct test*));
-
     bool visible = false;
+
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    memcat = gtk_label_new("MEMCAT(ˆ_ˆ)");
  
     gtk_window_set_title (GTK_WINDOW (window), "MEMCAT(ˆ_ˆ)");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
@@ -156,6 +161,8 @@ void main_loop() {
     login_button = gtk_button_new_with_label("Авторизоваться");
     reg_button = gtk_button_new_with_label("Зарегистрироваться");
     checkbutton = gtk_check_button_new_with_label ("Показать пароль");
+
+    gtk_container_add(GTK_CONTAINER(vbox), memcat);
 
      //добавили в первую коробку username_label и username_entry и в основную коробку добавили первую
     hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
