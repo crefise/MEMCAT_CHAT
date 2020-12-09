@@ -13,7 +13,11 @@
 #include <stdlib.h>
 #include <sqlite3.h> 
 
+extern int ph_count;
 #define BUF_SIZE 256;
+/* SERVER FUNCTION*/
+void *user_connect(void* sock); // функция оброботки каждого клиента
+int parse_solution(char *text); // Функция которая определяем что именно хочет клиент
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready
