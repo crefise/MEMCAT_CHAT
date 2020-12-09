@@ -1,5 +1,5 @@
 #include "../inc/header.h"
-//#define test_cout;
+#define test_cout
 char *login;
 char *password;
 
