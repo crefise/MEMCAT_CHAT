@@ -8,7 +8,7 @@ int main() {
 
     
     /**** START DATABASE BLOCK ****/
-    int count_users = 14;
+    int count_users = 1;
     sqlite3* users_db;
     sqlite3* chats_db;
     init_db(users_db, chats_db);
