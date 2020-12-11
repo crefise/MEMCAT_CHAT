@@ -14,6 +14,9 @@
 #include <sqlite3.h> 
 
 extern int ph_count;
+extern int count_users;
+extern sqlite3* users_db;
+extern sqlite3* chats_db;
 #define BUF_SIZE 256;
 /* SERVER FUNCTION*/
 void *user_connect(void* sock); // функция оброботки каждого клиента
@@ -23,8 +26,9 @@ int parse_solution(char *text); // Функция которая определ�
 void open_db(char* path, sqlite3** db); // ready
 void exec_db(char* statement, sqlite3* db); // ready
 void close_db(sqlite3* db); // ready
+int get_maxID_db(sqlite3* db); // 
 //void init_db(sqlite3* users_db, sqlite3* chats_db); //
-void add_user_db(int* id, char* login, char* password, sqlite3* db); // ready
+void add_user_db(char* login, char* password, sqlite3* db); // ready
 int access_db(char* login, char* password, sqlite3* db); // ready
 void delete_user(int id, sqlite3* db);
 char* get_users_login(int id, sqlite3* db);

@@ -7,7 +7,6 @@ static char* add_char_to_str(char* str, char ch) {
 
 char** ps_message(char* src) {
     for (int i = 0; i < 8; i++, src++);
-    printf("src = %s\n", src);
     char* id1_s = "";
     char* id2_s = "";
 
@@ -21,8 +20,6 @@ char** ps_message(char* src) {
 
     src++;
     src++;
-    printf("id1 = %s\n", id1_s);
-    printf("src = %s\n", src);
     for(; src[0] != ']'; src++) {
         char* ch = (char*)malloc(2);
         ch[0] = src[0];
@@ -31,8 +28,6 @@ char** ps_message(char* src) {
         free(ch);
     }
     src++;
-    printf("id2 = %s\n", id2_s);
-    printf("src = %s\n", src);
     int id1_l = strlen(id1_s);
     int id2_l = strlen(id2_s);
 

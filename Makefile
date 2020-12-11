@@ -22,7 +22,7 @@ comp_g:
 compile_all: comp_s comp_c comp_g
 
 install_lib:
-	sh Client/Libs/install_lib_gtk+3.sh
+	sh Client/Libs/install_lib_gtk+3.shьфлу
 
 clear:
 	@rm -rf server_run

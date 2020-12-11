@@ -40,7 +40,10 @@ void *user_connect(void* sock) {
                     break;
                 case 4: // We wanna register
                     write(2, "HOTIM  REGISTRAtSIYA\n",21);
-                    exit = 1;
+                    char** temp = ps_registration(buff);
+                    add_user_db(temp[0], temp[1], users_db);
+                    exec_db("SELECT * FROM USERS", users_db);
+                    exit = 0;
                     break;
                 case 5: // We wanna login
                     write(2, "HOTIM  LOGIN\n",21);
