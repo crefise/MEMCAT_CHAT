@@ -177,6 +177,7 @@ GtkWidget *create_register_grid ( GtkWidget *stack )
     GtkWidget *label_login;
     GtkWidget *label_password;
     GtkWidget *label_confirm_password;
+    GtkWidget *label_error;
 
     struct user_info *user_login_info = malloc(sizeof(struct user_info));
 
@@ -187,6 +188,7 @@ GtkWidget *create_register_grid ( GtkWidget *stack )
     label_login = gtk_label_new ( "Login:" );
     label_password  = gtk_label_new ( "Password:" );
     label_confirm_password  = gtk_label_new ( "Confirm password:" );
+    label_error = gtk_label_new ( "Confirm password:" );
 
     /// ***
     user_login_info->entry_username = gtk_entry_new();
@@ -276,6 +278,4 @@ void register_connect(GtkWidget *button, gpointer data) {
     char *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
     char *password_repeat = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_confirm_password));
-   // if (strcmp(password, password_repeat) != 0)
-      //  write(2,"1", 1);
 }
