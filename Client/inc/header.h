@@ -12,26 +12,36 @@
 #include <netinet/in.h>
 #include<stdbool.h>
 #include <netdb.h>
+
+/*gtk_function.c*/
 #include "gtk/gtk.h"
-extern int sock;
-
 struct user_info {
-    GtkWidget *username_entry;
-    GtkWidget *password_entry;
-    GtkWidget *password_entry_repeat;
+    GtkWidget *entry_username;
+    GtkWidget *entry_password;
+    GtkWidget *entry_confirm_password;
 };
+void load_css ( void );
+GtkWidget *createWindow ( const gint width, const gint height, const gchar *const title );
+GtkWidget *create_login_box (GtkWidget *stack);
+GtkWidget *create_login_grid (GtkWidget *stack);
+GtkWidget *create_register_grid (GtkWidget *stack);
+GtkWidget *create_stack_box (GtkWidget **stack);
+void main_clbk (GtkButton *button, GtkStack *stack);
+void login_clbk (GtkButton *button, GtkStack *stack );
+void register_clbk (GtkButton *button, GtkStack *stack);
+void quit_clbk    ( void );
+void login_connect(GtkWidget *button, gpointer data);
+void register_connect(GtkWidget *button, gpointer data);
 
-void visible_pasword(GtkWidget *button, gpointer password_entry);
-void visible_pasword(GtkWidget *button, gpointer password_entry);
-void login_connect(GtkWidget *button, gpointer data); // функция вызываеться при нажании копки логин
-void register_connect(GtkWidget *button, gpointer data); //функция вызываеться при нажатии кнопки регистрация
-void go_to_log(GtkWidget *button, gpointer window1);
-void reg_window(GtkWidget *button, gpointer window);
-void main_loop();
-void close_all();
+
+/* END gtk_function.c */
 
 
+/* string.c */
 char* concat(char* s1, char* s2);
 char* i_to_s(int n);
+/* END string.c */
+
+
 
 #endif
