@@ -1,8 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#include <sys/socket.h>
-#include <sys/types.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -35,13 +34,16 @@ void register_connect(GtkWidget *button, gpointer data);
 
 
 /* END gtk_function.c */
-
+#include <sys/socket.h>
+#include <sys/types.h>
 
 /* string.c */
 char* concat(char* s1, char* s2);
 char* i_to_s(int n);
 /* END string.c */
 
-
+/* socket_function */
+extern int sock;
+/* END socket_function */
 
 #endif
