@@ -2,62 +2,70 @@
 #include "../inc/header.h"
 
 void *user_connect(void* sock) {
-    char buff[256]; // client - massage
+    char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
     int client_socket = *temp;
     bool exit = 0;
 
     while (!exit) {
-        int nsize = recv(client_socket, &buff[0], sizeof(buff) - 1, 0);
+
+        mx_strdel(&buffer);
+        buffer = mx_strnew(256);
+
+        int nsize = recv(client_socket, &buffer[0], 256, 0); // Ждем ответа от клиента 
 
         if (nsize == 0) {
             write(2, "CLIENT CLOSE CONNECTION\n", 24);
             break;
         }
 
-        printf("%d\n", nsize);
 
-        if (nsize < 0)
-            continue;
-        else {
-            pthread_t pthread;
-            printf ("Server tooked : %s\n", buff);
-            int solution = parse_solution(buff);
+        pthread_t pthread; 
 
-            switch (solution)
-            {
-                case 1: // Хотим написать сообщение
-                    write(2, "ADD MASSAGE\n",13);
-                    exit = 1;
-                    break;
-                case 2: // Хотим обновить диалоги
-                    write(2, "UPPDATE DIALOGS\n",16);
-                    exit = 1;
-                    break;
-                case 3: // Хотим обновить сообщения в диалоге
-                    write(2, "UPPDATE TEXT IN DIALOG\n",23);
-                    exit = 1;
-                    break;
-                case 4: // We wanna register
-                    write(2, "HOTIM  REGISTRAtSIYA\n",21);
-                    char** temp = ps_registration(buff);
-                    add_user_db(temp[0], temp[1], users_db);
-                    exec_db("SELECT * FROM USERS", users_db);
-                    exit = 0;
-                    break;
-                case 5: // We wanna login
-                    write(2, "HOTIM  LOGIN\n",21);
-                    exit = 1;
-                    break;
-                case -1: // ошибка сообщения
-                    write(2, "-1 ERROR\n",9);
-                    exit = 1;
-                    break;
-                default: // неизвесная ошибка
-                    write(2, "UKNOWN ERROR\n",13);
-                    exit = 1;
-                    break;
-            }
+        printf("Server took : %s\n", buffer);
+        int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
+
+        switch (solution) {
+            case 1: // Хотим написать сообщение
+                write(2, "ADD MASSAGE\n",13);
+                exit = 1;
+                break;
+            case 2: // Хотим обновить диалоги
+                write(2, "UPPDATE DIALOGS\n",16);
+                exit = 1;
+                break;
+            case 3: // Хотим обновить сообщения в диалоге
+                write(2, "UPPDATE TEXT IN DIALOG\n",23);
+                exit = 1;
+                break;
+            case 4: // We wanna register
+                write(2, "HOTIM  REGISTRAtSIYA\n",21);
+                char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
+                add_user_db(temp[0], temp[1], users_db);
+                //exec_db("SELECT * FROM USERS", users_db); // base show
+                if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
+                    write(2, "USER CLOSE CONNECTION\n",21);
+                }
+                exit = 0;
+                break;
+            case 5: // We wanna login
+                write(2, "HOTIM  LOGIN\n",14);
+
+                if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
+                    write(2, "USER CLOSE CONNECTION\n",21);
+                }
+                exit = 0;
+                break;
+
+                
+            case -1: // ошибка сообщения
+                write(2, "-1 ERROR\n",9);
+                exit = 1;
+                break;
+            default: // неизвесная ошибка
+                write(2, "UKNOWN ERROR\n",13);
+                exit = 1;
+                break;
         }
     }
 

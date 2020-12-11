@@ -45,7 +45,9 @@ char** ps_message(char* src);
 /* string */
 char* i_to_s(int n);
 char* concat(char* s1, char* s2);
-
+char *clear_buffer(char *s1);
+char *mx_strnew(const int size);
+void mx_strdel(char **str);
 /* GTK */
 
 

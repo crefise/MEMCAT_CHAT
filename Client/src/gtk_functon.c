@@ -1,5 +1,5 @@
 #include "../inc/header.h"
-#define test_cout
+//#define test_cout
 void load_css ( void ) {
     GtkCssProvider *provider;
     GdkDisplay     *display;
@@ -194,10 +194,37 @@ void quit_clbk    ( void ) {
 }
 
 void login_connect(GtkWidget *button, gpointer data) {
+    char *buffer = NULL;
     struct user_info *temp = data;
     char  *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
     // А тут мы ждем ответа от сервера/ можно ли нам менять окно!
+    buffer = concat((char*)"login[", (char*)i_to_s(strlen(login)));
+    buffer = concat(buffer, "][");
+    buffer = concat(buffer, (char*)i_to_s(strlen(password)));
+    buffer = concat(buffer, "]");
+    buffer = concat(buffer,login);
+    buffer = concat(buffer,password);
+    if (send(sock, buffer, strlen(buffer), 0) == -1) {
+        write(2, "SERVER DONT CONNETCTED\n",23);
+    } // send data to server
+    free(buffer);
+
+
+    buffer = malloc(2);
+    if (recv(sock, &buffer[0], sizeof(buffer) - 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+        write(2, "SERVER DONT CONNETCTED\n",23);
+        return;
+    }
+
+    if (strcmp(buffer, "1") != 0) {
+        write(2, "LOGIN ERROR\n",13);
+        return;
+    }
+    else {
+        write(2, "LOGIN OKAY ",12);
+        return;
+    }
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
@@ -225,20 +252,33 @@ void register_connect(GtkWidget *button, gpointer data) {
         #ifdef test_cout
         write(2, "\nPASS REPEAT OKAY\n",18);
         #endif
-        // SEND INFO TO SERVER
 
-// отправляем на сервер запрос что мы хотим регистрироваться!
-    char *str = concat((char*)"registration[", (char*)i_to_s(strlen(login)));
-    str = concat(str, "][");
-    str = concat(str, (char*)i_to_s(strlen(password)));
-    str = concat(str, "]");
-    str = concat(str,login);
-    str = concat(str,password);
-    if (send(sock, str, strlen(str), 0) == -1) {
-        write(2, "SERVER DONT CONNETCTED\n",23);
-    } // send data to server
-    free(str);
-    // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
-    write(2, "END\n",4);
+        // отправляем на сервер запрос что мы хотим регистрироваться!
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////// Парсим строку
+        char *str = concat((char*)"registration[", (char*)i_to_s(strlen(login)));
+        str = concat(str, "][");
+        str = concat(str, (char*)i_to_s(strlen(password)));
+        str = concat(str, "]");
+        str = concat(str,login);
+        str = concat(str,password);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (send(sock, str, strlen(str), 0) == -1) { // отправляем на сервер наши данные для регистрации
+            write(2, "SERVER DONT CONNETCTED\n",23);
+            return;
+        }
+        free(str);
+        char temp_buf[256];
+
+        
+        if (recv(sock, &temp_buf[0], sizeof(temp_buf) - 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+            write(2, "SERVER DONT CONNETCTED\n",23);
+            return;
+        }
+        else {
+            write(2, "REGISTER OKAY\n",14);
+            return;
+        }
+
     }
 }
