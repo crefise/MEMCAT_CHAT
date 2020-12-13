@@ -4,6 +4,9 @@ int sock;
 
 int main ( void ) {
     initializate_socket();
+    if (sock == -1)
+        mx_printerr("NO_CONNECT_TO_SERVER");
+
     GtkWidget *window;
     GtkWidget *login_box;
     GtkWidget *login_grid;
@@ -34,8 +37,8 @@ int main ( void ) {
     gtk_stack_add_named  ( GTK_STACK ( stack ), register_grid, "Register" );
 
     /// ***
-    gtk_stack_set_transition_type ( GTK_STACK ( stack ), GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN );
-    gtk_stack_set_transition_duration ( GTK_STACK ( stack ), 1000 );
+    gtk_stack_set_transition_type ( GTK_STACK ( stack ), GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN ); // Тип перехода между страницами стака
+    gtk_stack_set_transition_duration ( GTK_STACK ( stack ), 1000 ); // Скорость перехода между страницами стака
     gtk_stack_set_interpolate_size ( GTK_STACK ( stack ), TRUE );
 
     /// ***

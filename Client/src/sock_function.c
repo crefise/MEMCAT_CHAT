@@ -12,5 +12,6 @@ void initializate_socket(){
     serv_addr.sin_family = AF_INET;
     memcpy(&serv_addr.sin_addr.s_addr,    server->h_addr_list[0],  server->h_length);
     serv_addr.sin_port = htons(SERVERPORT);
-    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
+        sock = -1;
 }
