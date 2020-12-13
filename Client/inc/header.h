@@ -1,6 +1,10 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+//#define SERVERADDR "51.15.120.179"
+//#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
+#define SERVERADDR "localhost"
+#define SERVERPORT 8000 // Порт сервера
 
 #include <stdio.h>
 #include <string.h>
@@ -53,6 +57,7 @@ bool curr_sybmobol(char *str);
 
 /* socket_function */
 extern int sock;
+void initializate_socket();
 /* END socket_function */
 
 #endif
