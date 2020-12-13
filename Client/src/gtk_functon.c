@@ -205,6 +205,12 @@ void login_connect(GtkWidget *button, gpointer data) {
     buffer = concat(buffer, "]");
     buffer = concat(buffer,login);
     buffer = concat(buffer,password);
+
+    if (!curr_sybmobol(login) || !curr_sybmobol(password)){ // проверка на коректность ввода
+        mx_printerr("SYBMOL ERROR");
+        return;
+    }
+
     if (send(sock, buffer, strlen(buffer), 0) == -1) {
         write(2, "SERVER DONT CONNETCTED\n",23);
     } // send data to server
@@ -228,50 +234,35 @@ void login_connect(GtkWidget *button, gpointer data) {
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
+    char *buffer = NULL;
     struct user_info *temp = data;
     char *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
     char *password_repeat = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_confirm_password));
-      #ifdef test_cout
-    write(2,"REGISTER CHECK:\n", 16);
-    write(2,login, strlen(login));
-    write(2,"\n",1);
-    write(2,password, strlen(password));
-    write(2,"\n",1);
-    write(2,password_repeat, strlen(password_repeat));
-    write(2,"\n",1);
-    write(2,"\n",1);
-    write(2,"\n",1);
-    #endif
+
+    if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
+        mx_printerr("SYBMOL ERROR");
+        return;
+    }
+
     if (strcmp(password, password_repeat) != 0) {
-        #ifdef test_cout
-        write(2, "\nPASS REPEAT ERROR\n",19);
-        #endif
+        write(2,"PASS REPEAT_ERR\n",16);
     }
     else {
-        #ifdef test_cout
-        write(2, "\nPASS REPEAT OKAY\n",18);
-        #endif
-
         // отправляем на сервер запрос что мы хотим регистрироваться!
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////// Парсим строку
-        char *str = concat((char*)"registration[", (char*)i_to_s(strlen(login)));
-        str = concat(str, "][");
-        str = concat(str, (char*)i_to_s(strlen(password)));
-        str = concat(str, "]");
-        str = concat(str,login);
-        str = concat(str,password);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (send(sock, str, strlen(str), 0) == -1) { // отправляем на сервер наши данные для регистрации
+        buffer = concat(concat(concat(concat(concat(concat((char*)"registration[", 
+                                        (char*)i_to_s(strlen(login))), "]["), 
+                                        (char*)i_to_s(strlen(password))), "]"),login),password);
+
+        if (send(sock, buffer, strlen(buffer), 0) == -1) { // отправляем на сервер наши данные для регистрации
             write(2, "SERVER DONT CONNETCTED\n",23);
             return;
         }
-        free(str);
-        char temp_buf[256];
+        free(buffer);
 
-        
-        if (recv(sock, &temp_buf[0], sizeof(temp_buf) - 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+        buffer = mx_strnew(256);
+        if (recv(sock, buffer, 256, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
             write(2, "SERVER DONT CONNETCTED\n",23);
             return;
         }
@@ -279,6 +270,7 @@ void register_connect(GtkWidget *button, gpointer data) {
             write(2, "REGISTER OKAY\n",14);
             return;
         }
+        mx_strdel(&buffer);
 
     }
 }

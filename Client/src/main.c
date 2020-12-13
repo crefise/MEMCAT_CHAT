@@ -1,7 +1,8 @@
 #include "../inc/header.h"
 
 //#define SERVERADDR "51.15.120.179"
-#define SERVERADDR "10.11.6.1" // Айпи для моего ПК
+//#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
+#define SERVERADDR "localhost"
 #define SERVERPORT 8000 // Порт сервера
 
 void initializate_socket(){

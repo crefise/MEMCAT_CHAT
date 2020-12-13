@@ -42,3 +42,8 @@ void mx_strdel(char **str) {
     free(*str);
     *str = NULL;
 }
+
+void mx_printerr(const char *s) {
+    write(2, s, strlen(s));
+    write(2, "\n", 1);
+}

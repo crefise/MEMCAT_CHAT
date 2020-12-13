@@ -43,7 +43,13 @@ char* i_to_s(int n);
 char *clear_buffer(char *s1);
 char *mx_strnew(const int size);
 void mx_strdel(char **str);
+void mx_printerr(const char *s);
 /* END string.c */
+
+/* help_function.c */
+bool curr_sybmobol(char *str);
+/* END help_function.c */
+
 
 /* socket_function */
 extern int sock;

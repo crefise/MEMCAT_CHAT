@@ -1,4 +1,6 @@
 #include "../inc/header.h"
+
+
 char* concat(char* s1, char* s2) {
    int len1 = strlen(s1);
    int len2 = strlen(s2);                      
@@ -40,4 +42,9 @@ char *mx_strnew(const int size) {
 void mx_strdel(char **str) {
     free(*str);
     *str = NULL;
+}
+
+void mx_printerr(const char *s) {
+   write(2, s, strlen(s));
+   write(2, "\n", 1);
 }

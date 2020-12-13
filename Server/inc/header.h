@@ -21,6 +21,7 @@ extern sqlite3* chats_db;
 /* SERVER FUNCTION*/
 void *user_connect(void* sock); // функция оброботки каждого клиента
 int parse_solution(char *text); // Функция которая определяем что именно хочет клиент
+bool curr_sybmobol(char *str);
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready
@@ -48,6 +49,7 @@ char* concat(char* s1, char* s2);
 char *clear_buffer(char *s1);
 char *mx_strnew(const int size);
 void mx_strdel(char **str);
+void mx_printerr(const char *s);
 /* GTK */
 
 
