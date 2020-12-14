@@ -22,6 +22,7 @@ struct user_info {
     GtkWidget *entry_username;
     GtkWidget *entry_password;
     GtkWidget *entry_confirm_password;
+    GtkWidget *label_error;
 };
 void load_css ( void );
 GtkWidget *createWindow ( const gint width, const gint height, const gchar *const title );
