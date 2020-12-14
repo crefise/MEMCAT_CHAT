@@ -41,19 +41,39 @@ void *user_connect(void* sock) {
             case 4: // We wanna register
                 write(2, "HOTIM  REGISTRAtSIYA\n",21);
                 char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
-                add_user_db(temp[0], temp[1], users_db);
-                //exec_db("SELECT * FROM USERS", users_db); // base show
-                if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
-                    write(2, "USER CLOSE CONNECTION\n",21);
+                if (check_user_db(temp[0], users_db)) { // if 1 человек уже зарегестрирован
+                    if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
+                        write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                    mx_printerr("USER CANT CREATE ACC, BECOUSE HE DID IT ALREADY");
+                } 
+                else {
+                    if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
+                        write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                    add_user_db(temp[0], temp[1], users_db);
                 }
+
+                exec_db("SELECT * FROM USERS", users_db); // base show
+
                 exit = 0;
                 break;
             case 5: // We wanna login
                 write(2, "HOTIM  LOGIN\n",14);
-
-                if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
-                    write(2, "USER CLOSE CONNECTION\n",21);
+                char **temp_for_login = ps_login(buffer);
+                if (access_db(temp_for_login[0], temp_for_login[1], users_db) == 1) {
+                    if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
+                     write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                    mx_printerr("LOGIN SUCCESS");
                 }
+                else {
+                    if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
+                     write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                    mx_printerr("LOGIN FILED");
+                }
+
                 exit = 0;
                 break;
 

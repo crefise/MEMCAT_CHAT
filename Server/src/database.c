@@ -77,15 +77,31 @@ int access_db(char* login, char* password, sqlite3* db) {
    } 
    rc = sqlite3_step(result);
    if (rc == SQLITE_ROW) {
-      /*
-      char* ID_c = sqlite3_column_text(result, 0);
-      int ID = 0;
-      //printf("USER ID = %s\n", sqlite3_column_text(result, 0));
-      sqlite3_finalize(result);
-      */
       free(statement);
-      
-      //free(ID_c);
+      return true;
+   }
+   else {
+      sqlite3_finalize(result);
+      free(statement);
+      return false;
+   }
+}
+
+int check_user_db(char* login, sqlite3* db) {
+   sqlite3_stmt *result;
+   char* statement = "SELECT ID from USERS where LOGIN='";
+   statement = concat(statement, login);
+   statement = concat(statement, "'");
+
+   int rc = sqlite3_prepare_v2(db, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+      sqlite3_close(db);
+      return false;
+   } 
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) {
+      free(statement);
       return true;
    }
    else {

@@ -220,16 +220,15 @@ void login_connect(GtkWidget *button, gpointer data) {
     buffer = malloc(2);
     if (recv(sock, &buffer[0], sizeof(buffer) - 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
         write(2, "SERVER DONT CONNETCTED\n",23);
-        return;
-    }
-
-    if (strcmp(buffer, "1") != 0) {
-        write(2, "LOGIN ERROR\n",13);
-        return;
-    }
+    } 
     else {
-        write(2, "LOGIN OKAY ",12);
-        return;
+        if (strcmp(buffer, "1") != 0) {
+            write(2, "LOGIN ERROR\n",13);
+        }
+        else {
+            write(2, "LOGIN OKAY ",12);
+        }
+        mx_strdel(&buffer);
     }
 }
 
@@ -266,9 +265,12 @@ void register_connect(GtkWidget *button, gpointer data) {
             write(2, "SERVER DONT CONNETCTED\n",23);
             return;
         }
-        else {
+        else if (strcmp(buffer, "1") == 0){
             write(2, "REGISTER OKAY\n",14);
             return;
+        }
+        else {
+            mx_printerr("ALREADY REGISTER");
         }
         mx_strdel(&buffer);
 

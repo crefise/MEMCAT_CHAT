@@ -41,6 +41,7 @@ void register_connect(GtkWidget *button, gpointer data);
 #include <sys/socket.h>
 #include <sys/types.h>
 
+
 /* string.c */
 char* concat(char* s1, char* s2);
 char* i_to_s(int n);
