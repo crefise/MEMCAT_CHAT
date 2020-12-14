@@ -22,6 +22,7 @@ GtkWidget *createWindow ( const gint width, const gint height, const gchar *cons
     GtkWidget *window;
     window = gtk_window_new ( GTK_WINDOW_TOPLEVEL );
     gtk_window_set_title ( GTK_WINDOW ( window ), title );
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     g_signal_connect ( window, "destroy", gtk_main_quit, window );
     gtk_window_set_default_size ( GTK_WINDOW ( window ), width, height );
     gtk_container_set_border_width ( GTK_CONTAINER ( window ), 50 );
@@ -69,6 +70,7 @@ GtkWidget *create_login_grid (GtkWidget *stack) {
 
     GtkWidget *label_username;
     GtkWidget *label_password;
+    
 
     /// *** Create the Grid
     grid = gtk_grid_new();
@@ -76,6 +78,7 @@ GtkWidget *create_login_grid (GtkWidget *stack) {
     /// ***
     label_username = gtk_label_new ( "Username:" );
     label_password = gtk_label_new ( "Password:" );
+    user_login_info->label_error = gtk_label_new ( "" );
 
     /// ***
     user_login_info->entry_username = gtk_entry_new();
@@ -83,15 +86,19 @@ GtkWidget *create_login_grid (GtkWidget *stack) {
 
     /// ***
     login_button = gtk_button_new_with_label ( "Login" );
-    back_button  = gtk_button_new_with_label ( "Go to Main" );
+    back_button  = gtk_button_new_with_label ( "Back to Main" );
 
     /// ***
     gtk_grid_attach ( GTK_GRID ( grid ), label_username, 0, 0, 1, 1 );
     gtk_grid_attach ( GTK_GRID ( grid ), user_login_info->entry_username, 1, 0, 1, 1 );
+
     gtk_grid_attach ( GTK_GRID ( grid ), label_password, 0, 1, 1, 1 );
     gtk_grid_attach ( GTK_GRID ( grid ), user_login_info->entry_password, 1, 1, 1, 1 );
-    gtk_grid_attach ( GTK_GRID ( grid ), back_button,    0, 2, 1, 1 );
-    gtk_grid_attach ( GTK_GRID ( grid ), login_button,   1, 2, 1, 1 );
+
+    gtk_grid_attach ( GTK_GRID ( grid ), user_login_info->label_error, 0, 2, 2, 2 );
+
+    gtk_grid_attach ( GTK_GRID ( grid ), back_button,    0, 5, 1, 1 );
+    gtk_grid_attach ( GTK_GRID ( grid ), login_button,   1, 5, 1, 1 );
 
     /// ***
     g_signal_connect ( login_button, "clicked", G_CALLBACK ( login_connect ), user_login_info );
@@ -109,7 +116,6 @@ GtkWidget *create_register_grid (GtkWidget *stack) {
     GtkWidget *label_login;
     GtkWidget *label_password;
     GtkWidget *label_confirm_password;
-    GtkWidget *label_error;
 
     struct user_info *user_login_info = malloc(sizeof(struct user_info));
 
@@ -120,7 +126,7 @@ GtkWidget *create_register_grid (GtkWidget *stack) {
     label_login = gtk_label_new ( "Login:" );
     label_password  = gtk_label_new ( "Password:" );
     label_confirm_password  = gtk_label_new ( "Confirm password:" );
-    label_error = gtk_label_new ( "Confirm password:" );
+    user_login_info->label_error = gtk_label_new ( "" );
 
     /// ***
     user_login_info->entry_username = gtk_entry_new();
@@ -141,8 +147,10 @@ GtkWidget *create_register_grid (GtkWidget *stack) {
     gtk_grid_attach ( GTK_GRID ( grid ), label_confirm_password,  0, 2, 1, 1 );
     gtk_grid_attach ( GTK_GRID ( grid ), user_login_info->entry_confirm_password,  1, 2, 1, 1 );
 
-    gtk_grid_attach ( GTK_GRID ( grid ), back_button,     0, 3, 1, 1 );
-    gtk_grid_attach ( GTK_GRID ( grid ), register_button, 1, 3, 1, 1 );
+    gtk_grid_attach ( GTK_GRID ( grid ), user_login_info->label_error, 0, 3, 2, 2 );
+
+    gtk_grid_attach ( GTK_GRID ( grid ), back_button,     0, 5, 1, 1 );
+    gtk_grid_attach ( GTK_GRID ( grid ), register_button, 1, 5, 1, 1 );
 
     /// ***
     g_signal_connect ( register_button, "clicked", G_CALLBACK ( register_connect ), user_login_info );
@@ -196,8 +204,17 @@ void quit_clbk    ( void ) {
 void login_connect(GtkWidget *button, gpointer data) {
     char *buffer = NULL;
     struct user_info *temp = data;
+
+    gtk_label_set_text(GTK_LABEL(temp->label_error), "");
+
     char  *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
+
+    if (strcmp(login, "") == 0 || strcmp(password, "") == 0) {
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "Empty field(s)");
+        return;
+    }
+
     // А тут мы ждем ответа от сервера/ можно ли нам менять окно!
     buffer = concat((char*)"login[", (char*)i_to_s(strlen(login)));
     buffer = concat(buffer, "][");
@@ -236,9 +253,22 @@ void login_connect(GtkWidget *button, gpointer data) {
 void register_connect(GtkWidget *button, gpointer data) {
     char *buffer = NULL;
     struct user_info *temp = data;
+
+    gtk_label_set_text(GTK_LABEL(temp->label_error), "");
+
     char *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
     char *password_repeat = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_confirm_password));
+
+    if (strcmp(login, "") == 0 || strcmp(password, "") == 0 || strcmp(password_repeat, "") == 0) {
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "Empty field(s)");
+        return;
+    }
+
+    if (strcmp(password, password_repeat) != 0) {
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "Passwords do not match");
+        return;
+    }
 
     if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
         mx_printerr("SYBMOL ERROR");
