@@ -276,6 +276,18 @@ void register_connect(GtkWidget *button, gpointer data) {
         return;
     }
 
+    /*
+    if (strlen(login) < 4) {
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "login ne mozet mense 4");
+        return;
+    }
+    */
+   
+    if (strlen(password) < 6) {
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "Parol ne mojet bit mense 6");
+        return;
+    }
+
 
 
     else {
@@ -302,7 +314,7 @@ void register_connect(GtkWidget *button, gpointer data) {
             return;
         }
         else {
-            mx_printerr("ALREADY REGISTER");
+            gtk_label_set_text(GTK_LABEL(temp->label_error), "Login zanyat hahuy");
         }
         mx_strdel(&buffer);
 
