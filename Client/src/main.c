@@ -1,7 +1,7 @@
 #include "../inc/header.h"
 
 int sock;
-
+GtkWidget *stack;
 int main ( void ) {
     initializate_socket();
     if (sock == -1)
@@ -13,7 +13,7 @@ int main ( void ) {
     GtkWidget *register_grid;
 
     GtkWidget *stack_box;
-    GtkWidget *stack;
+
 
     /// ***
     gtk_init ( NULL, NULL );

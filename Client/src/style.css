@@ -14,13 +14,12 @@ label
 {
     color:              white;
     font-size:          12px;
-    margin-right:       15px;
 }
 
 button
 {
     background:         #343434;
-    border-color:       red;
+    border-color:       gray;
     box-shadow:         none;
     margin:             10px;
 }

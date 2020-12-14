@@ -62,4 +62,7 @@ extern int sock;
 void initializate_socket();
 /* END socket_function */
 
+
+
+extern GtkWidget *stack;
 #endif

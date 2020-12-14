@@ -224,7 +224,7 @@ void login_connect(GtkWidget *button, gpointer data) {
     buffer = concat(buffer,password);
 
     if (!curr_sybmobol(login) || !curr_sybmobol(password)){ // проверка на коректность ввода
-        mx_printerr("SYBMOL ERROR");
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD SYMBOL");
         return;
     }
 
@@ -240,7 +240,7 @@ void login_connect(GtkWidget *button, gpointer data) {
     } 
     else {
         if (strcmp(buffer, "1") != 0) {
-            write(2, "LOGIN ERROR\n",13);
+            gtk_label_set_text(GTK_LABEL(temp->label_error), "UNCOREECT PASS OR LOGIN");
         }
         else {
             write(2, "LOGIN OKAY ",12);
@@ -259,6 +259,13 @@ void register_connect(GtkWidget *button, gpointer data) {
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
     char *password_repeat = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_confirm_password));
 
+
+// Проверки на коректность ввода
+    if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD SYMBOL");
+        return;
+    }
+
     if (strcmp(login, "") == 0 || strcmp(password, "") == 0 || strcmp(password_repeat, "") == 0) {
         gtk_label_set_text(GTK_LABEL(temp->label_error), "Empty field(s)");
         return;
@@ -269,14 +276,8 @@ void register_connect(GtkWidget *button, gpointer data) {
         return;
     }
 
-    if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
-        mx_printerr("SYBMOL ERROR");
-        return;
-    }
 
-    if (strcmp(password, password_repeat) != 0) {
-        write(2,"PASS REPEAT_ERR\n",16);
-    }
+
     else {
         // отправляем на сервер запрос что мы хотим регистрироваться!
 
@@ -297,6 +298,7 @@ void register_connect(GtkWidget *button, gpointer data) {
         }
         else if (strcmp(buffer, "1") == 0){
             write(2, "REGISTER OKAY\n",14);
+            login_clbk((GtkButton*)button, (GtkStack*)stack);
             return;
         }
         else {
