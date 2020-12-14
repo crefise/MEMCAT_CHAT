@@ -66,6 +66,7 @@ void *user_connect(void* sock) {
                      write(2, "USER CLOSE CONNECTION\n",21);
                     }
                     mx_printerr("LOGIN SUCCESS");
+                    add_online_user_db(temp_for_login[0], client_socket, online_users_db);
                 }
                 else {
                     if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
@@ -87,6 +88,9 @@ void *user_connect(void* sock) {
                 exit = 1;
                 break;
         }
+        mx_printerr("--------ONLINE BASE NOW-----------");
+        exec_db("SELECT * FROM ONLINE_USERS", online_users_db);
+        mx_printerr("----------------------------------");
     }
 
     printf("CONNECTION  CLOSED\n");

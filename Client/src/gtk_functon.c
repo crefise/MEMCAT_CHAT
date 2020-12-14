@@ -243,7 +243,7 @@ void login_connect(GtkWidget *button, gpointer data) {
             gtk_label_set_text(GTK_LABEL(temp->label_error), "UNCOREECT PASS OR LOGIN");
         }
         else {
-            write(2, "LOGIN OKAY ",12);
+            write(2, "LOGIN OKAY\n",11);
         }
         mx_strdel(&buffer);
     }

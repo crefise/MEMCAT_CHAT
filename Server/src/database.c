@@ -61,6 +61,17 @@ void add_user_db(char* login, char* password, sqlite3* db) {
    free(statement);
 }
 
+void add_online_user_db(char* login, int socket, sqlite3* db) {
+   char* statement = "INSERT INTO ONLINE_USERS (LOGIN,SOCKET) VALUES ('";
+   statement = concat(statement, login);
+   statement = concat(statement, "', '");
+   statement = concat(statement, i_to_s(socket));
+   statement = concat(statement, "'); ");
+
+   exec_db(statement, db);
+   free(statement);
+}
+
 int access_db(char* login, char* password, sqlite3* db) {
    sqlite3_stmt *result;
    char* statement = "SELECT ID from USERS where LOGIN='";

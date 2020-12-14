@@ -17,6 +17,7 @@ extern int ph_count;
 extern int count_users;
 extern sqlite3* users_db;
 extern sqlite3* chats_db;
+extern sqlite3* online_users_db;
 #define BUF_SIZE 256;
 /* SERVER FUNCTION*/
 void *user_connect(void* sock); // функция оброботки каждого клиента
@@ -29,6 +30,7 @@ void exec_db(char* statement, sqlite3* db); // ready
 void close_db(sqlite3* db); // ready
 int get_maxID_db(sqlite3* db); // 
 int check_user_db(char* login, sqlite3* db);
+void add_online_user_db(char* login, int socket, sqlite3* db);
 //void init_db(sqlite3* users_db, sqlite3* chats_db); //
 void add_user_db(char* login, char* password, sqlite3* db); // ready
 int access_db(char* login, char* password, sqlite3* db); // ready

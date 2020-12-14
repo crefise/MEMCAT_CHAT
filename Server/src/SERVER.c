@@ -5,6 +5,7 @@ int parse_solution(char *text);
 int ph_count = 0; 
 sqlite3* users_db;
 sqlite3* chats_db;
+sqlite3* online_users_db;
 
 int main() {
     /**** START DATABASE BLOCK ****/
@@ -12,6 +13,7 @@ int main() {
 
     open_db("Server/databases/users.db", &users_db);
     open_db("Server/databases/chats.db", &chats_db);
+    open_db("Server/databases/online_users.db", &online_users_db);
 
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
@@ -24,6 +26,11 @@ int main() {
            "USER1_ID       INT                 NOT NULL,"\
            "USER2_ID       INT                 NOT NULL,"\
            "PATH           TEXT                NOT NULL);", chats_db);
+
+    exec_db("CREATE TABLE ONLINE_USERS("\
+           "LOGIN       TEXT                NOT NULL,"\
+           "SOCKET      INT                 NOT NULL,"\
+           "UNIQUE (LOGIN, SOCKET));", online_users_db);
 
     exec_db("SELECT * FROM USERS", users_db);
     
@@ -62,13 +69,13 @@ int main() {
     write(1, "LISTEN SUCCESS\n Waiting connection...\n",38);
 
     // Получаем сообщения из сокета
-    pthread_t pthreads[5];
+    pthread_t pthreads[1];
     int client_socket; // сокет для клиента
     struct sockaddr_in client_addr; // адрес клиента (заполняется системой)
     unsigned int client_addr_size = (unsigned int)sizeof(client_addr);
     while ((client_socket = accept(sock, (struct sockaddr *)&client_addr, &client_addr_size))) {
         write(1,"CONNETCTED: \n",13);
-        pthread_create(&pthreads[ph_count], NULL, user_connect, &client_socket);
+        pthread_create(&pthreads[0], NULL, user_connect, &client_socket);
         ph_count++;
         printf("Подключенные клиенты - %d\n",  ph_count);
         write(1,"PTHREAD CREATED: \n",18);
@@ -76,10 +83,9 @@ int main() {
     close(sock);
 
     /**** START DATABASE BLOCK ****/
-    exec_db("SELECT * FROM USERS", users_db);
     close_db(users_db);
     close_db(chats_db);
-
+    close_db(online_users_db);
     /**** END DATABASE BLOCK ****/
     return 0;
 }
