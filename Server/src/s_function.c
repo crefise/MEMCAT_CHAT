@@ -7,8 +7,9 @@ void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
     int client_socket = *temp;
+    char *login, *pass;
     bool exit = 0;
-
+    bool logined = 0;
     while (!exit) {
 
         mx_strdel(&buffer);
@@ -18,11 +19,21 @@ void *user_connect(void* sock) {
 
         if (nsize == 0) {
             write(2, "CLIENT CLOSE CONNECTION\n", 24);
+            if (logined) {
+               mx_printerr(login);
+               mx_strdel(&login);
+               mx_strdel(&pass); 
+               // Удаление пользователя из онлайн базы пользователей
+               char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
+               temp_statement = concat(temp_statement, i_to_s(client_socket));
+               temp_statement = concat(temp_statement, ";");
+               exec_db(temp_statement, online_users_db);
+               mx_strdel(&temp_statement);
+            }
             break;
         }
 
 
-        pthread_t pthread; 
 
         printf("Server took : %s\n", buffer);
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
@@ -45,7 +56,7 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case 5: // We wanna login
-                log_func(buffer, client_socket);
+                log_func(buffer, client_socket, &logined, &login, &pass);
                 exit = 0;
                 break;
             case -1: // ошибка сообщения
@@ -83,7 +94,6 @@ int parse_solution(char *text) {
     return -1;
 }
 
-
 bool curr_sybmobol(char *str) {
     int size_banned = 5;
     char banned_symbol[5] = {' ', '\\', '#', '[', ']'};
@@ -114,18 +124,24 @@ void reg_func(char *buffer, int client_socket) {
 
     exec_db("SELECT * FROM USERS", users_db); // base show
 }
-void log_func(char *buffer, int client_socket) {
+
+void log_func(char *buffer, int client_socket, bool *logined, char **login, char** pass) {
     char **temp_for_login = ps_login(buffer);
     if (access_db(temp_for_login[0], temp_for_login[1], users_db) == 1) {
         if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
-            write(2, "USER CLOSE CONNECTION\n",21);
+            write(2, "USER CLOSE CONNECTION\n",22);
+            return;
         }
+        *login = strdup(temp_for_login[0]);
+        *pass = strdup(temp_for_login[1]);
         mx_printerr("LOGIN SUCCESS");
+        *logined = true;
         add_online_user_db(temp_for_login[0], client_socket, online_users_db);
     }
     else {
         if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
             write(2, "USER CLOSE CONNECTION\n",21);
+            return;
         }
         mx_printerr("LOGIN FILED");
     }
