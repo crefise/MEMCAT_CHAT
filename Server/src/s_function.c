@@ -1,6 +1,8 @@
 
 #include "../inc/header.h"
 
+
+
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
@@ -39,46 +41,13 @@ void *user_connect(void* sock) {
                 exit = 1;
                 break;
             case 4: // We wanna register
-                write(2, "HOTIM  REGISTRAtSIYA\n",21);
-                char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
-                if (check_user_db(temp[0], users_db)) { // if 1 человек уже зарегестрирован
-                    if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
-                        write(2, "USER CLOSE CONNECTION\n",21);
-                    }
-                    mx_printerr("USER CANT CREATE ACC, BECOUSE HE DID IT ALREADY");
-                } 
-                else {
-                    if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
-                        write(2, "USER CLOSE CONNECTION\n",21);
-                    }
-                    add_user_db(temp[0], temp[1], users_db);
-                }
-
-                exec_db("SELECT * FROM USERS", users_db); // base show
-
+                reg_func(buffer,client_socket);
                 exit = 0;
                 break;
             case 5: // We wanna login
-                write(2, "HOTIM  LOGIN\n",14);
-                char **temp_for_login = ps_login(buffer);
-                if (access_db(temp_for_login[0], temp_for_login[1], users_db) == 1) {
-                    if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
-                     write(2, "USER CLOSE CONNECTION\n",21);
-                    }
-                    mx_printerr("LOGIN SUCCESS");
-                    add_online_user_db(temp_for_login[0], client_socket, online_users_db);
-                }
-                else {
-                    if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
-                     write(2, "USER CLOSE CONNECTION\n",21);
-                    }
-                    mx_printerr("LOGIN FILED");
-                }
-
+                log_func(buffer, client_socket);
                 exit = 0;
                 break;
-
-                
             case -1: // ошибка сообщения
                 write(2, "-1 ERROR\n",9);
                 exit = 1;
@@ -126,4 +95,38 @@ bool curr_sybmobol(char *str) {
         }
     }
     return true;
+}
+
+void reg_func(char *buffer, int client_socket) {
+    char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
+    if (check_user_db(temp[0], users_db)) { // if 1 человек уже зарегестрирован
+        if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
+            write(2, "USER CLOSE CONNECTION\n",21);
+        }
+        mx_printerr("USER CANT CREATE ACC, BECOUSE HE DID IT ALREADY");
+    } 
+    else {
+        if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
+            write(2, "USER CLOSE CONNECTION\n",21);
+        }
+        add_user_db(temp[0], temp[1], users_db);
+    }
+
+    exec_db("SELECT * FROM USERS", users_db); // base show
+}
+void log_func(char *buffer, int client_socket) {
+    char **temp_for_login = ps_login(buffer);
+    if (access_db(temp_for_login[0], temp_for_login[1], users_db) == 1) {
+        if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
+            write(2, "USER CLOSE CONNECTION\n",21);
+        }
+        mx_printerr("LOGIN SUCCESS");
+        add_online_user_db(temp_for_login[0], client_socket, online_users_db);
+    }
+    else {
+        if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
+            write(2, "USER CLOSE CONNECTION\n",21);
+        }
+        mx_printerr("LOGIN FILED");
+    }
 }

@@ -15,6 +15,7 @@
 #include <netinet/in.h>
 #include<stdbool.h>
 #include <netdb.h>
+#include <pthread.h>
 
 /*gtk_function.c*/
 #include "gtk/gtk.h"
@@ -62,7 +63,8 @@ extern int sock;
 void initializate_socket();
 /* END socket_function */
 
-
+/* PTHREAD_FUNCTION.c */
+void *massage_check_in(void * sock);
 
 extern GtkWidget *stack;
 #endif

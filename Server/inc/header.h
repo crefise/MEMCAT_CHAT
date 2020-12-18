@@ -23,6 +23,8 @@ extern sqlite3* online_users_db;
 void *user_connect(void* sock); // функция оброботки каждого клиента
 int parse_solution(char *text); // Функция которая определяем что именно хочет клиент
 bool curr_sybmobol(char *str);
+void reg_func(char *buffer, int client_socket); // register function;
+void log_func(char *buffer, int client_socket); // login function;
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready

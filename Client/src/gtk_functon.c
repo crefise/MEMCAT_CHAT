@@ -1,5 +1,5 @@
 #include "../inc/header.h"
-//#define test_cout
+
 void load_css ( void ) {
     GtkCssProvider *provider;
     GdkDisplay     *display;
@@ -228,24 +228,28 @@ void login_connect(GtkWidget *button, gpointer data) {
         return;
     }
 
-    if (send(sock, buffer, strlen(buffer), 0) == -1) {
+    if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
         write(2, "SERVER DONT CONNETCTED\n",23);
-    } // send data to server
-    free(buffer);
+    } 
+    mx_strdel(&buffer);
 
 
-    buffer = malloc(2);
-    if (recv(sock, &buffer[0], sizeof(buffer) - 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+    buffer = mx_strnew(1);
+    if (recv(sock, &buffer[0], 1, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
         write(2, "SERVER DONT CONNETCTED\n",23);
     } 
     else {
+        mx_printerr(buffer);
         if (strcmp(buffer, "1") != 0) {
             gtk_label_set_text(GTK_LABEL(temp->label_error), "UNCOREECT PASS OR LOGIN");
         }
         else {
             write(2, "LOGIN OKAY\n",11);
+            pthread_t pthreads[1];
+            pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
         }
         mx_strdel(&buffer);
+
     }
 }
 
@@ -282,12 +286,12 @@ void register_connect(GtkWidget *button, gpointer data) {
         return;
     }
     */
-   
+   /*
     if (strlen(password) < 6) {
         gtk_label_set_text(GTK_LABEL(temp->label_error), "Parol ne mojet bit mense 6");
         return;
     }
-
+    */
 
 
     else {
@@ -301,20 +305,20 @@ void register_connect(GtkWidget *button, gpointer data) {
             write(2, "SERVER DONT CONNETCTED\n",23);
             return;
         }
-        free(buffer);
+        mx_strdel(&buffer);
 
         buffer = mx_strnew(256);
         if (recv(sock, buffer, 256, 0) == -1) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
             write(2, "SERVER DONT CONNETCTED\n",23);
             return;
         }
-        else if (strcmp(buffer, "1") == 0){
-            write(2, "REGISTER OKAY\n",14);
-            login_clbk((GtkButton*)button, (GtkStack*)stack);
+        else if (strcmp(buffer, "1") == 0){ // если от сервера пришло что регистер успешна
+            mx_printerr("REGISTER SUCCESS");
+            login_clbk((GtkButton*)button, (GtkStack*)stack); // переходим в авторизацию
             return;
         }
         else {
-            gtk_label_set_text(GTK_LABEL(temp->label_error), "Login zanyat hahuy");
+            gtk_label_set_text(GTK_LABEL(temp->label_error), "Login is used"); // если логин используется
         }
         mx_strdel(&buffer);
 
