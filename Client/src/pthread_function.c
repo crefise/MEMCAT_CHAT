@@ -13,3 +13,12 @@ void* massage_check_in(void* socket) {
     mx_printerr("\n");
     return NULL;
 }
+
+void *console_style() {
+    char buff[256];
+    scanf("%s", buff);
+    if (send(sock, &buff[0], strlen(buff), 0) == 0) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+        write(2, "SERVER DONT CONNETCTED\n",23);
+        return NULL;
+    } 
+}
