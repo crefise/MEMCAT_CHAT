@@ -74,11 +74,9 @@ int main() {
     struct sockaddr_in client_addr; // адрес клиента (заполняется системой)
     unsigned int client_addr_size = (unsigned int)sizeof(client_addr);
     while ((client_socket = accept(sock, (struct sockaddr *)&client_addr, &client_addr_size))) {
-        write(1,"CONNETCTED: \n",13);
         pthread_create(&pthreads[0], NULL, user_connect, &client_socket);
         ph_count++;
         printf("Подключенные клиенты - %d\n",  ph_count);
-        write(1,"PTHREAD CREATED: \n",18);
     }
     close(sock);
 
@@ -87,6 +85,7 @@ int main() {
     close_db(chats_db);
     close_db(online_users_db);
     /**** END DATABASE BLOCK ****/
+    
     return 0;
 }
 

@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <sqlite3.h> 
 
-extern int ph_count;
 extern int count_users;
 extern sqlite3* users_db;
 extern sqlite3* chats_db;
@@ -25,6 +24,7 @@ int parse_solution(char *text); // Функция которая определ�
 bool curr_sybmobol(char *str);
 void reg_func(char *buffer, int client_socket); // register function;
 void log_func(char *buffer, int client_socket, bool *logined,  char **login, char** pass); // login function;
+void send_massage_to_client(char* message, char* login, int sender);
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready
@@ -47,6 +47,7 @@ int get_users_ID(char* login, sqlite3* db);
 char** ps_registration(char* src);
 char** ps_login(char* src);
 char** ps_message(char* src);
+void ps_massage_add(char *str,char **login, char **message);
 
 /* string */
 char* i_to_s(int n);
@@ -55,6 +56,8 @@ char *clear_buffer(char *s1);
 char *mx_strnew(const int size);
 void mx_strdel(char **str);
 void mx_printerr(const char *s);
+char *mx_strncpy(char *dst, const char *src, int len);
+bool mx_isdigit(char c);
 /* GTK */
 
 

@@ -45,5 +45,34 @@ void mx_strdel(char **str) {
 
 void mx_printerr(const char *s) {
     write(2, s, strlen(s));
-    write(2, "\n", 1);
+}
+
+char *mx_strncpy(char *dst, const char *src, int len) {
+    dst = mx_strnew(len);
+   for (int i = 0; i < len; i++) {
+        if (dst) {
+            if(src) {
+                dst[i] = src[i];
+            }
+           else {
+                dst[i] = '\n';
+           }
+        }
+        else {
+           return dst;
+        }
+   }
+   return dst;
+}
+
+bool mx_isdigit(char c) {
+    char alphabet[] = "0123456789";
+    char *letter = alphabet;
+    while (*letter != '\0' && *letter != c) {
+        ++letter;
+    }
+    if (*letter) {
+        return true;
+    }
+    return false;
 }

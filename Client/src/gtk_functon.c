@@ -239,7 +239,6 @@ void login_connect(GtkWidget *button, gpointer data) {
         write(2, "SERVER DONT CONNETCTED\n",23);
     } 
     else {
-        mx_printerr(buffer);
         if (strcmp(buffer, "1") != 0) {
             gtk_label_set_text(GTK_LABEL(temp->label_error), "UNCOREECT PASS OR LOGIN");
         }
@@ -247,6 +246,8 @@ void login_connect(GtkWidget *button, gpointer data) {
             write(2, "LOGIN OKAY\n",11);
             pthread_t pthreads[1];
             pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
+            pthread_create(&pthreads[0], NULL, console_style, NULL);
+            
         }
         mx_strdel(&buffer);
 

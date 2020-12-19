@@ -51,6 +51,8 @@ char *clear_buffer(char *s1);
 char *mx_strnew(const int size);
 void mx_strdel(char **str);
 void mx_printerr(const char *s);
+char *mx_strncpy(char *dst, const char *src, int len);
+bool mx_isdigit(char c);
 /* END string.c */
 
 /* help_function.c */
@@ -65,6 +67,7 @@ void initializate_socket();
 
 /* PTHREAD_FUNCTION.c */
 void *massage_check_in(void * sock);
+void *console_style();
 
 extern GtkWidget *stack;
 #endif

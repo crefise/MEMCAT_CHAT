@@ -2,46 +2,73 @@
 #include "../inc/header.h"
 
 
+void send_massage_to_client(char* message, char* login, int sender) {
+    /*
+    sqlite3_stmt *result;
+    char* statement = "SELECT SOCKET from ONLINE_USERS where LOGIN='";
+    statement = concat(statement, login);
+    statement = concat(statement, "'");
+    int rc = sqlite3_prepare_v2(online_users_db, statement, -1, &result, 0);
+    result.
+    */
+    if (send(7, message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
+            mx_printerr("SEND ERROR\n");
+    }
+}
 
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
     int client_socket = *temp;
-    char *login, *pass;
+    char *login, *pass, *send_login, *send_text;
     bool exit = 0;
     bool logined = 0;
     while (!exit) {
+
+
+        mx_printerr("--------ONLINE BASE NOW-----------\n");
+        exec_db("SELECT * FROM ONLINE_USERS", online_users_db);
+        mx_printerr("----------------------------------\n");
 
         mx_strdel(&buffer);
         buffer = mx_strnew(256);
 
         int nsize = recv(client_socket, &buffer[0], 256, 0); // Ждем ответа от клиента 
 
-        if (nsize == 0) {
-            write(2, "CLIENT CLOSE CONNECTION\n", 24);
+        if (nsize == 0) { // Если клиент вышел/ чистим все что надо
             if (logined) {
-               mx_printerr(login);
-               mx_strdel(&login);
-               mx_strdel(&pass); 
                // Удаление пользователя из онлайн базы пользователей
-               char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
-               temp_statement = concat(temp_statement, i_to_s(client_socket));
-               temp_statement = concat(temp_statement, ";");
-               exec_db(temp_statement, online_users_db);
-               mx_strdel(&temp_statement);
+                char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
+                temp_statement = concat(temp_statement, i_to_s(client_socket));
+                temp_statement = concat(temp_statement, ";");
+                exec_db(temp_statement, online_users_db);
+                mx_strdel(&temp_statement);
+                mx_printerr("USER \"");
+                mx_printerr(login);
+                mx_printerr("\" CLOSED CONNECTION.\n");
             }
+            else {
+                mx_printerr("UKNOWN USER CLOSED CONNECTION.\n");
+            }
+            mx_strdel(&login);
+            mx_strdel(&pass); 
+            close(client_socket); // Закрываем сокет клиента
             break;
         }
 
 
 
-        printf("Server took : %s\n", buffer);
+        mx_printerr("Server took : ");
+        mx_printerr(buffer);
+        mx_printerr("\n");
+
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
 
         switch (solution) {
-            case 1: // Хотим написать сообщение
-                write(2, "ADD MASSAGE\n",13);
-                exit = 1;
+            case 1: // Хотим написать сообщение              
+                ps_massage_add(buffer, &send_login, &send_text); // Парсим сообщение что пришло
+                send_massage_to_client(send_text, send_login, client_socket); // отправляем сообщение на нужный логин
+                exit = 0;
                 break;
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
@@ -68,14 +95,8 @@ void *user_connect(void* sock) {
                 exit = 1;
                 break;
         }
-        mx_printerr("--------ONLINE BASE NOW-----------");
-        exec_db("SELECT * FROM ONLINE_USERS", online_users_db);
-        mx_printerr("----------------------------------");
     }
 
-    printf("CONNECTION  CLOSED\n");
-    close(client_socket);
-    ph_count--;
 
     return NULL;
 }
@@ -134,7 +155,11 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
         }
         *login = strdup(temp_for_login[0]);
         *pass = strdup(temp_for_login[1]);
-        mx_printerr("LOGIN SUCCESS");
+
+        mx_printerr("LOGIN SUCCESS. USER: \"");
+        mx_printerr(*login);
+        mx_printerr("\"\n");
+
         *logined = true;
         add_online_user_db(temp_for_login[0], client_socket, online_users_db);
     }
@@ -143,6 +168,8 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
             write(2, "USER CLOSE CONNECTION\n",21);
             return;
         }
-        mx_printerr("LOGIN FILED");
+        mx_printerr("LOGIN FILED. USER: \"");
+        mx_printerr(*login);
+        mx_printerr("\"\n");
     }
 }
