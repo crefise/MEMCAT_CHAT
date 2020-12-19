@@ -252,6 +252,8 @@ void login_connect(GtkWidget *button, gpointer data) {
         mx_strdel(&buffer);
 
     }
+    gtk_widget_hide(login_window);
+    main_menu();
 }
 
 void register_connect(GtkWidget *button, gpointer data) {
