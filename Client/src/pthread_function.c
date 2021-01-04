@@ -35,7 +35,7 @@ char* parce_for_send_to_client(char *str) {
     char *temp_1 = i_to_s(login_size);
     char *temp_2 = mx_strncpy(temp_2, &str[6], login_size);
     char *temp_3 = mx_strncpy(temp_3, &str[6+login_size+1], strlen(str)-(6+login_size+1));
-    char *result = concat(concat(concat("message",temp_1), temp_2), temp_3);
+    char *result = concat(concat(concat("message[",temp_1), concat(temp_2,), temp_3);
     mx_strdel(&temp_1);
     mx_strdel(&temp_2);
     mx_strdel(&temp_3);
