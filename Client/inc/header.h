@@ -37,7 +37,9 @@ void register_clbk (GtkButton *button, GtkStack *stack);
 void quit_clbk    ( void );
 void login_connect(GtkWidget *button, gpointer data);
 void register_connect(GtkWidget *button, gpointer data);
-
+extern GtkWidget *login_window;
+void main_menu();
+GtkWidget* createConsoleBox();
 
 /* END gtk_function.c */
 #include <sys/socket.h>

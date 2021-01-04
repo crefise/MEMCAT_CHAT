@@ -2,12 +2,12 @@
 
 int sock;
 GtkWidget *stack;
+GtkWidget *login_window;
 int main ( void ) {
     initializate_socket();
     if (sock == -1)
         mx_printerr("NO_CONNECT_TO_SERVER\n");
 
-    GtkWidget *window;
     GtkWidget *login_box;
     GtkWidget *login_grid;
     GtkWidget *register_grid;
@@ -20,11 +20,11 @@ int main ( void ) {
     load_css();
 
     /// *** Create a Window
-    window = createWindow ( 300, 300, "MEMCAT(ˆ_ˆ)" );
+    login_window = createWindow ( 300, 300, "MEMCAT(ˆ_ˆ)" );
 
     /// *** Create the Stack Box
     stack_box = create_stack_box ( &stack );
-    gtk_container_add ( GTK_CONTAINER ( window ), stack_box );
+    gtk_container_add ( GTK_CONTAINER ( login_window ), stack_box );
 
     /// ***
     login_box     = create_login_box     ( stack );
@@ -42,6 +42,6 @@ int main ( void ) {
     gtk_stack_set_interpolate_size ( GTK_STACK ( stack ), TRUE );
 
     /// ***
-    gtk_widget_show_all ( window );
+    gtk_widget_show_all ( login_window );
     gtk_main ();
 }
