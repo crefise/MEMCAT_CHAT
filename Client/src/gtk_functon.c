@@ -247,13 +247,13 @@ void login_connect(GtkWidget *button, gpointer data) {
             pthread_t pthreads[1];
             pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
             pthread_create(&pthreads[0], NULL, console_style, NULL);
-            
+            gtk_widget_hide(login_window);
+            main_menu();
         }
         mx_strdel(&buffer);
 
     }
-    gtk_widget_hide(login_window);
-    main_menu();
+
 }
 
 void register_connect(GtkWidget *button, gpointer data) {

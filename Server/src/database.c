@@ -134,7 +134,7 @@ int check_user_db(char* login, sqlite3* db) {
 }
 
 int get_socket_db(char* login, sqlite3* db) {
-   int socket = 0;
+   int socket = -1;
    sqlite3_stmt *result;
    char* statement = "SELECT SOCKET FROM ONLINE_USERS WHERE LOGIN='";
    statement = concat(statement, login);
@@ -144,19 +144,16 @@ int get_socket_db(char* login, sqlite3* db) {
    if (rc != SQLITE_OK) {
       fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
       sqlite3_close(db);
-      return -1;
    }
    rc = sqlite3_step(result);
-   if (rc == SQLITE_ROW) {
-      char* socket_s = concat(socket_s, (char*)sqlite3_column_text(result, 0));
-      socket = atoi(socket_s);
-      free(socket_s);
-   }
+   if (rc == SQLITE_ROW) 
+      socket = atoi((char*)sqlite3_column_text(result, 0));
    
    sqlite3_finalize(result);
    free(statement);
    return socket;
 }
+
 
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
