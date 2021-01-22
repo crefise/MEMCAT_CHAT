@@ -268,6 +268,11 @@ void register_connect(GtkWidget *button, gpointer data) {
 
 
 // Проверки на коректность ввода
+    if (strlen(login) > 32 || strlen(login) < 1){ // проверка на коректность ввода
+        gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD LOGIN");
+        return;
+    }
+
     if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
         gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD SYMBOL");
         return;
