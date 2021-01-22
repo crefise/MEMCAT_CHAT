@@ -4,6 +4,7 @@ void* massage_check_in(void* socket) {
     mx_printerr("PTHREAD MASSAGE WAITER IS WORKING...\n");
     int sock = *(int *)socket;
     char *buffer = mx_strnew(256);
+    while(1==1) {
     if (recv(sock, &buffer[0], 256, 0) == 0) {
         mx_printerr("MASSAGE_CHECK_IN ERROR\n");
         return NULL;
@@ -11,6 +12,7 @@ void* massage_check_in(void* socket) {
     mx_printerr("Massage that in: ");
     mx_printerr(buffer);
     mx_printerr("\n");
+    }
     return NULL;
 }
 
@@ -35,7 +37,7 @@ char* parce_for_send_to_client(char *str) {
     char *temp_1 = i_to_s(login_size);
     char *temp_2 = mx_strncpy(temp_2, &str[6], login_size);
     char *temp_3 = mx_strncpy(temp_3, &str[6+login_size+1], strlen(str)-(6+login_size+1));
-    char *result = concat(concat(concat("message[",temp_1), concat(temp_2,), temp_3);
+    char *result = concat(concat(concat("message[",temp_1), concat("]",temp_2)), temp_3); // massage[size_login]loginMESSAGE
     mx_strdel(&temp_1);
     mx_strdel(&temp_2);
     mx_strdel(&temp_3);
@@ -78,5 +80,5 @@ void *console_style() {
             break;
         }
     }
-    return NULL;
+    return NULL; 
 }
