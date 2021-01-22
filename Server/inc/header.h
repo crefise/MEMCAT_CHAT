@@ -33,7 +33,7 @@ int get_maxID_db(sqlite3* db); //
 int check_user_db(char* login, sqlite3* db);
 void add_online_user_db(char* login, int socket, sqlite3* db);
 void delete_online_user_db(int socket, sqlite3* db);
-int get_socket_db(char* login, sqlite3* db)
+int get_socket_db(char* login, sqlite3* db);
 void add_user_db(char* login, char* password, sqlite3* db); // ready
 int access_db(char* login, char* password, sqlite3* db); // ready
 void delete_user(int id, sqlite3* db);

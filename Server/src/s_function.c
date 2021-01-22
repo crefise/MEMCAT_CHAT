@@ -17,8 +17,20 @@ void send_massage_to_client(char* message, char* login, int sender) {
             mx_printerr("SEND ERROR\n");
     }
     */
-    if (send(get_socket_db(login, data_base), message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
-            mx_printerr("SEND ERROR\n");
+   int send_sock = get_socket_db(login, data_base);
+   mx_printerr("TOOK SOCK: ");
+   write(2, i_to_s(send_sock), strlen(i_to_s(send_sock)));
+   mx_printerr("\n");
+    if (send(send_sock, message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
+        if (send(sender, "MESSAGE ERROR SEND!!!", 21, 0) == -1) { // 1 - success registration, 0 - bad registration
+                mx_printerr("SEND ERROR\n");
+        }
+        mx_printerr("SEND ERROR\n");
+    }
+    else {
+        if (send(sender, "Message send okay!", 18, 0) == -1) { // 1 - success registration, 0 - bad registration
+                mx_printerr("SEND ERROR\n");
+        }
     }
 }
 
@@ -174,8 +186,6 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
             write(2, "USER CLOSE CONNECTION\n",21);
             return;
         }
-        mx_printerr("LOGIN FILED. USER: \"");
-        mx_printerr(*login);
-        mx_printerr("\"\n");
+        mx_printerr("LOGIN FILED.");
     }
 }
