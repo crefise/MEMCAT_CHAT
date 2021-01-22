@@ -46,11 +46,13 @@ void exec_db(char* statement, sqlite3* db) {
 } 
 
 void close_db(sqlite3* db) {
+   char* statement = "TRUNCATE TABLE ONLINE_USERS";
+   exec_db(statement, db);
+   free(statement);
    sqlite3_close(db);
 }
 
 void add_user_db(char* login, char* password, sqlite3* db) {
-   //char* statement = "INSERT INTO USERS (ID,LOGIN,PASSWORD) VALUES (";
    char* statement = "INSERT INTO USERS (LOGIN,PASSWORD) VALUES ('";
    statement = concat(statement, login);
    statement = concat(statement, "', '");
@@ -67,6 +69,15 @@ void add_online_user_db(char* login, int socket, sqlite3* db) {
    statement = concat(statement, "', '");
    statement = concat(statement, i_to_s(socket));
    statement = concat(statement, "'); ");
+
+   exec_db(statement, db);
+   free(statement);
+}
+
+void delete_online_user_db(int socket, sqlite3* db) {
+   char* statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
+   statement = concat(statement, i_to_s(socket));
+   statement = concat(statement, "; ");
 
    exec_db(statement, db);
    free(statement);
@@ -122,22 +133,46 @@ int check_user_db(char* login, sqlite3* db) {
    }
 }
 
+int get_socket_db(char* login, sqlite3* db) {
+   int socket = 0;
+   sqlite3_stmt *result;
+   char* statement = "SELECT SOCKET FROM ONLINE_USERS WHERE LOGIN='";
+   statement = concat(statement, login);
+   statement = concat(statement, "'");
+
+   int rc = sqlite3_prepare_v2(db, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+      sqlite3_close(db);
+      return -1;
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) {
+      char* socket_s = concat(socket_s, (char*)sqlite3_column_text(result, 0));
+      socket = atoi(socket_s);
+      free(socket_s);
+   }
+   
+   sqlite3_finalize(result);
+   free(statement);
+   return socket;
+}
 
 /*
-void init_db(sqlite3* users_db, sqlite3* chats_db) {
-   open_db("Server/databases/users.db", &users_db);
-   open_db("Server/databases/chats.db", &chats_db);
+void init_db(sqlite3* data_base, sqlite3* data_base) {
+   open_db("Server/databases/users.db", &data_base);
+   open_db("Server/databases/chats.db", &data_base);
 
    exec_db("CREATE TABLE USERS("\
            "ID             INT PRIMARY KEY     NOT NULL,"\
            "LOGIN          TEXT                NOT NULL,"\
            "PASSWORD       TEXT                NOT NULL,"\
-           "UNIQUE (ID, LOGIN));", users_db);
+           "UNIQUE (ID, LOGIN));", data_base);
    
    exec_db("CREATE TABLE CHATS("\
            "CHAT_ID        INT PRIMARY KEY     NOT NULL,"\
            "USER1_ID       INT                 NOT NULL,"\
            "USER2_ID       INT                 NOT NULL,"\
-           "PATH           TEXT                NOT NULL);", chats_db);
+           "PATH           TEXT                NOT NULL);", data_base);
 }
 */

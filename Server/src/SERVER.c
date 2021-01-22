@@ -2,37 +2,34 @@
 
 void *user_connect(void* sock);
 int parse_solution(char *text);
-int ph_count = 0; 
-sqlite3* users_db;
-sqlite3* chats_db;
-sqlite3* online_users_db;
+int ph_count = 0;
+
+sqlite3* data_base;
 
 int main() {
     /**** START DATABASE BLOCK ****/
     write(1, "####### DATABASE BLOCK ######\n", 30);
 
-    open_db("Server/databases/users.db", &users_db);
-    open_db("Server/databases/chats.db", &chats_db);
-    open_db("Server/databases/online_users.db", &online_users_db);
+    open_db("Server/databases/data_base.db", &data_base);
 
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
            "LOGIN          TEXT                NOT NULL,"\
            "PASSWORD       TEXT                NOT NULL,"\
-           "UNIQUE (ID, LOGIN));", users_db);
+           "UNIQUE (ID, LOGIN));", data_base);
    
     exec_db("CREATE TABLE CHATS("\
            "CHAT_ID        INT PRIMARY KEY     NOT NULL,"\
            "USER1_ID       INT                 NOT NULL,"\
            "USER2_ID       INT                 NOT NULL,"\
-           "PATH           TEXT                NOT NULL);", chats_db);
+           "PATH           TEXT                NOT NULL);", data_base);
 
     exec_db("CREATE TABLE ONLINE_USERS("\
            "LOGIN       TEXT                NOT NULL,"\
            "SOCKET      INT                 NOT NULL,"\
-           "UNIQUE (LOGIN, SOCKET));", online_users_db);
+           "UNIQUE (LOGIN, SOCKET));", data_base);
 
-    exec_db("SELECT * FROM USERS", users_db);
+    exec_db("SELECT * FROM USERS", data_base);
     
     write(1, "####### DATABASE BLOCK ######\n", 30);
     /**** END DATABASE BLOCK ****/
@@ -81,9 +78,8 @@ int main() {
     close(sock);
 
     /**** START DATABASE BLOCK ****/
-    close_db(users_db);
-    close_db(chats_db);
-    close_db(online_users_db);
+    close_db(data_base);
+
     /**** END DATABASE BLOCK ****/
     
     return 0;

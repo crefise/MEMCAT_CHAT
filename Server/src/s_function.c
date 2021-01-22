@@ -8,10 +8,16 @@ void send_massage_to_client(char* message, char* login, int sender) {
     char* statement = "SELECT SOCKET from ONLINE_USERS where LOGIN='";
     statement = concat(statement, login);
     statement = concat(statement, "'");
-    int rc = sqlite3_prepare_v2(online_users_db, statement, -1, &result, 0);
+    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
     result.
     */
+
+    /*
     if (send(7, message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
+            mx_printerr("SEND ERROR\n");
+    }
+    */
+    if (send(get_socket_db(login, data_base), message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
             mx_printerr("SEND ERROR\n");
     }
 }
@@ -27,7 +33,7 @@ void *user_connect(void* sock) {
 
 
         mx_printerr("--------ONLINE BASE NOW-----------\n");
-        exec_db("SELECT * FROM ONLINE_USERS", online_users_db);
+        exec_db("SELECT * FROM ONLINE_USERS", data_base);
         mx_printerr("----------------------------------\n");
 
         mx_strdel(&buffer);
@@ -41,7 +47,7 @@ void *user_connect(void* sock) {
                 char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
                 temp_statement = concat(temp_statement, i_to_s(client_socket));
                 temp_statement = concat(temp_statement, ";");
-                exec_db(temp_statement, online_users_db);
+                exec_db(temp_statement, data_base);
                 mx_strdel(&temp_statement);
                 mx_printerr("USER \"");
                 mx_printerr(login);
@@ -130,7 +136,7 @@ bool curr_sybmobol(char *str) {
 
 void reg_func(char *buffer, int client_socket) {
     char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
-    if (check_user_db(temp[0], users_db)) { // if 1 человек уже зарегестрирован
+    if (check_user_db(temp[0], data_base)) { // if 1 человек уже зарегестрирован
         if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
@@ -140,15 +146,15 @@ void reg_func(char *buffer, int client_socket) {
         if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
-        add_user_db(temp[0], temp[1], users_db);
+        add_user_db(temp[0], temp[1], data_base);
     }
 
-    exec_db("SELECT * FROM USERS", users_db); // base show
+    exec_db("SELECT * FROM USERS", data_base); // base show
 }
 
 void log_func(char *buffer, int client_socket, bool *logined, char **login, char** pass) {
     char **temp_for_login = ps_login(buffer);
-    if (access_db(temp_for_login[0], temp_for_login[1], users_db) == 1) {
+    if (access_db(temp_for_login[0], temp_for_login[1], data_base) == 1) {
         if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
             write(2, "USER CLOSE CONNECTION\n",22);
             return;
@@ -161,7 +167,7 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
         mx_printerr("\"\n");
 
         *logined = true;
-        add_online_user_db(temp_for_login[0], client_socket, online_users_db);
+        add_online_user_db(temp_for_login[0], client_socket, data_base);
     }
     else {
         if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
