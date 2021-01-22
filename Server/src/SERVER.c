@@ -110,7 +110,6 @@ int main() {
     unsigned int client_addr_size = (unsigned int)sizeof(client_addr);
     while ((client_socket = accept(sock, (struct sockaddr *)&client_addr, &client_addr_size))) {
         pthread_create(&pthreads[0], NULL, user_connect, &client_socket);
-        ph_count++;
         printf("Подключенные клиенты - %d\n",  ph_count);
     }
     close(sock);
