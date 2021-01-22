@@ -138,7 +138,7 @@ int get_socket_db(char* login, sqlite3* db) {
    sqlite3_stmt *result;
    char* statement = "SELECT SOCKET FROM ONLINE_USERS WHERE LOGIN='";
    statement = concat(statement, login);
-   statement = concat(statement, "'");
+   statement = concat(statement, "';");
 
    int rc = sqlite3_prepare_v2(db, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {

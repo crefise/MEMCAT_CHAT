@@ -12,6 +12,44 @@ int main() {
 
     open_db("Server/databases/data_base.db", &data_base);
 
+
+    /* 
+    exec_db("CREATE TABLE 'USERS' (
+                'ID' INT NOT NULL AUTO_INCREMENT,
+                'LOGIN' TEXT(32) NOT NULL UNIQUE,
+                'PASSWORD' TEXT NOT NULL,
+                PRIMARY KEY ('ID')
+            );
+
+            CREATE TABLE 'CHATS' (
+                'CHAT_ID' INT NOT NULL AUTO_INCREMENT,
+                'USER1_ID' INT NOT NULL,
+                'USER2_ID' INT NOT NULL,
+                PRIMARY KEY ('CHAT_ID')
+            );
+
+            CREATE TABLE 'ONLINE_USERS' (
+                'USER_ID' INT NOT NULL,
+                'LOGIN' TEXT NOT NULL UNIQUE,
+                'SOCKET' INT NOT NULL UNIQUE,
+                PRIMARY KEY ('USER_ID')
+            );
+
+            CREATE TABLE 'CHAT' (
+                'MESSAGE_ID' INT NOT NULL AUTO_INCREMENT,
+                'DATE_TIME' DATETIME NOT NULL,
+                'MESSAGE' TEXT NOT NULL,
+                'AUTHOR_ID' INT NOT NULL,
+                PRIMARY KEY ('MESSAGE_ID')
+            );
+
+            ALTER TABLE 'CHATS' ADD CONSTRAINT 'CHATS_fk0' FOREIGN KEY ('CHAT_ID') REFERENCES 'USERS'('ID');
+
+            ALTER TABLE 'CHAT' ADD CONSTRAINT 'CHAT_fk0' FOREIGN KEY ('MESSAGE_ID') REFERENCES 'USERS'('ID');
+
+            ", data_base);
+    */
+
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
            "LOGIN          TEXT                NOT NULL,"\
