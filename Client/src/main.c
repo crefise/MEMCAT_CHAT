@@ -1,5 +1,6 @@
 #include "../inc/header.h"
 
+
 int sock;
 GtkWidget *stack;
 GtkWidget *login_window;
