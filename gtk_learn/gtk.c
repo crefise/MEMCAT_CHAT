@@ -48,7 +48,6 @@ int main(int argc, char *argv[]) {
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
 
-
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(my_close_app), NULL); // Сигнал для завершения преложения
 
 
@@ -70,13 +69,13 @@ int main(int argc, char *argv[]) {
 
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
     scrool_chats = gtk_scrolled_window_new(NULL, NULL); 
-// END CREATE NEW THING
 
     for (int i = 0; i < SIZE; i++)
         messages_label[i] = gtk_label_new(messages[i]);
     for (int i = 0; i < SIZE_C; i++)
         chat_list_label[i] = gtk_button_new_with_label(chat_list[i]);
 
+    // END CREATE NEW THING
 
 
     //SETNAME
@@ -85,7 +84,6 @@ int main(int argc, char *argv[]) {
         gtk_widget_set_name(GTK_WIDGET(messages_label[i]), "message");
     for (int i = 0; i < SIZE_C; i++) // SET NAME FOR CHAT
         gtk_widget_set_name(GTK_WIDGET(chat_list_label[i]), "chat");
-
    // END SETNAME
 
 
@@ -102,7 +100,6 @@ int main(int argc, char *argv[]) {
 
     gtk_box_pack_start(GTK_BOX(chats_box), search_box, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(chats_box), scrool_chats, TRUE, TRUE, 5);
-
 
     gtk_box_pack_start(GTK_BOX(search_box), search_str, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_box), search_key, FALSE, FALSE, 0);
