@@ -1,4 +1,20 @@
 #include <gtk/gtk.h>
+#include "unistd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+    GtkWidget *window; // my window
+    GtkWidget *main_box,*chats_list_box,  *message_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
+    GtkWidget *input_str, *input_key; // for imput_box
+    GtkWidget *search_str, *search_key;
+    GtkWidget *dialog;
+
+
+void key_test(GtkWidget *button, gpointer data) {
+    char *chat_name  = strdup((char*)gtk_button_get_label (GTK_BUTTON(button)));
+    write(2,chat_name, strlen(chat_name));
+}
 
 void load_css ( void ) {
     GtkCssProvider *provider;
@@ -28,10 +44,8 @@ void my_close_app(GtkWidget *window, gpointer data)
 
 
 int main(int argc, char *argv[]) {
-    GtkWidget *window; // my window
-    GtkWidget *main_box,*chats_list_box,  *message_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
-    GtkWidget *input_str, *input_key; // for imput_box
-    GtkWidget *search_str, *search_key;
+
+
     char *messages[] = {"Hello", "mello", "tello", "pello"};
     char *chat_list[] = {"Kostya", "Vova", "Sergii", "Viktor", "Vlad"};
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
@@ -47,9 +61,6 @@ int main(int argc, char *argv[]) {
     gtk_window_set_title(GTK_WINDOW(window), "MEMCAT CHAT");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
-
-    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(my_close_app), NULL); // Сигнал для завершения преложения
-
 
 
 // CREATE NEW THING
@@ -93,7 +104,7 @@ int main(int argc, char *argv[]) {
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 10);
 
     gtk_box_pack_start(GTK_BOX(input_box), input_str, TRUE, TRUE, 2);
     gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 2);
@@ -111,6 +122,9 @@ int main(int argc, char *argv[]) {
 // END PACK
 
 // CONTAIN ALL
+
+    gtk_container_add(GTK_CONTAINER(message_box), dialog); 
+
     gtk_container_add(GTK_CONTAINER(scrool_massages), message_list_box); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box);
     gtk_container_add(GTK_CONTAINER(window), main_box);
@@ -118,6 +132,17 @@ int main(int argc, char *argv[]) {
 
 
     gtk_widget_show_all(window);
+    gtk_widget_hide (dialog);
+
+
+    // SIGNAL
+    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(my_close_app), NULL); // Сигнал для завершения преложения
+    for(int i =0; i < SIZE_C; i++)
+        g_signal_connect(G_OBJECT(chat_list_label[i]), "clicked", G_CALLBACK(key_test), NULL);
+    //END SIGNAL
+   // write(2,(char*)gtk_button_get_label (GTK_BUTTON(chat_list_label[0])), 6);
+
+
 
     gtk_main();
 
