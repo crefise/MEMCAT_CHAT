@@ -1,12 +1,8 @@
 
 #include "header.h"
-
-
-
-char *OPENED_DIALOG; // Нужна для отслеживания открытого диалоги
+char *OPENED_DIALOG;
 #define SIZE 4
 #define SIZE_C 2
-
     CHAT_T *MY_CHATS = NULL;
 
     GtkWidget *window; // my window
@@ -20,6 +16,7 @@ void select_chat(GtkWidget *button, gpointer data) {
     CHAT_T *used_chat = data;
     char *chat_name  = strdup((char*)gtk_button_get_label (GTK_BUTTON(button)));
     mx_fill_message_list_box(&used_chat, used_chat->name_chat);
+
 
 
     GtkWidget *will_hide = mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box;
@@ -49,7 +46,7 @@ void load_css ( void ) {
     /// ***
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////// VIKTOR
+///////////////////////////////////////////////////////////////////////////////////// VICTOR ////////////////////
 struct message_struct {
     GtkWidget *input_str;
     GtkWidget *message_list_box;
@@ -71,10 +68,7 @@ void send(GtkWidget *button, gpointer input)
     }
     
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[]) {
     GtkWidget *window; // my window
     GtkWidget *main_box,*chats_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
@@ -104,7 +98,7 @@ int main(int argc, char *argv[]) {
     MY_CHATS = mx_create_new_chat((char*)"Vladimir");
     mx_add_new_chat(&MY_CHATS,"Viktor");
 
-    OPENED_DIALOG = strdup("NONE"); 
+    OPENED_DIALOG = strdup("Vladimir");
 
 
 // CREATE NEW THING
@@ -124,6 +118,7 @@ int main(int argc, char *argv[]) {
 
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
     scrool_chats = gtk_scrolled_window_new(NULL, NULL); 
+
 // END CREATE NEW THING
 
 
