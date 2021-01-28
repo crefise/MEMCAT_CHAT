@@ -1,5 +1,21 @@
 #include <gtk/gtk.h>
 #include <string.h>
+#include "unistd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+    GtkWidget *window; // my window
+    GtkWidget *main_box,*chats_list_box,  *message_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
+    GtkWidget *input_str, *input_key; // for imput_box
+    GtkWidget *search_str, *search_key;
+    GtkWidget *dialog;
+
+
+void key_test(GtkWidget *button, gpointer data) {
+    char *chat_name  = strdup((char*)gtk_button_get_label (GTK_BUTTON(button)));
+    write(2,chat_name, strlen(chat_name));
+}
 
 void load_css ( void ) {
     GtkCssProvider *provider;
@@ -107,7 +123,7 @@ int main(int argc, char *argv[]) {
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 10);
 
     gtk_box_pack_start(GTK_BOX(input_box), MessageInfo->input_str, TRUE, TRUE, 2);
     gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 2);
@@ -133,6 +149,16 @@ int main(int argc, char *argv[]) {
     g_signal_connect(input_key, "clicked", G_CALLBACK (send), MessageInfo);
 
     gtk_widget_show_all(window);
+
+
+    // SIGNAL
+    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
+    for(int i =0; i < SIZE_C; i++)
+        g_signal_connect(G_OBJECT(chat_list_label[i]), "clicked", G_CALLBACK(key_test), NULL);
+    //END SIGNAL
+   // write(2,(char*)gtk_button_get_label (GTK_BUTTON(chat_list_label[0])), 6);
+
+
 
     gtk_main();
 
