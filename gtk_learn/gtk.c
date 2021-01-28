@@ -1,9 +1,13 @@
-#include <gtk/gtk.h>
-#include <string.h>
-#include "unistd.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#include "header.h"
+
+
+
+char *OPENED_DIALOG; // Нужна для отслеживания открытого диалоги
+#define SIZE 4
+#define SIZE_C 2
+
+    CHAT_T *MY_CHATS = NULL;
 
     GtkWidget *window; // my window
     GtkWidget *main_box,*chats_list_box,  *message_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
@@ -12,9 +16,19 @@
     GtkWidget *dialog;
 
 
-void key_test(GtkWidget *button, gpointer data) {
+void select_chat(GtkWidget *button, gpointer data) {
+    CHAT_T *used_chat = data;
     char *chat_name  = strdup((char*)gtk_button_get_label (GTK_BUTTON(button)));
-    write(2,chat_name, strlen(chat_name));
+    mx_fill_message_list_box(&used_chat, used_chat->name_chat);
+
+
+    GtkWidget *will_hide = mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box;
+    GtkWidget *will_show = used_chat->message_list_box;
+
+    OPENED_DIALOG = strdup(used_chat->name_chat);
+
+    gtk_widget_hide(will_hide);
+    gtk_widget_show_all(will_show);
 }
 
 void load_css ( void ) {
@@ -35,27 +49,31 @@ void load_css ( void ) {
     /// ***
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////// VIKTOR
 struct message_struct {
     GtkWidget *input_str;
     GtkWidget *message_list_box;
 };
 
-#define SIZE 4
-#define SIZE_C 5
-#include <malloc/malloc.h>
+
 
 void send(GtkWidget *button, gpointer input)
 {   
-    struct message_struct *temp = input;
+    struct message_struct *messages = input;
 
-    char *text = (char*)gtk_entry_get_text(GTK_ENTRY(temp->input_str));
-    if(text) {
+    char *text = (char*)gtk_entry_get_text(GTK_ENTRY(messages->input_str));
+    if(text && strlen(text)) {
         GtkWidget *message = gtk_label_new(text);
         gtk_widget_set_name(message, "message");
-        gtk_box_pack_start(GTK_BOX(temp->message_list_box), message, FALSE, FALSE, 5);
-        gtk_widget_show_all(temp->message_list_box);
+        gtk_box_pack_start(GTK_BOX(messages->message_list_box), message, FALSE, FALSE, 5);
+        gtk_widget_show_all(messages->message_list_box);
+        gtk_entry_set_text(GTK_ENTRY(messages->input_str), "");
     }
+    
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 int main(int argc, char *argv[]) {
     GtkWidget *window; // my window
@@ -67,12 +85,13 @@ int main(int argc, char *argv[]) {
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
     GtkWidget *scrool_massages, *scrool_chats;
 
-    struct message_struct *MessageInfo =  malloc(sizeof(struct message_struct));
+
     
+ 
  
     gtk_init(&argc, &argv);
     load_css();
-
+    
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "MEMCAT CHAT");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
@@ -80,6 +99,12 @@ int main(int argc, char *argv[]) {
 
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
 
+    struct message_struct *MessageInfo =  malloc(sizeof(struct message_struct));
+
+    MY_CHATS = mx_create_new_chat((char*)"Vladimir");
+    mx_add_new_chat(&MY_CHATS,"Viktor");
+
+    OPENED_DIALOG = strdup("NONE"); 
 
 
 // CREATE NEW THING
@@ -99,22 +124,11 @@ int main(int argc, char *argv[]) {
 
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
     scrool_chats = gtk_scrolled_window_new(NULL, NULL); 
-
-    for (int i = 0; i < SIZE; i++)
-        messages_label[i] = gtk_label_new(messages[i]);
-    for (int i = 0; i < SIZE_C; i++)
-        chat_list_label[i] = gtk_button_new_with_label(chat_list[i]);
-
-    // END CREATE NEW THING
+// END CREATE NEW THING
 
 
-    //SETNAME
+//SETNAME
     gtk_widget_set_name(GTK_WIDGET(chats_box), "chats_box"); // SETNAME FOR CHATLIST BOX
-    for (int i = 0; i < SIZE; i++)// SET NAME FOR MESSAGE
-        gtk_widget_set_name(GTK_WIDGET(messages_label[i]), "message");
-    for (int i = 0; i < SIZE_C; i++) // SET NAME FOR CHAT
-        gtk_widget_set_name(GTK_WIDGET(chat_list_label[i]), "chat");
-   // END SETNAME
 
 
 
@@ -134,29 +148,33 @@ int main(int argc, char *argv[]) {
     gtk_box_pack_start(GTK_BOX(search_box), search_str, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_box), search_key, FALSE, FALSE, 0);
 
-    for (int i = 0; i < SIZE; i++) // PACK MESSAGES
-        gtk_box_pack_start(GTK_BOX(MessageInfo->message_list_box), messages_label[i], FALSE, FALSE, 5);
-    for (int i = 0; i < SIZE_C; i++) // PACK CHAT_LIST
-        gtk_box_pack_start(GTK_BOX(chats_list_box), chat_list_label[i], FALSE, FALSE, 1);
+    for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
+        gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
+    }
 // END PACK
 
 // CONTAIN ALL
-    gtk_container_add(GTK_CONTAINER(scrool_massages), MessageInfo->message_list_box); 
-    gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box);
+    GtkWidget *CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Содержив в себе все чаты
+    for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) {
+    gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_list_box); 
+    }
+    gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
+    gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
     gtk_container_add(GTK_CONTAINER(window), main_box);
 // CONTAIN ALL END
 
+
+
+ 
+   gtk_widget_show_all(window);
+
+// SIGNAL
     g_signal_connect(input_key, "clicked", G_CALLBACK (send), MessageInfo);
-
-    gtk_widget_show_all(window);
-
-
-    // SIGNAL
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
     for(int i =0; i < SIZE_C; i++)
-        g_signal_connect(G_OBJECT(chat_list_label[i]), "clicked", G_CALLBACK(key_test), NULL);
-    //END SIGNAL
-   // write(2,(char*)gtk_button_get_label (GTK_BUTTON(chat_list_label[0])), 6);
+       g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
+//END SIGNAL
+
 
 
 
