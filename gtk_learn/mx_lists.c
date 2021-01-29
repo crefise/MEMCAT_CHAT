@@ -125,7 +125,6 @@ MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index){
    // write(2, "Index error(mx_get_index_message())\n", 36);
     return NULL;
 }
-
 void mx_fill_message_list_box(CHAT_T **chat, char *login, char *sender, char* message) { // WILL DO
 if (message == NULL) {
     //download from server
@@ -139,7 +138,7 @@ else {
 }
 
 
-void select_chat_on_off(CHAT_T *chat, char mode) {
+void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и выключения подсветки для чата
     if (strcmp(chat->name_chat, "Favorite") == 0) {
         if (mode == '+') { 
             gtk_widget_set_name(GTK_WIDGET(chat->chat_button), "main_menu_key_active");
