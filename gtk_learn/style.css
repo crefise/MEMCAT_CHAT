@@ -1,3 +1,8 @@
+
+#setting_str 
+{
+    background-color: rgb(47, 53, 47);
+}
 window
 {
     background-color:   #1f1e1e;
@@ -30,4 +35,18 @@ button
 {
     background: rgb(54, 51, 51);
     color : rgb(255, 255, 255);
+}
+#chat_active 
+{
+    background:         rgb(20, 4, 4);
+    color:              rgb(188, 191, 207);
+    font-size:          30px;
+    border:             solid 2px rgb(236, 110, 7); 
+
+}
+#main_menu_key_active 
+{
+    background: rgb(54, 51, 51);
+    color : rgb(255, 255, 255);
+    border:             solid 2px rgb(236, 110, 7); 
 }

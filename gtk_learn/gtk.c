@@ -3,7 +3,9 @@
 char *OPENED_DIALOG;
 #define SIZE 4
 #define SIZE_C 2
+#define FAVORIDE_CHAT_DEFINE "Favorite"
     CHAT_T *MY_CHATS = NULL;
+    CHAT_T *FAVORITE_CHAT = NULL;
 
     GtkWidget *window; // my window
     GtkWidget *main_box,*chats_list_box,  *message_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
@@ -14,15 +16,23 @@ char *OPENED_DIALOG;
 
 void select_chat(GtkWidget *button, gpointer data) {
     CHAT_T *used_chat = data;
-    char *chat_name  = strdup((char*)gtk_button_get_label (GTK_BUTTON(button)));
-    mx_fill_message_list_box(&used_chat, used_chat->name_chat);
-
-
-
-    GtkWidget *will_hide = mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box;
-    GtkWidget *will_show = used_chat->message_list_box;
+    if (strcmp(used_chat->name_chat, OPENED_DIALOG) == 0) {
+        return;
+    }
+    GtkWidget *will_hide; 
+    if (strcmp(FAVORIDE_CHAT_DEFINE, OPENED_DIALOG) == 0) {
+        will_hide = FAVORITE_CHAT->message_list_box;
+        select_chat_on_off(FAVORITE_CHAT,'-'); // подсветка
+    }
+    else {
+        will_hide = mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box;
+        select_chat_on_off(mx_find_name_chat(MY_CHATS,OPENED_DIALOG),'-'); // подсветка
+    }
+     GtkWidget *will_show = used_chat->message_list_box;
 
     OPENED_DIALOG = strdup(used_chat->name_chat);
+    
+    select_chat_on_off(used_chat,'+'); // подсветка
 
     gtk_widget_hide(will_hide);
     gtk_widget_show_all(will_show);
@@ -47,39 +57,39 @@ void load_css ( void ) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////// VICTOR ////////////////////
-struct message_struct {
-    GtkWidget *input_str;
-    GtkWidget *message_list_box;
-};
 
 
-
-void send(GtkWidget *button, gpointer input)
+void send_message(GtkWidget *button, gpointer data)
 {   
-    struct message_struct *messages = input;
-
-    char *text = (char*)gtk_entry_get_text(GTK_ENTRY(messages->input_str));
-    if(text && strlen(text)) {
-        GtkWidget *message = gtk_label_new(text);
-        gtk_widget_set_name(message, "message");
-        gtk_box_pack_start(GTK_BOX(messages->message_list_box), message, FALSE, FALSE, 5);
-        gtk_widget_show_all(messages->message_list_box);
-        gtk_entry_set_text(GTK_ENTRY(messages->input_str), "");
+    //struct message_struct *messages = input;
+    GtkWidget *input_str = data;
+    CHAT_T *used_chat = NULL;
+    if (strcmp(OPENED_DIALOG, FAVORIDE_CHAT_DEFINE) == 0) {
+        used_chat = FAVORITE_CHAT; 
     }
+    else {
+        used_chat = mx_find_name_chat(MY_CHATS, OPENED_DIALOG);
+    }
+
+    char *text = (char*)gtk_entry_get_text(GTK_ENTRY(input_str));
+    if(text && strlen(text) > 0) {
+        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, "TESTING", text);
+        gtk_entry_set_text(GTK_ENTRY(input_str), "");
+    }
+    mx_update_used_chat(used_chat);
     
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[]) {
     GtkWidget *window; // my window
     GtkWidget *main_box,*chats_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
-    GtkWidget *input_key; // for imput_box
+    GtkWidget *input_key, *input_str;// for imput_box
     GtkWidget *search_str, *search_key;
-    char *messages[] = {"Hello", "mello", "tello", "pello"};
-    char *chat_list[] = {"Kostya", "Vova", "Sergii", "Viktor", "Vlad"};
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
     GtkWidget *scrool_massages, *scrool_chats;
-
-
+    GtkWidget* setting_str, *home_key, *setting_key; // верхняя полоска настроек
+    GtkWidget* search_chat_box;
+    GtkWidget* main_menu_box;
     
  
  
@@ -93,17 +103,24 @@ int main(int argc, char *argv[]) {
 
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
 
-    struct message_struct *MessageInfo =  malloc(sizeof(struct message_struct));
+    FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE);
 
-    MY_CHATS = mx_create_new_chat((char*)"Vladimir");
+
+    mx_add_new_chat(&MY_CHATS,"Vladimir");
     mx_add_new_chat(&MY_CHATS,"Viktor");
+    mx_add_new_chat(&MY_CHATS,"Vlad");
+    mx_add_new_chat(&MY_CHATS,"Kostya");
+    mx_add_new_chat(&MY_CHATS,"Sergei");
 
-    OPENED_DIALOG = strdup("Vladimir");
+    OPENED_DIALOG = strdup("Favorite");
+    select_chat_on_off(FAVORITE_CHAT,'+'); // подсветка
 
+    setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    setting_key = gtk_button_new_with_label("SETTINGS");
 
 // CREATE NEW THING
     input_key = gtk_button_new_with_label("SEND");
-    MessageInfo->input_str = gtk_entry_new();
+    input_str = gtk_entry_new();
 
     search_key = gtk_button_new_with_label("SEARCH");
     search_str = gtk_entry_new();
@@ -112,10 +129,13 @@ int main(int argc, char *argv[]) {
     chats_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     message_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     input_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    MessageInfo->message_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
     search_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     chats_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
+    search_chat_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Сделать поиск боксов
+    main_menu_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // сделать главное меню
+    
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
     scrool_chats = gtk_scrolled_window_new(NULL, NULL); 
 
@@ -124,17 +144,20 @@ int main(int argc, char *argv[]) {
 
 //SETNAME
     gtk_widget_set_name(GTK_WIDGET(chats_box), "chats_box"); // SETNAME FOR CHATLIST BOX
-
+    gtk_widget_set_name(GTK_WIDGET(setting_str), "setting_str");
+    gtk_widget_set_name(GTK_WIDGET(setting_key), "main_menu_key");
 
 
 // PACK ALL
     gtk_box_pack_start(GTK_BOX(main_box), chats_box, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
 
+
+    gtk_box_pack_start(GTK_BOX(message_box), setting_str, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 10);
 
-    gtk_box_pack_start(GTK_BOX(input_box), MessageInfo->input_str, TRUE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(input_box), input_str, TRUE, TRUE, 2);
     gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 2);
 
     gtk_box_pack_start(GTK_BOX(chats_box), search_box, FALSE, FALSE, 0);
@@ -143,6 +166,9 @@ int main(int argc, char *argv[]) {
     gtk_box_pack_start(GTK_BOX(search_box), search_str, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_box), search_key, FALSE, FALSE, 0);
 
+    gtk_box_pack_start(GTK_BOX(setting_str), FAVORITE_CHAT->chat_button, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(setting_str), setting_key, TRUE, TRUE, 5);
+
     for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
         gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
     }
@@ -150,8 +176,9 @@ int main(int argc, char *argv[]) {
 
 // CONTAIN ALL
     GtkWidget *CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Содержив в себе все чаты
+    gtk_container_add(GTK_CONTAINER(CONTAINER), FAVORITE_CHAT->message_list_box);
     for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) {
-    gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_list_box); 
+        gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_list_box); 
     }
     gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
@@ -163,11 +190,18 @@ int main(int argc, char *argv[]) {
  
    gtk_widget_show_all(window);
 
+/*
+    for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) {
+        gtk_widget_hide(mx_get_index_chat(MY_CHATS, i)->message_list_box); 
+    }
+    gtk_widget_hide(FAVORITE_CHAT->message_list_box);
+*/
 // SIGNAL
-    g_signal_connect(input_key, "clicked", G_CALLBACK (send), MessageInfo);
+    g_signal_connect(input_key, "clicked", G_CALLBACK (send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
-    for(int i =0; i < SIZE_C; i++)
-       g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
+    for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
+    g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
+    g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);
 //END SIGNAL
 
 
