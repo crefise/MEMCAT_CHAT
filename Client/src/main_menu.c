@@ -1,6 +1,8 @@
 #include "../inc/header.h"
-
-
+void select_chat(GtkWidget *button, gpointer data);
+GtkWidget *chats_list_box = NULL;
+GtkWidget *CONTAINER = NULL;
+ GtkWidget *window; // my window
 char *OPENED_DIALOG;
 #define SIZE 4
 #define SIZE_C 2
@@ -13,34 +15,13 @@ char *OPENED_DIALOG;
 void download_all_chat(CHAT_T* chats) {
   char *will_send = concat(concat("dialogs[", USER_LOGIN), "]");
    if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
-        write(2, "SERVER DONT CONNETCTED\n",23);
+      write(2, "SERVER DONT CONNETCTED\n",23);
     } 
 }
 
 
-void select_chat(GtkWidget *button, gpointer data) {
-    CHAT_T *used_chat = data;
-    if (strcmp(used_chat->name_chat, OPENED_DIALOG) == 0) { // Если мы кликнулы на тот диалог что у нас уже открыт
-        return;
-    }
-    GtkWidget *will_hide; 
-    if (strcmp(FAVORIDE_CHAT_DEFINE, OPENED_DIALOG) == 0) { // Если открытый чат это сохраненки
-        will_hide = FAVORITE_CHAT->message_list_box;
-        select_chat_on_off(FAVORITE_CHAT,'-'); // подсветка
-    }
-    else {
-        will_hide = mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box;
-        select_chat_on_off(mx_find_name_chat(MY_CHATS,OPENED_DIALOG),'-'); // подсветка
-    }
-     GtkWidget *will_show = used_chat->message_list_box;
 
-    OPENED_DIALOG = strdup(used_chat->name_chat);
-    gtk_label_set_text(GTK_LABEL(collocutor_name), OPENED_DIALOG); // Имя для собеседника
-    select_chat_on_off(used_chat,'+'); // подсветка
 
-    gtk_widget_hide(will_hide);
-    gtk_widget_show_all(will_show);
-}
 
 
 
@@ -61,12 +42,11 @@ void send_message(GtkWidget *button, gpointer data) {
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
     }
     mx_update_used_chat(used_chat);
-    
 }
 
 void main_menu() {
-    GtkWidget *window; // my window
-    GtkWidget *main_box,*chats_list_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
+   
+    GtkWidget *main_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
     GtkWidget *input_key, *input_str;// for imput_box
     GtkWidget *search_str, *search_key;
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
@@ -92,14 +72,14 @@ void main_menu() {
   // Прогружаем все чаты
   // Делаем запрос на сервер что нужны чаты конкретного пользователя
   // Сервер присылает все чаты и мы их пакуем
-    FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE);
+    FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);
     download_all_chat(MY_CHATS);
 
-    mx_add_new_chat(&MY_CHATS,"Vladimir");
-    mx_add_new_chat(&MY_CHATS,"Viktor");
-    mx_add_new_chat(&MY_CHATS,"Vlad");
-    mx_add_new_chat(&MY_CHATS,"Kostya");
-    mx_add_new_chat(&MY_CHATS,"Sergei");
+    mx_add_new_chat(&MY_CHATS,"Vladimir",1);
+    mx_add_new_chat(&MY_CHATS,"Viktor",2);
+    mx_add_new_chat(&MY_CHATS,"Vlad",3);
+    mx_add_new_chat(&MY_CHATS,"Kostya",5);
+    mx_add_new_chat(&MY_CHATS,"Sergei",15);
 
     OPENED_DIALOG = strdup("Favorite");
     select_chat_on_off(FAVORITE_CHAT,'+'); // подсветка
@@ -169,7 +149,7 @@ void main_menu() {
 // END PACK
 
 // CONTAIN ALL
-    GtkWidget *CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Содержив в себе все чаты
+    CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Содержив в себе все чаты
     gtk_container_add(GTK_CONTAINER(CONTAINER), FAVORITE_CHAT->message_list_box);
     for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) {
         gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_list_box); 
@@ -189,8 +169,10 @@ void main_menu() {
     g_signal_connect(input_key, "clicked", G_CALLBACK (send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
-    g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
+      g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);
+        
+    g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(search_dialog), (gpointer)search_str);
 //END SIGNAL
 
 

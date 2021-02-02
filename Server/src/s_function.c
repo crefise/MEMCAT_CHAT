@@ -34,6 +34,13 @@ void send_massage_to_client(char* message, char* login, int sender) {
     }
 }
 
+char *ps_isuser(char *text) {
+    char *result =  malloc(strlen(text) - 8);
+    result = strncpy(result, &text[7], strlen(text) - 8);
+    return result;
+}
+
+
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
@@ -82,6 +89,7 @@ void *user_connect(void* sock) {
 
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
 
+        char *temp;
         switch (solution) {
             case 1: // Хотим написать сообщение              
                 ps_massage_add(buffer, &send_login, &send_text); // Парсим сообщение что пришло
@@ -92,7 +100,7 @@ void *user_connect(void* sock) {
                 write(2, "UPPDATE DIALOGS\n",16);
                 //char* chats = get_chats_by_login_db(login);
                 get_chats_by_id_db(1);
-                exit = 1;
+                exit = 0;
                 break;
             case 3: // Хотим обновить сообщения в диалоге
                 write(2, "UPPDATE TEXT IN DIALOG\n",23);
@@ -104,6 +112,23 @@ void *user_connect(void* sock) {
                 break;
             case 5: // We wanna login
                 log_func(buffer, client_socket, &logined, &login, &pass);
+                exit = 0;
+                break;
+            case 6: // isuser? isuser[login]
+                temp = ps_isuser(buffer);
+                write(2, "sending...\n",11 );
+                if (get_users_ID(temp, data_base) == 0) {
+                    if (send(client_socket, "0", 1, 0) == -1) { //
+                        write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                } 
+                else {
+                    if (send(client_socket, "1", 1, 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
+                        write(2, "USER CLOSE CONNECTION\n",21);
+                    }
+                }
+
+
                 exit = 0;
                 break;
             case -1: // ошибка сообщения
@@ -121,6 +146,9 @@ void *user_connect(void* sock) {
     return NULL;
 }
 
+
+
+
 int parse_solution(char *text) {
     if (text[0] == 'm')
         return 1;
@@ -132,6 +160,8 @@ int parse_solution(char *text) {
         return 4;
     if (text[0] == 'l')
         return 5;
+    if (text[0] == 'i')
+        return 6;
     return -1;
 }
 

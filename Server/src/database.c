@@ -179,6 +179,27 @@ void get_chats_by_id_db(int id) {
 
    //return result;
 }
+
+int get_users_ID(char* login, sqlite3* db) {
+   int id = 0;
+   sqlite3_stmt *result;
+   char* statement = "SELECT ID FROM USERS WHERE LOGIN='";
+   statement = concat(statement, login);
+   statement = concat(statement, "';");
+
+   int rc = sqlite3_prepare_v2(db, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+      sqlite3_close(db);
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) 
+      id = atoi((char*)sqlite3_column_text(result, 0));
+   
+   sqlite3_finalize(result);
+   free(statement);
+   return id;
+}
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
    open_db("Server/databases/users.db", &data_base);

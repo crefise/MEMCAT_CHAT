@@ -1,6 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
-
+#define FAVORIDE_CHAT_DEFINE "Favorite"
 //#define SERVERADDR "51.15.120.179"
 //#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
 #define SERVERADDR "localhost"
@@ -95,13 +95,14 @@ typedef struct CHAT_S
     GtkWidget* chat_button;
     struct CHAT_S* next; 
     MESSAGE_T *messages;
+    int CHAT_ID;
 }              CHAT_T;
 
 
 
 CHAT_T* mx_get_index_chat(CHAT_T *chat, int index);
-void mx_add_new_chat(CHAT_T** chat,char *name);
-CHAT_T* mx_create_new_chat(char* name);
+void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID);
+CHAT_T* mx_create_new_chat(char* name, int CHAT_ID);
 void add_new_message(MESSAGE_T **message, char *text, char *sender);
 MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index);
 void mx_fill_message_list_box(CHAT_T **chat, char *login, char *sender, char* message);
@@ -109,8 +110,14 @@ CHAT_T* mx_find_name_chat(CHAT_T *chat, char* name);
 MESSAGE_T* mx_take_last_message(MESSAGE_T *message);
 void mx_update_used_chat(CHAT_T *used_chat);
 void select_chat_on_off(CHAT_T *chat, char mode);
-
+void search_dialog(GtkWidget *button, gpointer data);
+void select_chat(GtkWidget *button, gpointer data);
 extern char* USER_LOGIN;
-
-
+extern char *OPENED_DIALOG;
+extern CHAT_T *MY_CHATS;
+extern CHAT_T *FAVORITE_CHAT;
+extern GtkWidget *collocutor_name;
+extern GtkWidget *chats_list_box;
+extern GtkWidget *CONTAINER;
+extern GtkWidget *window; // my window
 #endif
