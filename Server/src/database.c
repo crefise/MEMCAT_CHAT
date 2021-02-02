@@ -153,8 +153,32 @@ int get_socket_db(char* login, sqlite3* db) {
    free(statement);
    return socket;
 }
+/*
+void get_chats_by_login_db(char* login) {
+   //char* result = NULL;
+   int id = get_users_ID(login, data_base);
+   char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
+   statement = concat(statement, i_to_s(id));
+   statement = concat(statement, "OR USER2_ID=");
+   statement = concat(statement, i_to_s(id));
+   statement = concat(statement, ";");
 
+   exec_db(statement, data_base);
 
+   //return result;
+}
+*/
+void get_chats_by_id_db(int id) {
+   char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
+   statement = concat(statement, i_to_s(id));
+   statement = concat(statement, " OR USER2_ID=");
+   statement = concat(statement, i_to_s(id));
+   statement = concat(statement, ";");
+
+   exec_db(statement, data_base);
+
+   //return result;
+}
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
    open_db("Server/databases/users.db", &data_base);

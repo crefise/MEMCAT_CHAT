@@ -90,6 +90,8 @@ void *user_connect(void* sock) {
                 break;
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
+                //char* chats = get_chats_by_login_db(login);
+                get_chats_by_id_db(1);
                 exit = 1;
                 break;
             case 3: // Хотим обновить сообщения в диалоге

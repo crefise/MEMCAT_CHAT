@@ -12,44 +12,36 @@ int main() {
 
     open_db("Server/databases/data_base.db", &data_base);
 
+    exec_db("CREATE TABLE USERS ("\
+            "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
+            "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
+            "    PASSWORD TEXT NOT NULL);"\
+            "CREATE TABLE CHATS ("\
+            "    CHAT_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
+            "    USER1_ID INT NOT NULL,"\
+            "    USER2_ID INT NOT NULL);"\
+            "CREATE TABLE ONLINE_USERS ("\
+            "    USER_ID INT NOT NULL,"\
+            "    LOGIN TEXT NOT NULL UNIQUE,"\
+            "    SOCKET INT NOT NULL UNIQUE,"\
+            "    PRIMARY KEY (USER_ID)"\
+            ");"\
+            "CREATE TABLE CHAT ("\
+            "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
+            "    DATE_TIME DATETIME NOT NULL,"\
+            "    MESSAGE TEXT NOT NULL,"\
+            "    AUTHOR_ID INT NOT NULL);", data_base);
 
-    /* 
-    exec_db("CREATE TABLE 'USERS' (
-                'ID' INT NOT NULL AUTO_INCREMENT,
-                'LOGIN' TEXT(32) NOT NULL UNIQUE,
-                'PASSWORD' TEXT NOT NULL,
-                PRIMARY KEY ('ID')
-            );
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 2)", data_base);
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 3)", data_base);
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (2, 5)", data_base);
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (3, 5)", data_base);
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (4, 1)", data_base);
+    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 4)", data_base);
 
-            CREATE TABLE 'CHATS' (
-                'CHAT_ID' INT NOT NULL AUTO_INCREMENT,
-                'USER1_ID' INT NOT NULL,
-                'USER2_ID' INT NOT NULL,
-                PRIMARY KEY ('CHAT_ID')
-            );
-
-            CREATE TABLE 'ONLINE_USERS' (
-                'USER_ID' INT NOT NULL,
-                'LOGIN' TEXT NOT NULL UNIQUE,
-                'SOCKET' INT NOT NULL UNIQUE,
-                PRIMARY KEY ('USER_ID')
-            );
-
-            CREATE TABLE 'CHAT' (
-                'MESSAGE_ID' INT NOT NULL AUTO_INCREMENT,
-                'DATE_TIME' DATETIME NOT NULL,
-                'MESSAGE' TEXT NOT NULL,
-                'AUTHOR_ID' INT NOT NULL,
-                PRIMARY KEY ('MESSAGE_ID')
-            );
-
-            ALTER TABLE 'CHATS' ADD CONSTRAINT 'CHATS_fk0' FOREIGN KEY ('CHAT_ID') REFERENCES 'USERS'('ID');
-
-            ALTER TABLE 'CHAT' ADD CONSTRAINT 'CHAT_fk0' FOREIGN KEY ('MESSAGE_ID') REFERENCES 'USERS'('ID');
-
-            ", data_base);
-    */
-
+    exec_db("SELECT * FROM CHATS", data_base);
+    
+   /*
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
            "LOGIN          TEXT                NOT NULL,"\
@@ -68,7 +60,7 @@ int main() {
            "UNIQUE (LOGIN, SOCKET));", data_base);
 
     exec_db("SELECT * FROM USERS", data_base);
-    
+    */
     write(1, "####### DATABASE BLOCK ######\n", 30);
     /**** END DATABASE BLOCK ****/
 
@@ -121,6 +113,3 @@ int main() {
     
     return 0;
 }
-
-
-

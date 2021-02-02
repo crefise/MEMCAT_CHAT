@@ -42,6 +42,7 @@ char* get_users_password(int id, sqlite3* db);
 void set_users_login(int id, char* login, sqlite3* db);
 void set_users_password(int id, char* password, sqlite3* db);
 int get_users_ID(char* login, sqlite3* db);
+void get_chats_by_id_db(int id);
 
 /* Parsing */
 char** ps_registration(char* src);
