@@ -1,5 +1,7 @@
 #include "../inc/header.h"
 
+char* USER_LOGIN;
+
 void load_css ( void ) {
     GtkCssProvider *provider;
     GdkDisplay     *display;
@@ -244,6 +246,7 @@ void login_connect(GtkWidget *button, gpointer data) {
         }
         else {
             write(2, "LOGIN OKAY\n",11);
+            USER_LOGIN = strdup(login);
             pthread_t pthreads[1];
             pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
             pthread_create(&pthreads[0], NULL, console_style, NULL);
