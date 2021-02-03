@@ -32,14 +32,8 @@ int main() {
             "    MESSAGE TEXT NOT NULL,"\
             "    AUTHOR_ID INT NOT NULL);", data_base);
 
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 2)", data_base);
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 3)", data_base);
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (2, 5)", data_base);
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (3, 5)", data_base);
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (4, 1)", data_base);
-    exec_db("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES (1, 4)", data_base);
 
-    exec_db("SELECT * FROM CHATS", data_base);
+  
     
    /*
     exec_db("CREATE TABLE USERS("\

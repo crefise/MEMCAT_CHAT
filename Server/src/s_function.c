@@ -90,9 +90,17 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case 2: // Хотим обновить диалоги
+                
+
+
+
                 write(2, "UPPDATE DIALOGS\n",16);
                 //char* chats = get_chats_by_login_db(login);
                 get_chats_by_id_db(1);
+
+                if (send(client_socket, "0", 1, 0) == -1) { //
+                        write(2, "USER CLOSE CONNECTION\n",21);
+                }
                 exit = 0;
                 break;
             case 3: // Хотим обновить сообщения в диалоге
@@ -117,10 +125,11 @@ void *user_connect(void* sock) {
                 } 
                 else { // If login exist
                     int chat_id = create_chat_db(login_1, login_2);
-                    if (send(client_socket, "1", 1, 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
+                    if (send(client_socket, i_to_s(chat_id), strlen(i_to_s(chat_id)), 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
                 }
+                exec_db("SELECT * FROM CHATS", data_base);
                 mx_strdel(&login_1);
                 mx_strdel(&login_2);
                 mx_strdel(&buffer);
