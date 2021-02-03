@@ -59,6 +59,7 @@ void mx_strdel(char **str);
 void mx_printerr(const char *s);
 char *mx_strncpy(char *dst, const char *src, int len);
 bool mx_isdigit(char c);
+void ps_isuser(char **login_1, char **login_2, char *text);
 /* GTK */
 
 

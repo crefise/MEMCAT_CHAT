@@ -3,20 +3,6 @@
 
 
 void send_massage_to_client(char* message, char* login, int sender) {
-    /*
-    sqlite3_stmt *result;
-    char* statement = "SELECT SOCKET from ONLINE_USERS where LOGIN='";
-    statement = concat(statement, login);
-    statement = concat(statement, "'");
-    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
-    result.
-    */
-
-    /*
-    if (send(7, message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
-            mx_printerr("SEND ERROR\n");
-    }
-    */
    int send_sock = get_socket_db(login, data_base);
    mx_printerr("TOOK SOCK: ");
    write(2, i_to_s(send_sock), strlen(i_to_s(send_sock)));
@@ -34,10 +20,17 @@ void send_massage_to_client(char* message, char* login, int sender) {
     }
 }
 
-char *ps_isuser(char *text) {
-    char *result =  malloc(strlen(text) - 8);
-    result = strncpy(result, &text[7], strlen(text) - 8);
-    return result;
+void ps_isuser(char **login_1, char **login_2, char *text) { // isuser[login/login]
+    int size_login_1 = 0, size_login_2 = 0;
+    for (int i = 7; text[i] != '/'; i++)
+        size_login_1++;
+    for (int i = 8+size_login_1; text[i] != ']'; i++)
+        size_login_2++;
+    
+    *login_1 =  malloc(size_login_1);
+    *login_2 =  malloc(size_login_2);
+    *login_1 = strncpy(*login_1, &text[7], size_login_1);
+    *login_2 = strncpy(*login_2, &text[8+size_login_1], size_login_2);
 }
 
 
@@ -88,7 +81,7 @@ void *user_connect(void* sock) {
         mx_printerr("\n");
 
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
-
+        char *login_1, *login_2;
         char *temp;
         switch (solution) {
             case 1: // Хотим написать сообщение              
@@ -114,23 +107,26 @@ void *user_connect(void* sock) {
                 log_func(buffer, client_socket, &logined, &login, &pass);
                 exit = 0;
                 break;
-            case 6: // isuser? isuser[login]
-                temp = ps_isuser(buffer);
-                write(2, "sending...\n",11 );
-                if (get_users_ID(temp, data_base) == 0) {
+            case 6: // isuser? isuser[login] // ADD NEW CHAT
+                
+                ps_isuser(&login_1,&login_2, buffer);
+                if (get_users_ID(login_1, data_base) == 0) { // Если такого логина не существует
                     if (send(client_socket, "0", 1, 0) == -1) { //
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
                 } 
-                else {
+                else { // If login exist
+
                     if (send(client_socket, "1", 1, 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
                 }
-
-
+                mx_strdel(&login_1);
+                mx_strdel(&login_2);
+                mx_strdel(&buffer);
                 exit = 0;
                 break;
+
             case -1: // ошибка сообщения
                 write(2, "-1 ERROR\n",9);
                 exit = 1;

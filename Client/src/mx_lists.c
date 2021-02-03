@@ -168,8 +168,8 @@ void search_dialog(GtkWidget *button, gpointer data) {
       mx_strdel(&text);
       return;
   }
-  char *buffer = malloc(256);
-  char *will_send = concat(concat("isuser[", text), "]");
+  char *buffer = malloc(256); 
+  char *will_send = concat(concat(concat(concat("isuser[", text), "/"), USER_LOGIN), "]");
   gtk_entry_set_text(GTK_ENTRY(search_str), "");
   if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
     write(2, "SERVER DONT CONNETCTED\n",23);
