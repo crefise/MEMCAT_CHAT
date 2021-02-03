@@ -75,10 +75,10 @@ void mx_update_used_chat(CHAT_T *used_chat) {
     gtk_widget_show_all(will_show);
 }
 
-int space_index(char *text, int num)
+int space_index(char *text, int beg, int end)
 {
     int len = strlen(text);
-    for (int i = num; i < len; i++) 
+    for (int i = beg; i < end; i--) 
         if (isspace(text[i]))
             return i;
     return -1;
@@ -89,7 +89,7 @@ void set_label(MESSAGE_T **message, char *text, char *sender) {
     if(strlen(text) > num) {
         for (; len - i > num;) {
             char *tmp = (char*)malloc(len + 1);
-            int index = space_index(text, i);
+            int index = space_index(text, i + num, i);
             
             if (index != -1) {
                 strncpy(tmp, text, index);
