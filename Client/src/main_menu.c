@@ -1,4 +1,5 @@
 #include "../inc/header.h"
+#include <ctype.h>
 
 GtkWidget *scrool_massages;
 
