@@ -224,7 +224,7 @@ int get_chat_id_by_logins(char* u1, char* u2) {
    int id1 = get_users_ID(u1, data_base);
    int id2 = get_users_ID(u2, data_base);
    sqlite3_stmt *result;
-   char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
+   char* statement = "SELECT CHAT_ID FROM CHATS WHERE USER1_ID=";
    statement = concat(statement, i_to_s(id1));
    statement = concat(statement, " AND USER2_ID=");
    statement = concat(statement, i_to_s(id2));
@@ -243,6 +243,100 @@ int get_chat_id_by_logins(char* u1, char* u2) {
    free(statement);
    return chat_id;
 }
+
+int get_max_chat_id() {
+   int id;
+   sqlite3_stmt *result;
+   char* statement = "SELECT MAX(CHAT_ID) FROM CHATS";
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) 
+      id = atoi((char*)sqlite3_column_text(result, 0));
+   
+   sqlite3_finalize(result);
+   return id;
+}
+
+char* get_users_login(int id) {
+   char* login = "";
+   sqlite3_stmt *result;
+   char* statement = "SELECT LOGIN FROM USERS WHERE ID=";
+   statement = concat(statement, i_to_s(id));
+   statement = concat(statement, ";");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) 
+      login = concat(login, (char*)sqlite3_column_text(result, 0));
+
+   free(statement);
+   return login;
+}
+
+char** get_chats(char* login) {
+   int max_chat_id = get_max_chat_id();
+   char** result = malloc(sizeof(char*) * max_chat_id);
+   sqlite3_stmt *res;
+
+   char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
+      statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
+      statement = concat(statement, " OR USER2_ID=");
+      statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
+      statement = concat(statement, ";");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &res, 0);
+   if (rc != SQLITE_OK) {
+         fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+         sqlite3_close(data_base);
+   }
+   
+   for(int i = 0; i < max_chat_id; i++) {
+      rc = sqlite3_step(res);
+      int chat_id;
+      int chat_u1;
+      int chat_u2;
+      int u1 = get_users_ID(login, data_base);
+      int u2;
+      char* u2_login = "";
+
+      if (rc == SQLITE_ROW) {
+         chat_id = atoi((char*)sqlite3_column_text(res, 0));
+         chat_u1 = atoi((char*)sqlite3_column_text(res, 1));
+         chat_u2 = atoi((char*)sqlite3_column_text(res, 2));
+         if (u1 == chat_u1) {
+            u2 = chat_u2;
+         }
+         else if (u1 == chat_u2) {
+            u2 = chat_u1;
+         }
+      }
+
+      u2_login = concat(u2_login, get_users_login(u2));
+      char* temp = "";
+      temp = concat(temp, i_to_s(u1));
+      temp = concat(temp, "/");
+      temp = concat(temp, u2_login);
+   
+      result[i] = malloc(sizeof(char) * strlen(temp));
+      result[i] = concat(result[i], temp);
+
+      free(statement);
+      free(u2_login);
+      free(temp);
+   }
+   sqlite3_finalize(res);
+   return result;
+}
+
+
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
    open_db("Server/databases/users.db", &data_base);

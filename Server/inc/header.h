@@ -37,7 +37,7 @@ int get_socket_db(char* login, sqlite3* db);
 void add_user_db(char* login, char* password, sqlite3* db); // ready
 int access_db(char* login, char* password, sqlite3* db); // ready
 void delete_user(int id, sqlite3* db);
-char* get_users_login(int id, sqlite3* db);
+char* get_users_login(int id);
 char* get_users_password(int id, sqlite3* db);
 void set_users_login(int id, char* login, sqlite3* db);
 void set_users_password(int id, char* password, sqlite3* db);
@@ -45,6 +45,10 @@ int get_users_ID(char* login, sqlite3* db);
 void get_chats_by_id_db(int id);
 int create_chat_db(char* u1, char* u2);
 int get_chat_id_by_logins(char* u1, char* u2);
+char* get_user2_and_chat_id_by_login(char* u1);
+char** get_chats(char* login);
+int get_max_chat_id();
+char* get_chat_by_login(char* u1, int count);
 
 /* Parsing */
 char** ps_registration(char* src);
