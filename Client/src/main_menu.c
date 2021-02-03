@@ -1,4 +1,7 @@
 #include "../inc/header.h"
+
+GtkWidget *scrool_massages;
+
 void select_chat(GtkWidget *button, gpointer data);
 GtkWidget *chats_list_box = NULL;
 GtkWidget *CONTAINER = NULL;
@@ -19,9 +22,13 @@ void download_all_chat(CHAT_T* chats) {
     } 
 }
 
-
-
-
+void scrolling()
+{
+    GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(scrool_massages));
+    gtk_adjustment_set_page_size (adj, 0);
+    double value = gtk_adjustment_get_upper(adj);
+    gtk_adjustment_set_value(adj, value);
+}
 
 
 
@@ -43,6 +50,7 @@ void send_message(GtkWidget *button, gpointer data) {
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
     }
     mx_update_used_chat(used_chat);
+    scrolling();
 }
 
 void main_menu() {
@@ -51,7 +59,7 @@ void main_menu() {
     GtkWidget *input_key, *input_str;// for imput_box
     GtkWidget *search_str, *search_key;
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
-    GtkWidget *scrool_massages, *scrool_chats;
+    GtkWidget *scrool_chats;
     GtkWidget* setting_str, *home_key, *setting_key; // верхняя полоска настроек
     GtkWidget* search_chat_box;
     GtkWidget* main_menu_box;

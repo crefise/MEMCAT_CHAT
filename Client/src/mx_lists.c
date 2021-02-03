@@ -224,5 +224,6 @@ void select_chat(GtkWidget *button, gpointer data) {
 
     gtk_widget_hide(will_hide);
     gtk_widget_show_all(will_show);
+    scrolling();
 }
 
