@@ -76,6 +76,7 @@ void mx_update_used_chat(CHAT_T *used_chat) {
 }
 
 
+
 void add_new_message(MESSAGE_T **message, char *text, char *sender) {
     if (*message == NULL) {
         (*message) = malloc(sizeof(MESSAGE_T));
