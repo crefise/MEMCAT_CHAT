@@ -116,7 +116,7 @@ void *user_connect(void* sock) {
                     }
                 } 
                 else { // If login exist
-
+                    int chat_id = create_chat_db(login_1, login_2);
                     if (send(client_socket, "1", 1, 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }

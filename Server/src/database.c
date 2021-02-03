@@ -200,6 +200,49 @@ int get_users_ID(char* login, sqlite3* db) {
    free(statement);
    return id;
 }
+
+int create_chat_db(char* u1, char* u2) {
+   int chat_id = get_chat_id_by_logins(u1, u2);
+   if (chat_id != 0) {
+      return chat_id;
+   }
+   char* statement = "INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES(";
+   statement = concat(statement, i_to_s(get_users_ID(u1, data_base)));
+   statement = concat(statement, ",");
+   statement = concat(statement, i_to_s(get_users_ID(u2, data_base)));
+   statement = concat(statement, ");");
+
+   exec_db(statement, data_base);
+
+   free(statement);
+   chat_id = get_chat_id_by_logins(u1, u2);
+   return chat_id;
+}
+
+int get_chat_id_by_logins(char* u1, char* u2) {
+   int chat_id = 0;
+   int id1 = get_users_ID(u1, data_base);
+   int id2 = get_users_ID(u2, data_base);
+   sqlite3_stmt *result;
+   char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
+   statement = concat(statement, i_to_s(id1));
+   statement = concat(statement, " AND USER2_ID=");
+   statement = concat(statement, i_to_s(id2));
+   statement = concat(statement, ";");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) 
+      chat_id = atoi((char*)sqlite3_column_text(result, 0));
+   
+   sqlite3_finalize(result);
+   free(statement);
+   return chat_id;
+}
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
    open_db("Server/databases/users.db", &data_base);
