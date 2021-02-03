@@ -19,7 +19,14 @@ void send_massage_to_client(char* message, char* login, int sender) {
         }
     }
 }
-
+char *ps_update_dialog(char *buffer) { // dialogs[login]
+    int login_size = 0;
+    for (int i = 8; buffer[i] != ']'; i++)
+        login_size++;
+    char *login = malloc(login_size);
+    login = strncpy(login, &buffer[8], login_size);
+    return login;
+}
 void ps_isuser(char **login_1, char **login_2, char *text) { // isuser[login/login]
     int size_login_1 = 0, size_login_2 = 0;
     for (int i = 7; text[i] != '/'; i++)
@@ -90,13 +97,14 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case 2: // Хотим обновить диалоги
-                
-
-
-
                 write(2, "UPPDATE DIALOGS\n",16);
-                //char* chats = get_chats_by_login_db(login);
-                get_chats_by_id_db(1);
+                login_1 = ps_update_dialog(buffer);
+
+
+
+
+
+
 
                 if (send(client_socket, "0", 1, 0) == -1) { //
                         write(2, "USER CLOSE CONNECTION\n",21);

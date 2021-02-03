@@ -16,6 +16,8 @@
 #include<stdbool.h>
 #include <netdb.h>
 #include <pthread.h>
+#include <ctype.h>
+
 
 /*gtk_function.c*/
 #include "gtk/gtk.h"
@@ -40,6 +42,8 @@ void register_connect(GtkWidget *button, gpointer data);
 extern GtkWidget *login_window;
 void main_menu();
 GtkWidget* createConsoleBox();
+void scrolling();
+
 
 /* END gtk_function.c */
 #include <sys/socket.h>
