@@ -38,7 +38,8 @@ void send_message(GtkWidget *button, gpointer data) {
 
     char *text = (char*)gtk_entry_get_text(GTK_ENTRY(input_str));
     if(text && strlen(text) > 0) {
-        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, "TESTING", text);
+        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
+        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, "Vladimir", "da idi nahsdadasd\nuy dibil");
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
     }
     mx_update_used_chat(used_chat);
@@ -73,7 +74,7 @@ void main_menu() {
   // Делаем запрос на сервер что нужны чаты конкретного пользователя
   // Сервер присылает все чаты и мы их пакуем
     FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);
-    download_all_chat(MY_CHATS);
+   // download_all_chat(MY_CHATS);
 
     mx_add_new_chat(&MY_CHATS,"Vladimir",1);
     mx_add_new_chat(&MY_CHATS,"Viktor",2);

@@ -20,10 +20,16 @@ entry
 {
     background-color: rgb(18, 22, 18);
 }
-#message 
+#message_my
 {
     background:         rgb(20, 4, 4);
     color:              rgb(188, 191, 207);
+    font-size:          15px;
+}
+#message_interlocutor
+{
+    background:         rgb(145, 119, 119);
+    color:              rgb(255, 255, 255);
     font-size:          15px;
 }
 #chat 

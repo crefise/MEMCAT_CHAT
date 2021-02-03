@@ -83,7 +83,10 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
         (*message)->sender = strdup(sender);
         (*message)->next = NULL;
         (*message)->text_label = gtk_label_new(text);
-        gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message");
+        if (strcmp(sender, USER_LOGIN) == 0)
+            gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_my");
+        else
+            gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_interlocutor");
     } 
     else {
         MESSAGE_T *temp = *message, *temp_1 = NULL;
@@ -98,7 +101,10 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
         temp->text_label = gtk_label_new(text);
         temp_1->next = temp;
         temp->next = NULL;
-        gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message");
+        if (strcmp(sender, USER_LOGIN) == 0)
+            gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_my");
+        else
+            gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_interlocutor");
     }
 
 }
@@ -132,6 +138,7 @@ if (message == NULL) {
     //download from server
 }
 else {
+
     add_new_message(&(*chat)->messages, message, sender);
     gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), mx_take_last_message((*chat)->messages)->text_label, FALSE, FALSE, 5);
 }
