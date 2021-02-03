@@ -100,17 +100,23 @@ void *user_connect(void* sock) {
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
 
-
-
-
-
-
-
-                if (send(client_socket, "0", 1, 0) == -1) { //
-                        write(2, "USER CLOSE CONNECTION\n",21);
+                char** chats = get_chats(login);
+                for (int i = 0; i < 2 ; i++) {
+                    mx_printerr(chats[i]);
+                    mx_printerr("\n");
                 }
+                mx_printerr("CAN!\n"); // ТУТ НУЖНО ЗАПАРСИТЬ ВСЕ В ОДНУ СТРОКУ И ПЕРЕДАТЬ НА КЛИЕНТ!
+                /*
+                mx_printerr("TEST_1\n");
+                for (int i = 0; chats[i]; i++) {
+                    mx_printerr("TEST_FOR\n");
+                    send(client_socket, chats[i], strlen(chats[i]), 0);
+                }
+                send(client_socket, "-", 1, 0);
+*/
                 exit = 0;
                 break;
+                
             case 3: // Хотим обновить сообщения в диалоге
                 write(2, "UPPDATE TEXT IN DIALOG\n",23);
                 exit = 1;

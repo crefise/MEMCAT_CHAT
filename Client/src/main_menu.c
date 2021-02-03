@@ -3,6 +3,32 @@
 
 GtkWidget *scrool_massages;
 
+
+void download_all_chat(CHAT_T* chats) {
+  char *will_send = concat(concat("dialogs[", USER_LOGIN), "]");
+    if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
+      write(2, "SERVER DONT CONNETCTED\n",23);
+    } 
+    char *buffer = NULL;
+    /*
+    while (1 == 1) {
+        buffer = malloc(256);
+        recv(sock, &buffer[0], 256, 0);
+        if (strcmp(buffer, "-") == 0) {
+            break;
+        }
+        
+        mx_printerr(buffer);
+        mx_printerr("\n");
+        mx_strdel(&buffer);
+    }
+    mx_printerr("CANCELED TAKING DIALOG LIST\n");
+    */
+}
+
+
+
+
 void select_chat(GtkWidget *button, gpointer data);
 GtkWidget *chats_list_box = NULL;
 GtkWidget *CONTAINER = NULL;
@@ -15,13 +41,6 @@ char *OPENED_DIALOG;
     CHAT_T *FAVORITE_CHAT = NULL;
     GtkWidget *collocutor_name = NULL;
 
-
-void download_all_chat(CHAT_T* chats) {
-  char *will_send = concat(concat("dialogs[", USER_LOGIN), "]");
-   if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
-      write(2, "SERVER DONT CONNETCTED\n",23);
-    } 
-}
 
 void scrolling()
 {
@@ -83,7 +102,7 @@ void main_menu() {
   // Делаем запрос на сервер что нужны чаты конкретного пользователя
   // Сервер присылает все чаты и мы их пакуем
     FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);
-   // download_all_chat(MY_CHATS);
+    download_all_chat(MY_CHATS);
 
     mx_add_new_chat(&MY_CHATS,"Vladimir",1);
     mx_add_new_chat(&MY_CHATS,"Viktor",2);

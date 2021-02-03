@@ -265,3 +265,4 @@ void select_chat(GtkWidget *button, gpointer data) {
     scrolling();
 }
 
+

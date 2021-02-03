@@ -34,7 +34,7 @@ int main() {
 
 
   
-    
+    exec_db("SELECT * FROM CHATS", data_base);
    /*
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
