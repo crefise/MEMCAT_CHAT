@@ -75,7 +75,42 @@ void mx_update_used_chat(CHAT_T *used_chat) {
     gtk_widget_show_all(will_show);
 }
 
+int space_index(char *text, int num)
+{
+    int len = strlen(text);
+    for (int i = num; i < len; i++) 
+        if (isspace(text[i]))
+            return i;
+    return -1;
+}
 
+void set_label(MESSAGE_T **message, char *text, char *sender) {
+    int num = 36, i = 0, len = strlen(text);
+    if(strlen(text) > num) {
+        for (; len - i > num;) {
+            char *tmp = (char*)malloc(len + 1);
+            int index = space_index(text, i);
+            
+            if (index != -1) {
+                strncpy(tmp, text, index);
+                tmp[index] = '\0';
+                while (isspace(text[index])) index++;
+                text = concat(tmp, concat("\n", &text[index]));
+                i = index;
+            }
+            
+            else {
+                strncpy(tmp, text, i + num);
+                tmp[i + num] = '\0';
+                text = concat(tmp, concat("\n", &text[i + num]));
+                i = i + num + 1;
+            }
+            len++;
+        }
+    }
+    (*message)->text_label = gtk_label_new(text);
+
+}
 
 void add_new_message(MESSAGE_T **message, char *text, char *sender) {
     if (*message == NULL) {
@@ -83,7 +118,8 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
         (*message)->message_text = strdup(text);
         (*message)->sender = strdup(sender);
         (*message)->next = NULL;
-        (*message)->text_label = gtk_label_new(text);
+        //(*message)->text_label = gtk_label_new(text);
+        set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0)
             gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_my");
         else
@@ -99,7 +135,8 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
         temp = malloc(sizeof(MESSAGE_T));
         temp->message_text = strdup(text);
         temp->sender = strdup(sender);
-        temp->text_label = gtk_label_new(text);
+        //temp->text_label = gtk_label_new(text);
+        set_label(&temp, text, sender);
         temp_1->next = temp;
         temp->next = NULL;
         if (strcmp(sender, USER_LOGIN) == 0)
