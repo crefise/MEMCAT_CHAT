@@ -54,7 +54,6 @@ void scrolling();
 char* concat(char* s1, char* s2);
 char* i_to_s(int n);
 char *clear_buffer(char *s1);
-char *mx_strnew(const int size);
 void mx_strdel(char **str);
 void mx_printerr(const char *s);
 char *mx_strncpy(char *dst, const char *src, int len);
@@ -79,7 +78,7 @@ void *console_style();
 extern GtkWidget *stack;
 
 
-
+char *mx_strnew(const int size);
 
 
 

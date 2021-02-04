@@ -69,5 +69,4 @@ void ps_isuser(char **login_1, char **login_2, char *text);
 void mx_del_strarr(char ***arr);
 /* GTK */
 
-
 #endif

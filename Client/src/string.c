@@ -27,17 +27,6 @@ char *clear_buffer(char *s1) {
    }
    return s1;
 }
-char *mx_strnew(const int size) {
-    if (size < 0) {
-        return NULL;
-    }
-    char *result = (char *)malloc(size + 1);
-    for (int i = 0; i < size+1; i++)
-    {
-        result[i] = '\0';
-    }
-    return result;
-}
 
 void mx_strdel(char **str) {
     free(*str);

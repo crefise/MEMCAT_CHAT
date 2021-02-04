@@ -65,6 +65,8 @@ char *mx_strncpy(char *dst, const char *src, int len) {
    return dst;
 }
 
+
+
 bool mx_isdigit(char c) {
     char alphabet[] = "0123456789";
     char *letter = alphabet;

@@ -108,12 +108,22 @@ void *user_connect(void* sock) {
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
                 char** chats = get_chats(login);
+                for (int i = 0; chats[i] != NULL; i++)
+                {
+                     mx_printerr("CHECK erROR\n");
+                    mx_printerr(chats[i]);
+                    mx_printerr("\n");
+
+                }
+                
                 if (chats == NULL) {
                     if (send(client_socket, "-", 1, 0) == -1)
                         mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
                 }
                 else {
+                                    mx_printerr("CHECK erROR\n");
                 temp = ps_comma_dot(chats);
+                                mx_printerr("CHECK erROR\n");
                 if (send(client_socket, temp, strlen(temp), 0) == -1)
                     mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
                 mx_del_strarr(&chats);
