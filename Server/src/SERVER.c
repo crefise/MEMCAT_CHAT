@@ -15,26 +15,28 @@ int main() {
     exec_db("CREATE TABLE USERS ("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
-            "    PASSWORD TEXT NOT NULL);"\
-            "CREATE TABLE CHATS ("\
+            "    PASSWORD TEXT NOT NULL);", data_base);
+    exec_db("CREATE TABLE CHATS ("\
             "    CHAT_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    USER1_ID INT NOT NULL,"\
-            "    USER2_ID INT NOT NULL);"\
-            "CREATE TABLE ONLINE_USERS ("\
-            "    USER_ID INT NOT NULL,"\
+            "    USER2_ID INT NOT NULL);", data_base);
+    exec_db("CREATE TABLE ONLINE_USERS ("\
+            "    USER_ID INTEGER PRIMARY KEY,"\
             "    LOGIN TEXT NOT NULL UNIQUE,"\
-            "    SOCKET INT NOT NULL UNIQUE,"\
-            "    PRIMARY KEY (USER_ID)"\
-            ");"\
-            "CREATE TABLE CHAT ("\
+            "    SOCKET INT NOT NULL UNIQUE)", data_base);
+    exec_db("CREATE TABLE CHAT ("\
             "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    DATE_TIME DATETIME NOT NULL,"\
             "    MESSAGE TEXT NOT NULL,"\
             "    AUTHOR_ID INT NOT NULL);", data_base);
 
 
-  
+    mx_printerr("======== ALL DB =========\n");
     exec_db("SELECT * FROM CHATS", data_base);
+    exec_db("SELECT * FROM USERS", data_base);
+    exec_db("SELECT * FROM CHAT", data_base);
+    exec_db("SELECT * FROM ONLINE_USERS", data_base);
+    mx_printerr("======== ALL DB =========\n");
    /*
     exec_db("CREATE TABLE USERS("\
            "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\

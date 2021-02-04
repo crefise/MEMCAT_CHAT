@@ -3,27 +3,88 @@
 
 GtkWidget *scrool_massages;
 
+void un_ps_chat(char *str) {
+    mx_printerr("TEST\n");
+    if (!str) {
+        mx_printerr("NULL CHAT STR (un_ps_chat)\n");
+        return;
+    }
+    str = concat(str, ";");
+            mx_printerr("STR : ");
+                    mx_printerr(str);
+            mx_printerr("\n");
+    int count_chat = 0;
+    for (int i = 0; str[i]; i++)
+        if (str[i] == ';')
+            count_chat++;
+
+    char **chats = malloc(sizeof(char*) * count_chat);
+    int begin_size = 0;
+
+    for (int i = 0; i < count_chat; i++)
+    {
+        int size = 0;
+        while(str[begin_size + size] != ';' ) {
+            size++;
+        }
+        mx_printerr("SIZE : ");
+                    mx_printerr(i_to_s(size));
+            mx_printerr("\n");
+        chats[i] = malloc(size);
+        chats[i] = strncpy(chats[i], &str[begin_size], size);
+        begin_size += size;
+        begin_size++;
+    }
+mx_printerr("-----\n");
+    for (int i = 0; i < count_chat; i++)
+    {
+        char *chat_ID_char;
+        char *chat_name;
+        int char_ID_int;
+        int temp_size = 0;
+        for (int z = 0; chats[i][z] != '/' && &chats[i][z] != NULL; z++)
+        {
+            temp_size++;
+
+        }
+
+        chat_ID_char = malloc(temp_size);
+        mx_printerr("STRLEN SIZE:");
+                  mx_printerr("\n");
+        mx_printerr(i_to_s(strlen(chats[i])));
+        chat_name = malloc(strlen(chats[i]) - temp_size - 1);
+        chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
+        chat_name = strncpy(chat_name, &chats[i][temp_size+1], (strlen(chats[i]) - temp_size) - 1 );
+        mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));
+
+        
+    }
+    
+    
+}
 
 void download_all_chat(CHAT_T* chats) {
-  char *will_send = concat(concat("dialogs[", USER_LOGIN), "]");
-    if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
+  char *buffer = concat(concat("dialogs[", USER_LOGIN), "]");
+    if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
       write(2, "SERVER DONT CONNETCTED\n",23);
     } 
-    char *buffer = NULL;
-    /*
-    while (1 == 1) {
-        buffer = malloc(256);
-        recv(sock, &buffer[0], 256, 0);
-        if (strcmp(buffer, "-") == 0) {
-            break;
-        }
-        
-        mx_printerr(buffer);
-        mx_printerr("\n");
-        mx_strdel(&buffer);
+    mx_strdel(&buffer);
+    buffer = malloc(256);
+    if (recv(sock, &buffer[0], 256, 0) == 0) {
+        mx_printerr("ERROR SERVER CONNECTIONS (download all chat)\n");
     }
-    mx_printerr("CANCELED TAKING DIALOG LIST\n");
-    */
+    if (strcmp(buffer, "-") == 0) {
+        mx_printerr("NULL CHATS");
+        return;
+    }
+    else {
+    mx_printerr("We taked: ");
+    mx_printerr(buffer);
+    mx_printerr("\n");
+    un_ps_chat(buffer);
+    }
+    
+
 }
 
 

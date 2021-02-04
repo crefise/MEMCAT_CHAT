@@ -245,19 +245,32 @@ int get_chat_id_by_logins(char* u1, char* u2) {
 }
 
 int get_max_chat_id() {
-   int id;
+   int id;   
+   mx_printerr("TEST1\n");
    sqlite3_stmt *result;
-   char* statement = "SELECT MAX(CHAT_ID) FROM CHATS";
+   char* statement = strdup("SELECT MAX(CHAT_ID) FROM CHATS");
+   mx_printerr("TEST1\n");
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   mx_printerr("TEST1\n");
    if (rc != SQLITE_OK) {
       fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       sqlite3_close(data_base);
    }
+   mx_printerr("TEST1\n");
    rc = sqlite3_step(result);
-   if (rc == SQLITE_ROW) 
-      id = atoi((char*)sqlite3_column_text(result, 0));
-   
+   mx_printerr("TESTGGG\n");
+   if (rc == SQLITE_ROW) {
+      if ((char*)sqlite3_column_text(result, 0) == NULL) {
+         mx_printerr("null\n");
+      }
+      else {
+         id = atoi((char*)sqlite3_column_text(result, 0));
+      }
+   }
+      
+   mx_printerr("TEST1\n");
    sqlite3_finalize(result);
+   free(statement);
    return id;
 }
 
@@ -283,21 +296,21 @@ char* get_users_login(int id) {
 
 char** get_chats(char* login) {
    int max_chat_id = get_max_chat_id();
-   char** result = malloc(sizeof(char*) * max_chat_id);
-   sqlite3_stmt *res;
+   char** result = malloc(sizeof(char*) * max_chat_id + 1);
 
+   result[max_chat_id] = NULL;
+   sqlite3_stmt *res;
    char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
       statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
       statement = concat(statement, " OR USER2_ID=");
       statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
       statement = concat(statement, ";");
-
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &res, 0);
    if (rc != SQLITE_OK) {
          fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
          sqlite3_close(data_base);
+         return NULL;
    }
-   
    for(int i = 0; i < max_chat_id; i++) {
       rc = sqlite3_step(res);
       int chat_id;
@@ -318,7 +331,6 @@ char** get_chats(char* login) {
             u2 = chat_u1;
          }
       }
-
       u2_login = concat(u2_login, get_users_login(u2));
       char* temp = "";
       temp = concat(temp, i_to_s(u1));
@@ -327,7 +339,6 @@ char** get_chats(char* login) {
    
       result[i] = malloc(sizeof(char) * strlen(temp));
       result[i] = concat(result[i], temp);
-
       free(statement);
       free(u2_login);
       free(temp);

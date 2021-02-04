@@ -1,7 +1,15 @@
 
 #include "../inc/header.h"
 
+char *ps_comma_dot(char **text){
 
+    char *result = strdup(text[0]);
+    for (int i = 1; text[i] ; i++) {
+        result = concat(concat(result, ";"), text[i]);
+    }
+    return result;
+
+}
 void send_massage_to_client(char* message, char* login, int sender) {
    int send_sock = get_socket_db(login, data_base);
    mx_printerr("TOOK SOCK: ");
@@ -99,13 +107,19 @@ void *user_connect(void* sock) {
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
-
                 char** chats = get_chats(login);
-                for (int i = 0; i < 2 ; i++) {
-                    mx_printerr(chats[i]);
-                    mx_printerr("\n");
+                if (chats == NULL) {
+                    if (send(client_socket, "-", 1, 0) == -1)
+                        mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
                 }
-                mx_printerr("CAN!\n"); // ТУТ НУЖНО ЗАПАРСИТЬ ВСЕ В ОДНУ СТРОКУ И ПЕРЕДАТЬ НА КЛИЕНТ!
+                else {
+                temp = ps_comma_dot(chats);
+                if (send(client_socket, temp, strlen(temp), 0) == -1)
+                    mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
+                mx_del_strarr(&chats);
+                mx_strdel(&temp);
+
+                }
                 /*
                 mx_printerr("TEST_1\n");
                 for (int i = 0; chats[i]; i++) {
@@ -239,4 +253,16 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
         }
         mx_printerr("LOGIN FILED.");
     }
+}
+
+
+void mx_del_strarr(char ***arr) {
+    int i = 0;
+    
+    while ((*arr)[i] != NULL) {
+        mx_strdel(&(*arr)[i]);
+        i++;
+    }
+    free(*arr);
+    *arr = NULL;
 }

@@ -59,6 +59,7 @@ void mx_strdel(char **str);
 void mx_printerr(const char *s);
 char *mx_strncpy(char *dst, const char *src, int len);
 bool mx_isdigit(char c);
+void mx_del_strarr(char ***arr);
 /* END string.c */
 
 /* help_function.c */
@@ -123,5 +124,6 @@ extern CHAT_T *FAVORITE_CHAT;
 extern GtkWidget *collocutor_name;
 extern GtkWidget *chats_list_box;
 extern GtkWidget *CONTAINER;
+
 extern GtkWidget *window; // my window
 #endif
