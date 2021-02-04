@@ -108,7 +108,7 @@ void *user_connect(void* sock) {
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
                 char** chats = get_chats(login);
-                for (int i = 0; chats[i] != NULL; i++)
+                for (int i = 0; chats != NULL  && chats[i] != NULL; i++)
                 {
                      mx_printerr("CHECK erROR\n");
                     mx_printerr(chats[i]);

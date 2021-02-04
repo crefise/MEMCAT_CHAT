@@ -245,7 +245,7 @@ int get_chat_id_by_logins(char* u1, char* u2) {
 }
 
 int get_max_chat_id() {
-   int id;   
+   int id = 0;   
    sqlite3_stmt *result;
    char* statement = strdup("SELECT MAX(CHAT_ID) FROM CHATS");
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
@@ -289,6 +289,7 @@ char* get_users_login(int id) {
 
 char** get_chats(char* login) {
    int max_chat_id = get_max_chat_id();
+   if (max_chat_id == 0) return NULL;
    char** result = malloc(sizeof(char*) * max_chat_id + 1);
 
    result[max_chat_id] = NULL;
