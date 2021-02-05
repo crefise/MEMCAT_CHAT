@@ -50,6 +50,8 @@ char* get_user2_and_chat_id_by_login(char* u1);
 char** get_chats(char* login);
 int get_max_chat_id();
 char* get_chat_by_login(char* u1, int count);
+char* get_server_date();
+void add_message(int chat_id, int sender_id, char* message);
 
 /* Parsing */
 char** ps_registration(char* src);

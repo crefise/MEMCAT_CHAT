@@ -10,6 +10,14 @@ int main() {
     /**** START DATABASE BLOCK ****/
     write(1, "####### DATABASE BLOCK ######\n", 30);
 
+
+    char* date_time = get_server_date();
+    mx_printerr("SEVER DATE_TIME: ");
+    mx_printerr(date_time);
+    mx_printerr("\n");
+    free(date_time);
+
+
     open_db("Server/databases/data_base.db", &data_base);
 
     exec_db("CREATE TABLE USERS ("\
