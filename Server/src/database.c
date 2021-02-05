@@ -241,7 +241,7 @@ int count_users_chats(int id) {
          return chats;
    }
    rc = sqlite3_step(result);
-   for (; rc = SQLITE_ROW; chats++) {
+   for (; rc == SQLITE_ROW; chats++) {
       rc = sqlite3_step(result);
    }
 
@@ -254,6 +254,7 @@ char** get_chats(char* login) {
    int user_id = get_users_ID(login);
    int friend_id;
    int chats_c = count_users_chats(user_id);
+   if (chats_c == 0) return NULL;
 
    char** chats = malloc(sizeof(char*) * (chats_c + 1));
    chats[chats_c] = NULL;
