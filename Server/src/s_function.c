@@ -10,7 +10,7 @@ char *ps_comma_dot(char **text){
     return result;
 
 }
-void send_massage_to_client(char* message, char* login, int sender) {
+void send_massage_to_client(char* message, char* login, int sender, ) {
    int send_sock = get_socket_db(login, data_base);
    mx_printerr("TOOK SOCK: ");
    write(2, i_to_s(send_sock), strlen(i_to_s(send_sock)));
@@ -102,7 +102,7 @@ void *user_connect(void* sock) {
         switch (solution) {
             case 1: // Хотим написать сообщение              
                 ps_massage_add(buffer, &send_login, &send_text, &chat_ID); // Парсим сообщение что пришло
-                send_massage_to_client(send_text, send_login, client_socket); // отправляем сообщение на нужный логин
+                send_massage_to_client(send_text, send_login, client_socket, chat_ID); // отправляем сообщение на нужный логин
                 exit = 0;
                 break;
             case 2: // Хотим обновить диалоги
