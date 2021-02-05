@@ -313,13 +313,56 @@ char** get_last_30_messages_from_CHAT(int chat_id) {
 }
 
 int get_max_message_id_from_CHAT(int chat_id) {
-   
+   int max_id = 0;   
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT MAX(MESSAGE_ID) FROM CHAT WHERE CHAT_ID=%i;", chat_id);
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) 
+      max_id = atoi((char*)sqlite3_column_text(result, 0));
+
+   sqlite3_finalize(result);
+   return max_id;
 }
 
 char** get_messages_from_CHAT(int chat_id) {
-   char** messages = malloc(sizeof(char*) * get_max_message_id_from_CHAT(chat_id));
+   int messages_c = count_messages_from_CHAT();
+   char** messages = malloc(sizeof(char*) * (messages_c + 1));
+   messages[messages_c] = NULL;
 
+   char* statement = sqlite3_mprintf(
+   "SELECT MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE FROM CHAT WHERE CHAT_ID=%i ORDER BY MESSAGE_ID", 
+   chat_id);
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   for(int i = 0; rc == SQLITE_ROW; i++, rc = sqlite3_step(result)) {
+      int message_id = atoi((char*)sqlite3_column_text(result, 0));
+      int author_id = atoi((char*)sqlite3_column_text(result, 1));
+      char* date_time = (char*)sqlite3_column_text(result, 2);
+      char* message = (char*)sqlite3_column_text(result, 3);
+
+      char* temp = sqlite3_mprintf("%i/%i/%i/%s/%s", chat_id, message_id, author_id, message, date_time);
+
+      messages[i] = "";
+      messages[i] = concat(messages[i], temp);
+   }
+   
+   sqlite3_finalize(result);
    return messages;
+}
+
+int count_messages_from_CHAT(int chat_id) {
+
 }
 
 void delete_user_from_USERS(int id) {

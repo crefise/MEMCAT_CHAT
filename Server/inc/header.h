@@ -58,6 +58,8 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
 int get_max_message_id_from_CHAT(int chat_id);
+char* get_message_from_CHAT(int chat_id, int message_id);
+int count_messages_from_CHAT(int chat_id);
 
 /* Parsing */
 char** ps_registration(char* src);
