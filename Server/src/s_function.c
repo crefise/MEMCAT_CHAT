@@ -11,7 +11,7 @@ char *ps_comma_dot(char **text){
 
 }
 void send_massage_to_client(char* message, char* login, int sender) {
-   int send_sock = get_socket_db(login, data_base);
+   int send_sock = get_socket_db(login);
    mx_printerr("TOOK SOCK: ");
    write(2, i_to_s(send_sock), strlen(i_to_s(send_sock)));
    mx_printerr("\n");
@@ -60,7 +60,7 @@ void *user_connect(void* sock) {
 
 
         mx_printerr("--------ONLINE BASE NOW-----------\n");
-        exec_db("SELECT * FROM ONLINE_USERS", data_base);
+        exec_db("SELECT * FROM ONLINE_USERS");
         mx_printerr("----------------------------------\n");
 
         mx_strdel(&buffer);
@@ -74,7 +74,7 @@ void *user_connect(void* sock) {
                 char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
                 temp_statement = concat(temp_statement, i_to_s(client_socket));
                 temp_statement = concat(temp_statement, ";");
-                exec_db(temp_statement, data_base);
+                exec_db(temp_statement);
                 mx_strdel(&temp_statement);
                 mx_printerr("USER \"");
                 mx_printerr(login);
@@ -156,7 +156,7 @@ void *user_connect(void* sock) {
             case 6: // isuser? isuser[login] // ADD NEW CHAT
                 
                 ps_isuser(&login_1,&login_2, buffer);
-                if (get_users_ID(login_1, data_base) == 0) { // Если такого логина не существует
+                if (get_users_ID(login_1) == 0) { // Если такого логина не существует
                     if (send(client_socket, "0", 1, 0) == -1) { //
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
@@ -167,7 +167,7 @@ void *user_connect(void* sock) {
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
                 }
-                exec_db("SELECT * FROM CHATS", data_base);
+                exec_db("SELECT * FROM CHATS");
                 mx_strdel(&login_1);
                 mx_strdel(&login_2);
                 mx_strdel(&buffer);
@@ -223,7 +223,7 @@ bool curr_sybmobol(char *str) {
 
 void reg_func(char *buffer, int client_socket) {
     char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
-    if (check_user_db(temp[0], data_base)) { // if 1 человек уже зарегестрирован
+    if (check_user_db(temp[0])) { // if 1 человек уже зарегестрирован
         if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
@@ -233,15 +233,15 @@ void reg_func(char *buffer, int client_socket) {
         if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
-        add_user_db(temp[0], temp[1], data_base);
+        add_user_db(temp[0], temp[1]);
     }
 
-    exec_db("SELECT * FROM USERS", data_base); // base show
+    exec_db("SELECT * FROM USERS"); // base show
 }
 
 void log_func(char *buffer, int client_socket, bool *logined, char **login, char** pass) {
     char **temp_for_login = ps_login(buffer);
-    if (access_db(temp_for_login[0], temp_for_login[1], data_base) == 1) {
+    if (access_db(temp_for_login[0], temp_for_login[1]) == 1) {
         if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
             write(2, "USER CLOSE CONNECTION\n",22);
             return;
