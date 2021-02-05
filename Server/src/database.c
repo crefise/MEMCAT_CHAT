@@ -262,20 +262,21 @@ char** get_chats(char* login) {
 
          if (u1 == chat_u1) u2 = chat_u2;
          else if (u1 == chat_u2) u2 = chat_u1;
+
+         char* u2_login = sqlite3_mprintf("%s", get_users_login(u2));
+         char* temp = sqlite3_mprintf("%i/%s", chat_id, u2_login);
+      
+         result[i] = malloc(sizeof(char) * strlen(temp));
+         result[i] = concat(result[i], temp);
+
+         free(temp);
+         free(u2_login);
+         i++;
       }
       else {
          result[i] = NULL;
          break;
       }
-      char* u2_login = sqlite3_mprintf("%s", get_users_login(u2));
-      char* temp = sqlite3_mprintf("%i/%s", chat_id, u2_login);
-   
-      result[i] = malloc(sizeof(char) * strlen(temp));
-      result[i] = concat(result[i], temp);
-
-      free(temp);
-      free(u2_login);
-      i++;
    }
 
    mx_printerrln("in get_chats start");
