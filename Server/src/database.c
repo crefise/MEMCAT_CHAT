@@ -367,8 +367,13 @@ void add_message(int chat_id, int sender_id, char* message) {
    statement = concat(statement, i_to_s(chat_id));
    statement = concat(statement, ", ");
    statement = concat(statement, i_to_s(sender_id));
-   statement = concat(statement, ", ");
+   statement = concat(statement, ", '");
+   statement = concat(statement, message);
+   statement = concat(statement, "', '");
+   statement = concat(statement, date_time);
+   statement = concat(statement, "');");
 
+   exec_db(statement, data_base);
 
    free(statement);
    free(date_time);

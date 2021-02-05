@@ -113,7 +113,7 @@ void send_message(GtkWidget *button, gpointer data) {
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
 
         // send massage to server
-a
+
     }
     mx_update_used_chat(used_chat);
     scrolling();
