@@ -234,7 +234,8 @@ char** get_chats(char* login) {
    if (max_chat_id == 0) return NULL;
    char** result = malloc(sizeof(char*) * max_chat_id + 1);
 
-   for (int i = 0; i < max_chat_id + 1; i++) result[i] = NULL;
+   //for (int i = 0; i < max_chat_id + 1; i++) 
+   result[max_chat_id] = NULL;
    sqlite3_stmt *res;
 
    int id = get_users_ID(login);
@@ -267,9 +268,9 @@ char** get_chats(char* login) {
          result[i] = NULL;
          break;
       }
+
       char* u2_login = sqlite3_mprintf("%s", get_users_login(u2));
       char* temp = sqlite3_mprintf("%i/%s", chat_id, u2_login);
-   
       result[i] = malloc(sizeof(char) * strlen(temp));
       result[i] = concat(result[i], temp);
 

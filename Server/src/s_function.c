@@ -107,7 +107,7 @@ void *user_connect(void* sock) {
                 mx_printerrln("T02");
                 char** chats = get_chats(login);
                 mx_printerrln("T02");
-                for (int i = 0; chats != NULL  && chats[i] != NULL; i++)
+                for (int i = 0;  chats[i] != NULL; i++)
                 {
                      mx_printerr("CHECK erROR\n");
                     mx_printerr(chats[i]);
