@@ -53,17 +53,11 @@ void exec_db(char* statement) {
 void close_db() {
    char* statement = "TRUNCATE TABLE ONLINE_USERS";
    exec_db(statement);
-   free(statement);
    sqlite3_close(data_base);
 }
 
 void add_user_db(char* login, char* password) {
-   char* statement = "INSERT INTO USERS (LOGIN,PASSWORD) VALUES ('";
-   statement = concat(statement, login);
-   statement = concat(statement, "', '");
-   statement = concat(statement, password);
-   statement = concat(statement, "'); ");
-
+   char* statement = sqlite3_mprintf("INSERT INTO USERS (LOGIN,PASSWORD) VALUES ('%s', '%s');", login, password);
    exec_db(statement);
    free(statement);
 }
@@ -364,12 +358,8 @@ char* get_server_date() {
 
 void add_message(int chat_id, int sender_id, char* message) {
    char* date_time = get_server_date();
-
-   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');",
-                                    chat_id, sender_id, message, date_time);
-
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');", chat_id, sender_id, message, date_time);
    exec_db(statement);
-
    free(statement);
    free(date_time);
 }
