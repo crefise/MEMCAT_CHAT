@@ -10,22 +10,13 @@ char *ps_comma_dot(char **text){
     return result;
 
 }
-void send_massage_to_client(char* message, char* login, int sender) {
-   int send_sock = get_socket_db(login);
-   mx_printerr("TOOK SOCK: ");
-   write(2, i_to_s(send_sock), strlen(i_to_s(send_sock)));
-   mx_printerr("\n");
-    if (send(send_sock, message, strlen(message), 0) == -1) { // 1 - success registration, 0 - bad registration
-        if (send(sender, "MESSAGE ERROR SEND!!!", 21, 0) == -1) { // 1 - success registration, 0 - bad registration
-                mx_printerr("SEND ERROR\n");
-        }
-        mx_printerr("SEND ERROR\n");
-    }
-    else {
-        if (send(sender, "Message send okay!", 18, 0) == -1) { // 1 - success registration, 0 - bad registration
-                mx_printerr("SEND ERROR\n");
-        }
-    }
+void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID) {
+    int send_sock = get_socket_db(recipient_login);
+    if (send_sock != 1) { // if ONLINE SENDING TO HIM
+        add_message(chat_ID, get_users_ID(sender_login), message);
+    } 
+    if (send(send_sock, message, strlen(message), 0) == -1)
+       mx_printerrln("UKNOWN ERROR SENDONG (send_massage_to_client)");
 }
 char *ps_update_dialog(char *buffer) { // dialogs[login]
     int login_size = 0;
@@ -102,13 +93,15 @@ void *user_connect(void* sock) {
         switch (solution) {
             case 1: // Хотим написать сообщение              
                 ps_massage_add(buffer, &send_login, &send_text, &chat_ID); // Парсим сообщение что пришло
-                send_massage_to_client(send_text, send_login, client_socket, chat_ID); // отправляем сообщение на нужный логин
+                send_massage_to_client(send_text, login, send_login, client_socket, chat_ID); // отправляем сообщение на нужный логин
                 exit = 0;
                 break;
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
+                mx_printerrln("T02");
                 char** chats = get_chats(login);
+                mx_printerrln("T02");
                 for (int i = 0; chats != NULL  && chats[i] != NULL; i++)
                 {
                      mx_printerr("CHECK erROR\n");

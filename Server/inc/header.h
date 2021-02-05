@@ -24,7 +24,7 @@ int parse_solution(char *text); // Функция которая определ�
 bool curr_sybmobol(char *str);
 void reg_func(char *buffer, int client_socket); // register function;
 void log_func(char *buffer, int client_socket, bool *logined,  char **login, char** pass); // login function;
-void send_massage_to_client(char* message, char* login, int sender);
+void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID);
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready

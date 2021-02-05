@@ -343,7 +343,7 @@ char** get_chats(char* login) {
       result[i] = malloc(sizeof(char) * strlen(temp));
       result[i] = concat(result[i], temp);
 
-      free(statement);
+      //free(statement);
       free(u2_login);
       free(temp);
       i++;
