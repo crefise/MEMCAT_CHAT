@@ -12,6 +12,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <sqlite3.h> 
+#include <time.h>
 
 extern int count_users;
 extern sqlite3* data_base;

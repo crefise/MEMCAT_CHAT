@@ -350,7 +350,29 @@ char** get_chats(char* login) {
    return result;
 }
 
+char* get_server_date() {
+   char* time_date = malloc(sizeof(char) * 18);
+   long int s_time;
+   struct tm *m_time;
+   s_time = time (NULL);
+   m_time = localtime (&s_time);
+   strftime (time_date, 128, "%X %d.%m.%Y", m_time);
+   return time_date;
+}
 
+void add_message(int chat_id, int sender_id, char* message) {
+   char* date_time = get_server_date();
+   char* statement = "INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES";
+   statement = concat(statement, "(");
+   statement = concat(statement, i_to_s(chat_id));
+   statement = concat(statement, ", ");
+   statement = concat(statement, i_to_s(sender_id));
+   statement = concat(statement, ", ");
+
+
+   free(statement);
+   free(date_time);
+}
 /*
 void init_db(sqlite3* data_base, sqlite3* data_base) {
    open_db("Server/databases/users.db", &data_base);

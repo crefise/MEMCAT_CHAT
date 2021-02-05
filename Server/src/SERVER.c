@@ -25,6 +25,7 @@ int main() {
             "    LOGIN TEXT NOT NULL UNIQUE,"\
             "    SOCKET INT NOT NULL UNIQUE)", data_base);
     exec_db("CREATE TABLE CHAT ("\
+            "    CHAT_ID INT NOT NULL"\
             "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    DATE_TIME DATETIME NOT NULL,"\
             "    MESSAGE TEXT NOT NULL,"\
