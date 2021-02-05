@@ -23,30 +23,30 @@ int main() {
     exec_db("CREATE TABLE USERS ("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
-            "    PASSWORD TEXT NOT NULL);", data_base);
+            "    PASSWORD TEXT NOT NULL);");
     exec_db("CREATE TABLE CHATS ("\
             "    CHAT_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    USER1_ID INT NOT NULL,"\
-            "    USER2_ID INT NOT NULL);", data_base);
+            "    USER2_ID INT NOT NULL);");
     exec_db("CREATE TABLE ONLINE_USERS ("\
             "    USER_ID INTEGER PRIMARY KEY,"\
             "    LOGIN TEXT NOT NULL UNIQUE,"\
-            "    SOCKET INT NOT NULL UNIQUE)", data_base);
+            "    SOCKET INT NOT NULL UNIQUE)");
     exec_db("CREATE TABLE CHAT ("\
             "    CHAT_ID INT NOT NULL"\
             "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    DATE_TIME DATETIME NOT NULL,"\
             "    MESSAGE TEXT NOT NULL,"\
-            "    AUTHOR_ID INT NOT NULL);", data_base);
+            "    AUTHOR_ID INT NOT NULL);");
 
 
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
-    exec_db("SELECT * FROM CHATS", data_base);
+    exec_db("SELECT * FROM CHATS");
     mx_printerr("-----users----\n");
-    exec_db("SELECT * FROM USERS", data_base);
+    exec_db("SELECT * FROM USERS");
     mx_printerr("-----chat----\n");
-    exec_db("SELECT * FROM CHAT", data_base);
+    exec_db("SELECT * FROM CHAT");
     mx_printerr("======== ALL DB =========\n");
    /*
     exec_db("CREATE TABLE USERS("\
@@ -114,7 +114,7 @@ int main() {
     close(sock);
 
     /**** START DATABASE BLOCK ****/
-    close_db(data_base);
+    close_db();
 
     /**** END DATABASE BLOCK ****/
     

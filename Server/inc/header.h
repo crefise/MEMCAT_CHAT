@@ -28,21 +28,21 @@ void send_massage_to_client(char* message, char* login, int sender);
 
 /* database */
 void open_db(char* path, sqlite3** db); // ready
-void exec_db(char* statement, sqlite3* db); // ready
-void close_db(sqlite3* db); // ready
-int get_maxID_db(sqlite3* db); // 
-int check_user_db(char* login, sqlite3* db);
+void exec_db(char* statement); // ready
+void close_db(); // ready
+int get_max_user_id();
+int check_user_db(char* login);
 void add_online_user_db(char* login, int socket, sqlite3* db);
-void delete_online_user_db(int socket, sqlite3* db);
-int get_socket_db(char* login, sqlite3* db);
-void add_user_db(char* login, char* password, sqlite3* db); // ready
-int access_db(char* login, char* password, sqlite3* db); // ready
+void delete_online_user_db(int socket);
+int get_socket_db(char* login);
+void add_user_db(char* login, char* password); // ready
+int access_db(char* login, char* password); // ready
 void delete_user(int id, sqlite3* db);
 char* get_users_login(int id);
 char* get_users_password(int id, sqlite3* db);
 void set_users_login(int id, char* login, sqlite3* db);
 void set_users_password(int id, char* password, sqlite3* db);
-int get_users_ID(char* login, sqlite3* db);
+int get_users_ID(char* login);
 void get_chats_by_id_db(int id);
 int create_chat_db(char* u1, char* u2);
 int get_chat_id_by_logins(char* u1, char* u2);

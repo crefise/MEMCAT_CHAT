@@ -169,7 +169,6 @@ void main_menu() {
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new_with_label("SETTINGS");
 
-
 // CREATE NEW THING
     input_key = gtk_button_new_with_label("SEND");
     input_str = gtk_entry_new();
