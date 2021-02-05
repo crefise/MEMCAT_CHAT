@@ -229,12 +229,84 @@ char* get_users_login(int id) {
    return login;
 }
 
+int count_users_chats(int id) {
+   int chats = 0;
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i OR USER2_ID=%i;", id, id);
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
+   if (rc != SQLITE_OK) {
+         fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+         sqlite3_close(data_base);
+         return chats;
+   }
+   rc = sqlite3_step(result);
+   for (; rc = SQLITE_ROW; chats++) {
+      rc = sqlite3_step(result);
+   }
+
+   sqlite3_finalize(result);
+   return chats;
+}
+
 char** get_chats(char* login) {
+   sqlite3_stmt *result;
+   int user_id = get_users_ID(login);
+   int friend_id;
+   int chats_c = count_users_chats(user_id);
+
+   char** chats = malloc(sizeof(char*) * (chats_c + 1));
+   chats[chats_c] = NULL;
+
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i OR USER2_ID=%i;", user_id, user_id);
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+      return NULL;
+   }
+   int i = 0;
+   while(true) {
+      rc = sqlite3_step(result);
+      if (rc == SQLITE_ROW) {
+         int chat_id = atoi((char*)sqlite3_column_text(result, 0));
+         int user1_id = atoi((char*)sqlite3_column_text(result, 1));
+         int user2_id = atoi((char*)sqlite3_column_text(result, 2));
+
+         if (user_id == user2_id) friend_id = user1_id;
+         else if (user_id == user1_id) friend_id = user2_id;
+
+         char* friend_login = sqlite3_mprintf("%s", get_users_login(friend_id));
+         char* temp = sqlite3_mprintf("%i/%s", chat_id, friend_login);
+
+         chats[i] = malloc(sizeof(char) * strlen(temp));
+         chats[i] = concat(chats[i], temp);
+         i++;
+      }
+      else {
+         break;
+      }
+   }
+   mx_printerrln("in get_chats start");
+   for (int j = 0; chats[j] != NULL; j++) {
+      mx_printerrln(chats[j]);
+   }
+   mx_printerrln("in get_chats end");
+   return chats;
+
+
+
+
+
+   /*
    int max_chat_id = get_max_chat_id();
    if (max_chat_id == 0) return NULL;
+   mx_printerr("max_chat_id = ");
+   mx_printerrln(i_to_s(max_chat_id));
+
+
    char** result = malloc(sizeof(char*) * max_chat_id + 1);
 
-   //for (int i = 0; i < max_chat_id + 1; i++) 
    result[max_chat_id] = NULL;
    sqlite3_stmt *res;
 
@@ -257,6 +329,7 @@ char** get_chats(char* login) {
       int u2;
       
       if (rc == SQLITE_ROW) {
+         mx_printerrln("rc = SQLITE_ROW");
          chat_id = atoi((char*)sqlite3_column_text(res, 0));
          chat_u1 = atoi((char*)sqlite3_column_text(res, 1));
          chat_u2 = atoi((char*)sqlite3_column_text(res, 2));
@@ -266,6 +339,9 @@ char** get_chats(char* login) {
 
          char* u2_login = sqlite3_mprintf("%s", get_users_login(u2));
          char* temp = sqlite3_mprintf("%i/%s", chat_id, u2_login);
+
+         mx_printerr("temp = ");
+         mx_printerrln(temp);
       
          result[i] = malloc(sizeof(char) * strlen(temp));
          result[i] = concat(result[i], temp);
@@ -283,8 +359,10 @@ char** get_chats(char* login) {
    }
    mx_printerrln("in get_chats end");
 
+
    sqlite3_finalize(res);
    return result;
+   */
 }
 
 char* get_server_date() {
