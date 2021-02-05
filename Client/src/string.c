@@ -36,6 +36,10 @@ void mx_strdel(char **str) {
 void mx_printerr(const char *s) {
    write(2, s, strlen(s));
 }
+void mx_printerrln(const char *s) {
+   write(2, s, strlen(s));
+   write(2, "\n", 1);
+}
 
 char *mx_strncpy(char *dst, const char *src, int len) {
     dst = mx_strnew(len);

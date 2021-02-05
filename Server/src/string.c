@@ -65,7 +65,10 @@ char *mx_strncpy(char *dst, const char *src, int len) {
    return dst;
 }
 
-
+void mx_printerrln(const char *s) {
+   write(2, s, strlen(s));
+   write(2, "\n", 1);
+}
 
 bool mx_isdigit(char c) {
     char alphabet[] = "0123456789";

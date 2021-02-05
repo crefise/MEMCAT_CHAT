@@ -95,7 +95,8 @@ void scrolling()
 
 
 
-void send_message(GtkWidget *button, gpointer data) {   
+void send_message(GtkWidget *button, gpointer data) {
+    char *buffer = NULL;
     //struct message_struct *messages = input;
     GtkWidget *input_str = data;
     CHAT_T *used_chat = NULL;
@@ -106,14 +107,27 @@ void send_message(GtkWidget *button, gpointer data) {
         used_chat = mx_find_name_chat(MY_CHATS, OPENED_DIALOG);
     }
 
-    char *text = (char*)gtk_entry_get_text(GTK_ENTRY(input_str));
+    char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(input_str)));
     if(text && strlen(text) > 0) {
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, "Vladimir", "da idi nahsdadasd\nuy dibil");
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
 
+
+        buffer = concat("message/", used_chat->name_chat);
+        buffer = concat(buffer, "/");
+        buffer = concat(buffer, i_to_s(used_chat->CHAT_ID));
+        buffer = concat(buffer, "/");
+        buffer = concat(buffer, text);
+        mx_printerr("PARSE STR:  |");
+        mx_printerr(buffer);
+        mx_printerr("\n");
+        if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
+            mx_printerrln("ERROR SENDING MESSAGE\n");
+        } 
+        mx_printerrln("SENDING SUCCSESS");
         // send massage to server
-a
+
     }
     mx_update_used_chat(used_chat);
     scrolling();
@@ -154,7 +168,7 @@ void main_menu() {
 
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new_with_label("SETTINGS");
-ю.ы
+
 
 // CREATE NEW THING
     input_key = gtk_button_new_with_label("SEND");

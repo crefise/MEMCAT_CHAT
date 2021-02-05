@@ -55,7 +55,7 @@ char* get_chat_by_login(char* u1, int count);
 char** ps_registration(char* src);
 char** ps_login(char* src);
 char** ps_message(char* src);
-void ps_massage_add(char *str,char **login, char **message);
+void ps_massage_add(char *str,char **login, char **message, int *chat_ID);
 
 /* string */
 char* i_to_s(int n);
@@ -68,6 +68,7 @@ char *mx_strncpy(char *dst, const char *src, int len);
 bool mx_isdigit(char c);
 void ps_isuser(char **login_1, char **login_2, char *text);
 void mx_del_strarr(char ***arr);
+void mx_printerrln(const char *s);
 /* GTK */
 
 #endif

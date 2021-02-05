@@ -59,6 +59,7 @@ void mx_printerr(const char *s);
 char *mx_strncpy(char *dst, const char *src, int len);
 bool mx_isdigit(char c);
 void mx_del_strarr(char ***arr);
+void mx_printerrln(const char *s);
 /* END string.c */
 
 /* help_function.c */

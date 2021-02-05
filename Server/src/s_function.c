@@ -98,9 +98,10 @@ void *user_connect(void* sock) {
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
         char *login_1, *login_2;
         char *temp;
+        int chat_ID;
         switch (solution) {
             case 1: // Хотим написать сообщение              
-                ps_massage_add(buffer, &send_login, &send_text); // Парсим сообщение что пришло
+                ps_massage_add(buffer, &send_login, &send_text, &chat_ID); // Парсим сообщение что пришло
                 send_massage_to_client(send_text, send_login, client_socket); // отправляем сообщение на нужный логин
                 exit = 0;
                 break;
