@@ -268,12 +268,22 @@ char** get_chats(char* login) {
          break;
       }
       char* u2_login = sqlite3_mprintf("%s", get_users_login(u2));
-      char* temp = sqlite3_mprintf("%i/%s");
-
+      char* temp = sqlite3_mprintf("%i/%s", chat_id, u2_login);
+   
       result[i] = malloc(sizeof(char) * strlen(temp));
       result[i] = concat(result[i], temp);
+
+      free(temp);
+      free(u2_login);
       i++;
    }
+
+   mx_printerrln("in get_chats start");
+   for (int i = 0; result[i] != NULL; i++) {
+      mx_printerrln(result[i]);
+   }
+   mx_printerrln("in get_chats end");
+
    sqlite3_finalize(res);
    return result;
 }
