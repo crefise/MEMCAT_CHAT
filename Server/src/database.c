@@ -234,12 +234,12 @@ char** get_chats(char* login) {
    if (max_chat_id == 0) return NULL;
    char** result = malloc(sizeof(char*) * max_chat_id + 1);
 
-   result[max_chat_id] = NULL;
+   for (int i = 0; i < max_chat_id + 1; i++) result[i] = NULL;
    sqlite3_stmt *res;
 
    int id = get_users_ID(login);
    char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i OR USER2_ID=%i;", id, id);
-   
+   mx_printerr("shos\n");
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &res, 0);
    if (rc != SQLITE_OK) {
          fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
