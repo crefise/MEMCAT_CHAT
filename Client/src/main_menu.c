@@ -110,7 +110,6 @@ void send_message(GtkWidget *button, gpointer data) {
     char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(input_str)));
     if(text && strlen(text) > 0) {
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
-        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, "Vladimir", "da idi nahsdadasd\nuy dibil");
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
 
 

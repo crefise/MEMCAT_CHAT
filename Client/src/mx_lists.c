@@ -113,11 +113,17 @@ void set_label(MESSAGE_T **message, char *text, char *sender) {
 }
 
 void add_new_message(MESSAGE_T **message, char *text, char *sender) {
+    mx_printerrln("????");
     if (*message == NULL) {
+            mx_printerrln("????");
         (*message) = malloc(sizeof(MESSAGE_T));
+             mx_printerrln("????");
         (*message)->message_text = strdup(text);
+             mx_printerrln("????");
         (*message)->sender = strdup(sender);
+             mx_printerrln("????");
         (*message)->next = NULL;
+             mx_printerrln("????");
         //(*message)->text_label = gtk_label_new(text);
         set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0)
@@ -126,19 +132,26 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
             gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_interlocutor");
     } 
     else {
+        mx_printerrln("OOO");
         MESSAGE_T *temp = *message, *temp_1 = NULL;
         while (temp->next != NULL){
             temp = temp->next;
         }
+        mx_printerrln("OOO");
         temp_1 = temp;
         temp = temp->next;
+        mx_printerrln("OOO");
         temp = malloc(sizeof(MESSAGE_T));
+        mx_printerrln("OOO");
         temp->message_text = strdup(text);
         temp->sender = strdup(sender);
+        mx_printerrln("OOO");
         //temp->text_label = gtk_label_new(text);
         set_label(&temp, text, sender);
         temp_1->next = temp;
+        mx_printerrln("OOO");
         temp->next = NULL;
+        mx_printerrln("OOO");
         if (strcmp(sender, USER_LOGIN) == 0)
             gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_my");
         else
@@ -176,8 +189,9 @@ if (message == NULL) {
     //download from server
 }
 else {
-
+        mx_printerrln("WTD?");
     add_new_message(&(*chat)->messages, message, sender);
+        mx_printerrln("WTD?");
     gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), mx_take_last_message((*chat)->messages)->text_label, FALSE, FALSE, 5);
 }
 

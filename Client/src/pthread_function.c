@@ -1,5 +1,38 @@
 #include "../inc/header.h"
 
+
+void ps_massage_in(char *str) {
+    char *temp_1 = mx_strncpy(temp_1,  &str[8], strlen(str) - 8); // Обрезаем massage
+
+///////////////////////// GETTING LOGIN AND TEXT MMESSAGE//////////////////////////////////
+    int info_counter = 0;
+    for (int i = 0; temp_1[i] != '/'; i++)
+        info_counter++;
+    char *login = mx_strnew(info_counter);
+    login = strncpy(login, temp_1, info_counter);
+    char *text_message = mx_strnew(strlen(temp_1) - info_counter - 1);
+    text_message = strncpy(text_message, &temp_1[info_counter+1], strlen(temp_1) - info_counter - 1);
+    mx_strdel(&temp_1);
+//////////////////////////////////////////////////////////////////////////////////////////
+
+    mx_printerrln("USED_CHECK");
+    mx_printerr("\n|");
+    mx_printerr(login);
+    mx_printerr("|\n");
+    CHAT_T *used_chat = mx_find_name_chat(MY_CHATS, login);
+    if (used_chat == NULL || !used_chat)
+        mx_printerrln("ERRORRRRRR");
+        mx_printerrln("USED_CHECK");
+    mx_fill_message_list_box(&used_chat, login, login, text_message);
+        mx_printerrln("USED_CHECK");
+    if (strcmp(OPENED_DIALOG, login) == 0) 
+        mx_update_used_chat(used_chat);
+    return;
+}
+
+
+
+
 void* massage_check_in(void* socket) {
     mx_printerr("PTHREAD MASSAGE WAITER IS WORKING...\n");
     int sock = *(int *)socket;
@@ -10,8 +43,11 @@ void* massage_check_in(void* socket) {
         return NULL;
     } 
     mx_printerr("Massage that in: ");
-    mx_printerr(buffer);
-    mx_printerr("\n");
+    mx_printerrln(buffer);
+    if (buffer[0] == 'm') {
+        ps_massage_in(buffer);
+    }
+
     }
     return NULL;
 }

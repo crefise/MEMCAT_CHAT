@@ -15,7 +15,12 @@ void send_massage_to_client(char* message, char* sender_login, char* recipient_l
     if (send_sock != 1) { // if ONLINE SENDING TO HIM
         add_message(chat_ID, get_users_ID(sender_login), message);
     } 
-    if (send(send_sock, message, strlen(message), 0) == -1)
+
+        char *buffer = concat("message/", sender_login);
+        buffer = concat(buffer, "/");
+        buffer = concat(buffer, message);
+
+    if (send(send_sock, buffer, strlen(buffer), 0) == -1)
        mx_printerrln("UKNOWN ERROR SENDONG (send_massage_to_client)");
 }
 char *ps_update_dialog(char *buffer) { // dialogs[login]
