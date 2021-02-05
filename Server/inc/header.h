@@ -19,6 +19,7 @@ extern sqlite3* data_base;
 
 #define BUF_SIZE 256;
 /* SERVER FUNCTION*/
+char* get_server_date();
 void *user_connect(void* sock); // функция оброботки каждого клиента
 int parse_solution(char *text); // Функция которая определяем что именно хочет клиент
 bool curr_sybmobol(char *str);
@@ -27,31 +28,36 @@ void log_func(char *buffer, int client_socket, bool *logined,  char **login, cha
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID);
 
 /* database */
-void open_db(char* path, sqlite3** db); // ready
-void exec_db(char* statement); // ready
-void close_db(); // ready
-int get_max_user_id();
-int check_user_db(char* login);
-void add_online_user_db(char* login, int socket, sqlite3* db);
-void delete_online_user_db(int socket);
-int get_socket_db(char* login);
-void add_user_db(char* login, char* password); // ready
-int access_db(char* login, char* password); // ready
-void delete_user(int id, sqlite3* db);
-char* get_users_login(int id);
-char* get_users_password(int id, sqlite3* db);
-void set_users_login(int id, char* login, sqlite3* db);
-void set_users_password(int id, char* password, sqlite3* db);
-int get_users_ID(char* login);
-void get_chats_by_id_db(int id);
-int create_chat_db(char* u1, char* u2);
-int get_chat_id_by_logins(char* u1, char* u2);
-char* get_user2_and_chat_id_by_login(char* u1);
-char** get_chats(char* login);
-int get_max_chat_id();
-char* get_chat_by_login(char* u1, int count);
-char* get_server_date();
-void add_message(int chat_id, int sender_id, char* message);
+void open_db(char* path, sqlite3** db);
+void exec_db(char* statement);
+void close_db(); 
+
+int get_max_id_in_USERS();
+bool exist_user_in_USERS(char* login);
+void add_user_to_USERS(char* login, char* password);
+bool check_login_password_in_USERS(char* login, char* password);
+char* get_login_from_USERS(int id);
+char* get_pass_from_USERS(int id);
+void set_login_in_USERS(int id, char* login);
+void set_password_in_USERS(int id, char* password);
+int get_id_from_USERS(char* login);
+void delete_user_from_USERS(int id);
+
+void add_user_to_ONLINE_USERS(char* login, int socket);
+void delete_user_from_ONLINE_USERS(int socket);
+int get_socket_from_ONLINE_USERS(char* login);
+
+void get_chats_from_CHATS_CONSOLE(int id);
+int add_chat_to_CHATS(char* u1, char* u2);
+int get_chat_id_from_CHATS(char* u1, char* u2);
+char** get_chats_from_CHATS(char* login);
+char** get_all_chats_from_CHATS();
+int get_max_chat_id_from_CHATS();
+
+void add_message_to_CHAT(int chat_id, int sender_id, char* message);
+char** get_last_30_messages_from_CHAT(int chat_id);
+char** get_messages_from_CHAT(int chat_id);
+int get_max_message_id_from_CHAT(int chat_id);
 
 /* Parsing */
 char** ps_registration(char* src);
@@ -71,6 +77,8 @@ bool mx_isdigit(char c);
 void ps_isuser(char **login_1, char **login_2, char *text);
 void mx_del_strarr(char ***arr);
 void mx_printerrln(const char *s);
-/* GTK */
+
+/* other */
+void double_free(char** array);
 
 #endif

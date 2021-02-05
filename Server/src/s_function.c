@@ -1,5 +1,20 @@
-
 #include "../inc/header.h"
+
+char* get_server_date() {
+   char* time_date = malloc(sizeof(char) * 18);
+   long int s_time;
+   struct tm *m_time;
+   s_time = time (NULL);
+   m_time = localtime (&s_time);
+   strftime (time_date, 128, "%X %d.%m.%Y", m_time);
+   return time_date;
+}
+
+void double_free(char** array) {
+   for (int i = 0; array[i]; i++) free(array[i]);
+   free(array);
+   array = NULL;
+}
 
 char *ps_comma_dot(char **text){
 
@@ -11,9 +26,9 @@ char *ps_comma_dot(char **text){
 
 }
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID) {
-    int send_sock = get_socket_db(recipient_login);
+    int send_sock = get_socket_from_ONLINE_USERS(recipient_login);
     if (send_sock != 1) { // if ONLINE SENDING TO HIM
-        add_message(chat_ID, get_users_ID(sender_login), message);
+        add_message_to_CHAT(chat_ID, get_id_from_USERS(sender_login), message);
     } 
 
         char *buffer = concat("message/", sender_login);
@@ -105,7 +120,7 @@ void *user_connect(void* sock) {
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
                 mx_printerrln("T02");
-                char** chats = get_chats(login);
+                char** chats = get_chats_from_CHATS(login);
                 mx_printerrln("T02");
                 for (int i = 0; chats != NULL && chats[i] != NULL; i++)
                 {
@@ -155,13 +170,13 @@ void *user_connect(void* sock) {
             case 6: // isuser? isuser[login] // ADD NEW CHAT
                 
                 ps_isuser(&login_1,&login_2, buffer);
-                if (get_users_ID(login_1) == 0) { // Если такого логина не существует
+                if (get_id_from_USERS(login_1) == 0) { // Если такого логина не существует
                     if (send(client_socket, "0", 1, 0) == -1) { //
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
                 } 
                 else { // If login exist
-                    int chat_id = create_chat_db(login_1, login_2);
+                    int chat_id = add_chat_to_CHATS(login_1, login_2);
                     if (send(client_socket, i_to_s(chat_id), strlen(i_to_s(chat_id)), 0) == -1) {  // СОЗДАТЬ ЧАТ И ВМЕСТО ЕДЕНИЦИ СКИНУТЬ НОМЕР ЧАТА!
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }
@@ -222,7 +237,7 @@ bool curr_sybmobol(char *str) {
 
 void reg_func(char *buffer, int client_socket) {
     char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
-    if (check_user_db(temp[0])) { // if 1 человек уже зарегестрирован
+    if (exist_user_in_USERS(temp[0])) { // if 1 человек уже зарегестрирован
         if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
@@ -232,7 +247,7 @@ void reg_func(char *buffer, int client_socket) {
         if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
-        add_user_db(temp[0], temp[1]);
+        add_user_to_USERS(temp[0], temp[1]);
     }
 
     exec_db("SELECT * FROM USERS"); // base show
@@ -240,7 +255,7 @@ void reg_func(char *buffer, int client_socket) {
 
 void log_func(char *buffer, int client_socket, bool *logined, char **login, char** pass) {
     char **temp_for_login = ps_login(buffer);
-    if (access_db(temp_for_login[0], temp_for_login[1]) == 1) {
+    if (check_login_password_in_USERS(temp_for_login[0], temp_for_login[1]) == 1) {
         if (send(client_socket, "1", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
             write(2, "USER CLOSE CONNECTION\n",22);
             return;
@@ -253,7 +268,7 @@ void log_func(char *buffer, int client_socket, bool *logined, char **login, char
         mx_printerr("\"\n");
 
         *logined = true;
-        add_online_user_db(temp_for_login[0], client_socket, data_base);
+        add_user_to_ONLINE_USERS(temp_for_login[0], client_socket);
     }
     else {
         if (send(client_socket, "0", 1, 0) == -1) { // отсылем 1 если логин удачный, отсылаем 0 если логин не удачный
