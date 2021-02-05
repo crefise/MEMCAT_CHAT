@@ -120,36 +120,33 @@ char** ps_login(char* src) {
 }
 
 void ps_massage_add(char *str,char **login, char **message, int *chat_ID) {
-    mx_printerr(str);
-    char *temp_1 = mx_strncpy(temp_1,  &str[7], strlen(str) - 8); // Обрезаем massage
-    int info_counter = 0;
+    char *temp_1 = mx_strncpy(temp_1,  &str[8], strlen(str) - 8); // Обрезаем massage
 
+///////////////////////// GETTING LOGIN CHAT /////////////////////////////////////////////
+    int info_counter = 0;
     for (int i = 0; temp_1[i] != '/'; i++)
         info_counter++;
+    *login = mx_strnew(info_counter);
+    *login = strncpy(*login, temp_1, info_counter);
+    char *temp_2 = mx_strnew(strlen(temp_1) - info_counter - 1);
+    temp_2 = strncpy(temp_2, &temp_1[info_counter+1], strlen(temp_1) - info_counter - 1);
+    mx_strdel(&temp_1);
+//////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////// GETTING ID CHAT AND MESSAGE ///////////////////////////////
+    info_counter = 0;
+    for (int i = 0; temp_2[i] != '/'; i++)
+        info_counter++;
     char *chat_ID_char = mx_strnew(info_counter);
-    chat_ID_char = strncpy(chat_ID_char, temp_1, info_counter);
-    temp_1 = strncpy(temp_1, &temp_1[info_counter+1], strlen(temp_1) - info_counter - 1);
-
+    chat_ID_char = strncpy(chat_ID_char, temp_2, info_counter);
     *chat_ID = atoi(chat_ID_char);
+    temp_1 = mx_strnew(strlen(temp_2) - info_counter - 1);
+    temp_1 = strncpy(temp_1, &temp_2[info_counter+1], strlen(temp_2) - info_counter - 1);
+    *message = strdup(temp_1);
+//////////////////////////////////////////////////////////////////////////////////////////
 
-//    for (int i = 1; mx_isdigit(temp_1[i]); i++) // Считаем количество цифр в размере логина
-   //     num_counter++; 
-    
-    //temp_1 = mx_strncpy(temp_1, &temp_1[2+num_counter], strlen(temp_1) - 2+num_counter);
+    mx_strdel(&temp_1);
+    mx_strdel(&temp_2);
 
-
-
- //   char* temp_login_size = mx_strncpy(temp_login_size, &temp_1[1], num_counter);
-  //  int temp_login_size_NUM = atoi(temp_login_size);
-
-
-
-   // *login = mx_strncpy(*login, &temp_1[2+num_counter], temp_login_size_NUM); // вырезаем логин
-    //mx_printerr(*login);
-  //  *message = mx_strncpy(*message, &temp_1[2+num_counter+temp_login_size_NUM], strlen(temp_1) - (temp_login_size_NUM)); // вырезаем пароль
-    //mx_printerr(*message);
-
-   // mx_strdel(&temp_1);
-  //  mx_strdel(&temp_login_size);
     return;
 }
