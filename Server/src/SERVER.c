@@ -10,6 +10,14 @@ int main() {
     /**** START DATABASE BLOCK ****/
     write(1, "####### DATABASE BLOCK ######\n", 30);
 
+
+    char* date_time = get_server_date();
+    mx_printerr("SEVER DATE_TIME: ");
+    mx_printerr(date_time);
+    mx_printerr("\n");
+    free(date_time);
+
+
     open_db("Server/databases/data_base.db", &data_base);
 
     exec_db("CREATE TABLE USERS ("\
@@ -33,10 +41,12 @@ int main() {
 
 
     mx_printerr("======== ALL DB =========\n");
+    mx_printerr("-----chats----\n");
     exec_db("SELECT * FROM CHATS", data_base);
+    mx_printerr("-----users----\n");
     exec_db("SELECT * FROM USERS", data_base);
+    mx_printerr("-----chat----\n");
     exec_db("SELECT * FROM CHAT", data_base);
-    exec_db("SELECT * FROM ONLINE_USERS", data_base);
     mx_printerr("======== ALL DB =========\n");
    /*
     exec_db("CREATE TABLE USERS("\

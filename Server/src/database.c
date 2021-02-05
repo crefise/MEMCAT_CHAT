@@ -7,6 +7,14 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
+void double_free(char** array) {
+   for (int i = 0; array[i]; i++) {
+      free(array[i]);
+   }
+   free(array);
+   array = NULL;
+}
+
 int get_maxID_db(sqlite3* db) {
    int max_id = 0;
    sqlite3_stmt *result;
@@ -294,11 +302,21 @@ char** get_chats(char* login) {
 
    result[max_chat_id] = NULL;
    sqlite3_stmt *res;
+
+   int id = get_users_ID(login, data_base);
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i OR USER2_ID=%i;", id, id);
+   
+   /*
+
+
+   
    char* statement = "SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=";
       statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
       statement = concat(statement, " OR USER2_ID=");
       statement = concat(statement, i_to_s(get_users_ID(login, data_base)));
       statement = concat(statement, ";");
+
+   */
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &res, 0);
    if (rc != SQLITE_OK) {
          fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
@@ -362,32 +380,26 @@ char* get_server_date() {
 
 void add_message(int chat_id, int sender_id, char* message) {
    char* date_time = get_server_date();
-   char* statement = "INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES";
-   statement = concat(statement, "(");
-   statement = concat(statement, i_to_s(chat_id));
-   statement = concat(statement, ", ");
-   statement = concat(statement, i_to_s(sender_id));
-   statement = concat(statement, ", ");
 
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');",
+                                    chat_id, sender_id, message, date_time);
+
+   exec_db(statement, data_base);
 
    free(statement);
    free(date_time);
 }
-/*
-void init_db(sqlite3* data_base, sqlite3* data_base) {
-   open_db("Server/databases/users.db", &data_base);
-   open_db("Server/databases/chats.db", &data_base);
 
-   exec_db("CREATE TABLE USERS("\
-           "ID             INT PRIMARY KEY     NOT NULL,"\
-           "LOGIN          TEXT                NOT NULL,"\
-           "PASSWORD       TEXT                NOT NULL,"\
-           "UNIQUE (ID, LOGIN));", data_base);
-   
-   exec_db("CREATE TABLE CHATS("\
-           "CHAT_ID        INT PRIMARY KEY     NOT NULL,"\
-           "USER1_ID       INT                 NOT NULL,"\
-           "USER2_ID       INT                 NOT NULL,"\
-           "PATH           TEXT                NOT NULL);", data_base);
+char** get_last_30_messages(int chat_id) {
+   char** last_messages = malloc(sizeof(char*) * 31);
+   last_messages[30] = NULL;
+
+
+
+   return last_messages;
 }
+
+/*
+
+sqlite3_mprintf("%s %i");
 */
