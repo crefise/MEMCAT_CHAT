@@ -18,6 +18,11 @@ extern int count_users;
 extern sqlite3* data_base;
 
 #define BUF_SIZE 256;
+
+#define RED "\x1b[31m"
+#define GREEN "\x1b[32m"
+#define NORMAL "\x1b[0m"
+
 /* SERVER FUNCTION*/
 char* get_server_date();
 void *user_connect(void* sock); // функция оброботки каждого клиента
@@ -42,7 +47,6 @@ void set_login_in_USERS(int id, char* login);
 void set_password_in_USERS(int id, char* password);
 bool check_user_in_USERS(char* login);
 bool check_login_password_in_USERS(char* login, char* password);
-
 
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
@@ -83,5 +87,6 @@ void mx_printerrln(const char *s);
 
 /* other */
 void double_free(char** array);
+void set_console_color(char* color);
 
 #endif

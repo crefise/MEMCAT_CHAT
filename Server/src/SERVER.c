@@ -10,16 +10,11 @@ int main() {
     /**** START DATABASE BLOCK ****/
     write(1, "####### DATABASE BLOCK ######\n", 30);
 
-
-    char* date_time = get_server_date();
-    mx_printerr("SEVER DATE_TIME: ");
-    mx_printerr(date_time);
-    mx_printerr("\n");
-    free(date_time);
-
+    set_console_color(GREEN);
+    printf("Server start date: %s\n", get_server_date());
+    set_console_color(NORMAL);
 
     open_db("Server/databases/data_base.db", &data_base);
-
     exec_db("CREATE TABLE USERS ("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
@@ -39,6 +34,17 @@ int main() {
             "    MESSAGE TEXT NOT NULL,"\
             "    AUTHOR_ID INT NOT NULL);");
 
+    //add_message_to_CHAT(1, 1, "hello, man");
+    add_user_to_USERS("test_user1", "a");
+    add_user_to_USERS("test_user2", "a");
+    add_user_to_USERS("test_user3", "a");
+    add_user_to_USERS("test_user4", "a");
+    add_chat_to_CHATS("test_user1", "test_user2");
+    add_chat_to_CHATS("test_user2", "test_user1");
+    add_chat_to_CHATS("test_user1", "test_user3");
+    add_chat_to_CHATS("test_user2", "test_user2");
+    //delete_user_from_USERS(get_id_from_USERS("test_user4"));
+    //delete_user_from_USERS(get_id_from_USERS("test_user4"));
 
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
@@ -48,26 +54,7 @@ int main() {
     mx_printerr("-----chat----\n");
     exec_db("SELECT * FROM CHAT");
     mx_printerr("======== ALL DB =========\n");
-   /*
-    exec_db("CREATE TABLE USERS("\
-           "ID             INTEGER PRIMARY KEY AUTOINCREMENT,"\
-           "LOGIN          TEXT                NOT NULL,"\
-           "PASSWORD       TEXT                NOT NULL,"\
-           "UNIQUE (ID, LOGIN));", data_base);
-   
-    exec_db("CREATE TABLE CHATS("\
-           "CHAT_ID        INT PRIMARY KEY     NOT NULL,"\
-           "USER1_ID       INT                 NOT NULL,"\
-           "USER2_ID       INT                 NOT NULL,"\
-           "PATH           TEXT                NOT NULL);", data_base);
 
-    exec_db("CREATE TABLE ONLINE_USERS("\
-           "LOGIN       TEXT                NOT NULL,"\
-           "SOCKET      INT                 NOT NULL,"\
-           "UNIQUE (LOGIN, SOCKET));", data_base);
-
-    exec_db("SELECT * FROM USERS", data_base);
-    */
     write(1, "####### DATABASE BLOCK ######\n", 30);
     /**** END DATABASE BLOCK ****/
 

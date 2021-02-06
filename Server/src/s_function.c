@@ -1,5 +1,9 @@
 #include "../inc/header.h"
 
+void set_console_color(char* color) {
+    write(1, color, strlen(color));
+}
+
 char* get_server_date() {
    char* time_date = malloc(sizeof(char) * 18);
    long int s_time;
