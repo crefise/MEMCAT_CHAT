@@ -88,5 +88,6 @@ void mx_printerrln(const char *s);
 /* other */
 void double_free(char** array);
 void set_console_color(char* color);
+void print_emoji(char* emoji);
 
 #endif

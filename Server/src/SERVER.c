@@ -6,28 +6,32 @@ int ph_count = 0;
 
 sqlite3* data_base;
 
+/* 🥰😍🤭🤨😎😕😢😡🥱💩🤡🤖 */
+
 int main() {
     /**** START DATABASE BLOCK ****/
-    write(1, "####### DATABASE BLOCK ######\n", 30);
+    print_emoji("😍");
+    write(1, " ###### DATABASE BLOCK ###### ", 30);
+    print_emoji("😍");
+    write(1, "\n", 1);
 
-    set_console_color(GREEN);
-    printf("Server start date: %s\n", get_server_date());
-    set_console_color(NORMAL);
+    printf("Server start date: ");
+    printf("%s%s%s\n", GREEN, get_server_date(), NORMAL);
 
     open_db("Server/databases/data_base.db", &data_base);
-    exec_db("CREATE TABLE USERS ("\
+    exec_db("CREATE TABLE IF NOT EXISTS USERS("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
             "    PASSWORD TEXT NOT NULL);");
-    exec_db("CREATE TABLE CHATS ("\
+    exec_db("CREATE TABLE IF NOT EXISTS CHATS("\
             "    CHAT_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    USER1_ID INT NOT NULL,"\
             "    USER2_ID INT NOT NULL);");
-    exec_db("CREATE TABLE ONLINE_USERS ("\
+    exec_db("CREATE TABLE IF NOT EXISTS ONLINE_USERS("\
             "    USER_ID INTEGER PRIMARY KEY,"\
             "    LOGIN TEXT NOT NULL UNIQUE,"\
             "    SOCKET INT NOT NULL UNIQUE)");
-    exec_db("CREATE TABLE CHAT ("\
+    exec_db("CREATE TABLE IF NOT EXISTS CHAT("\
             "    CHAT_ID INT NOT NULL,"\
             "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    DATE_TIME DATETIME NOT NULL,"\
@@ -43,8 +47,8 @@ int main() {
     add_chat_to_CHATS("test_user2", "test_user1");
     add_chat_to_CHATS("test_user1", "test_user3");
     add_chat_to_CHATS("test_user2", "test_user2");
-    //delete_user_from_USERS(get_id_from_USERS("test_user4"));
-    //delete_user_from_USERS(get_id_from_USERS("test_user4"));
+    delete_user_from_USERS(get_id_from_USERS("test_user4"));
+    delete_user_from_USERS(get_id_from_USERS("test_user4"));
 
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
@@ -55,7 +59,10 @@ int main() {
     exec_db("SELECT * FROM CHAT");
     mx_printerr("======== ALL DB =========\n");
 
-    write(1, "####### DATABASE BLOCK ######\n", 30);
+    print_emoji("😍");
+    write(1, " ###### DATABASE BLOCK ###### ", 30);
+    print_emoji("😍");
+    write(1, "\n", 1);
     /**** END DATABASE BLOCK ****/
 
     // Инициализируем сокет!

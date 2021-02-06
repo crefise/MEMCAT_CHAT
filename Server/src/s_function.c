@@ -4,6 +4,10 @@ void set_console_color(char* color) {
     write(1, color, strlen(color));
 }
 
+void print_emoji(char* emoji) {
+    write(1, emoji, strlen(emoji));
+}
+
 char* get_server_date() {
    char* time_date = malloc(sizeof(char) * 18);
    long int s_time;
@@ -157,6 +161,7 @@ void *user_connect(void* sock) {
                 send(client_socket, "-", 1, 0);
 */
                 exit = 0;
+                double_free(chats);
                 break;
                 
             case 3: // Хотим обновить сообщения в диалоге

@@ -7,7 +7,7 @@ static int callback(void *data, int argc, char **argv, char **azColName){
 
 int get_max_id_in_USERS() {
    int max_id = 0;
-   sqlite3_stmt *result;
+   sqlite3_stmt* result;
    char* statement = sqlite3_mprintf("SELECT MAX(ID) FROM USERS");
 
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
@@ -40,11 +40,11 @@ void open_db(char* path, sqlite3** db) {
 }
 
 void exec_db(char* statement) {
-   char* zErrMsg = 0; // вывод ошибки если такая есть
+   char* zErrMsg = 0;
    int rc = sqlite3_exec(data_base, statement, callback, 0, &zErrMsg);
    if( rc != SQLITE_OK ) {
       set_console_color(RED);
-      fprintf(stderr, "SQL error: %s\n", zErrMsg);
+      fprintf(stderr, "😕 SQL error: %s\n", zErrMsg);
       set_console_color(NORMAL);
       sqlite3_free(zErrMsg);
    } 
@@ -75,7 +75,7 @@ void delete_user_from_ONLINE_USERS(int socket) {
 }
 
 bool check_login_password_in_USERS(char* login, char* password) {
-   bool access;
+   bool access = false;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s' AND PASSWORD='%s'", login, password);
 
@@ -97,7 +97,7 @@ bool check_login_password_in_USERS(char* login, char* password) {
 }
 
 bool check_user_in_USERS(char* login) {
-   bool exist;
+   bool exist = false;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s';", login);
 
@@ -421,11 +421,11 @@ int count_messages_from_CHAT(int chat_id) {
 void delete_user_from_USERS(int id) {
    if (id == 0) {
       set_console_color(RED);
-      char* err = "Failed to delete data: user is not exist\n";
+      char* err = "😕 Failed to delete data: user is not exist\n";
       write(1, err, strlen(err));
       set_console_color(NORMAL);
    }
-   char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%s", id);
+   char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%i", id);
    exec_db(statement);
    sqlite3_free(statement);
 }
