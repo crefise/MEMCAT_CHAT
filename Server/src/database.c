@@ -418,14 +418,22 @@ int count_messages_from_CHAT(int chat_id) {
    return messages;
 }
 
-void delete_user_from_USERS(int id) {
+void delete_user_from_USERS(char* login) {
+   int id = get_id_from_USERS(login);
    if (id == 0) {
       set_console_color(RED);
-      char* err = "😕 Failed to delete data: user is not exist\n";
+      char* err = sqlite3_mprintf("😕 Failed to delete data: User [%s] does not exist\n", login);
       write(1, err, strlen(err));
       set_console_color(NORMAL);
+      sqlite3_free(err);
    }
    char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%i", id);
+   exec_db(statement);
+   sqlite3_free(statement);
+}
+
+void delete_message_from_CHAT(int message_id) {
+   char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%i", message_id);
    exec_db(statement);
    sqlite3_free(statement);
 }

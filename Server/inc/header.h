@@ -38,7 +38,7 @@ void exec_db(char* statement);
 void close_db(); 
 
 void add_user_to_USERS(char* login, char* password);
-void delete_user_from_USERS(int id);
+void delete_user_from_USERS(char* login);
 int get_max_id_in_USERS();
 int get_id_from_USERS(char* login);
 char* get_login_from_USERS(int id);
@@ -60,6 +60,7 @@ char** get_all_chats_from_CHATS();
 int get_max_chat_id_from_CHATS();
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
+void delete_message_from_CHAT(int message_id);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
 int get_max_message_id_from_CHAT(int chat_id);
