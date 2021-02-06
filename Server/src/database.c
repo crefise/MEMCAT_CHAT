@@ -86,7 +86,7 @@ bool check_login_password_in_USERS(char* login, char* password) {
    return access;
 }
 
-bool exist_user_in_USERS(char* login) {
+bool check_user_in_USERS(char* login) {
    bool exist;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s';", login);
@@ -366,7 +366,23 @@ char** get_messages_from_CHAT(int chat_id) {
 }
 
 int count_messages_from_CHAT(int chat_id) {
-   return 0;
+   sqlite3_stmt *result;
+   int messages = 0;
+   char* statement = sqlite3_mprintf("SELECT MESSAGE_ID FROM CHAT WHERE CHAT_ID=%i;", chat_id);
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   while(rc == SQLITE_ROW) {
+      messages++;
+      rc = sqlite3_step(result);
+   }
+
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+   return messages;
 }
 
 void delete_user_from_USERS(int id) {

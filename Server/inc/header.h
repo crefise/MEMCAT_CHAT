@@ -32,23 +32,24 @@ void open_db(char* path, sqlite3** db);
 void exec_db(char* statement);
 void close_db(); 
 
-int get_max_id_in_USERS();
-bool exist_user_in_USERS(char* login);
 void add_user_to_USERS(char* login, char* password);
-bool check_login_password_in_USERS(char* login, char* password);
+void delete_user_from_USERS(int id);
+int get_max_id_in_USERS();
+int get_id_from_USERS(char* login);
 char* get_login_from_USERS(int id);
 char* get_pass_from_USERS(int id);
 void set_login_in_USERS(int id, char* login);
 void set_password_in_USERS(int id, char* password);
-int get_id_from_USERS(char* login);
-void delete_user_from_USERS(int id);
+bool check_user_in_USERS(char* login);
+bool check_login_password_in_USERS(char* login, char* password);
+
 
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
 int get_socket_from_ONLINE_USERS(char* login);
 
-void get_chats_from_CHATS_CONSOLE(int id);
 int add_chat_to_CHATS(char* u1, char* u2);
+void get_chats_from_CHATS_CONSOLE(int id);
 int get_chat_id_from_CHATS(char* u1, char* u2);
 char** get_chats_from_CHATS(char* login);
 char** get_all_chats_from_CHATS();
