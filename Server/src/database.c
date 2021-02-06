@@ -5,14 +5,6 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
-void double_free(char** array) {
-   for (int i = 0; array[i]; i++) {
-      free(array[i]);
-   }
-   free(array);
-   array = NULL;
-}
-
 int get_max_id_in_USERS() {
    int max_id = 0;
    sqlite3_stmt *result;
@@ -31,7 +23,7 @@ int get_max_id_in_USERS() {
    }
    
    sqlite3_finalize(result);
-   free(statement);
+   sqlite3_free(statement);
    return max_id;
 }
 
@@ -59,19 +51,23 @@ void close_db() {
 void add_user_to_USERS(char* login, char* password) {
    char* statement = sqlite3_mprintf("INSERT INTO USERS (LOGIN,PASSWORD) VALUES ('%s', '%s');", login, password);
    exec_db(statement);
+   sqlite3_free(statement);
 }
 
 void add_user_to_ONLINE_USERS(char* login, int socket) {
    char* statement = sqlite3_mprintf("INSERT INTO ONLINE_USERS (LOGIN,SOCKET) VALUES ('%s', %i);", login, socket);
    exec_db(statement);
+   sqlite3_free(statement);
 }
 
 void delete_user_from_ONLINE_USERS(int socket) {
    char* statement = sqlite3_mprintf("DELETE FROM ONLINE_USERS WHERE SOCKET=%i;", socket);
    exec_db(statement);
+   sqlite3_free(statement);
 }
 
 bool check_login_password_in_USERS(char* login, char* password) {
+   bool access;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s' AND PASSWORD='%s'", login, password);
 
@@ -79,19 +75,19 @@ bool check_login_password_in_USERS(char* login, char* password) {
    if (rc != SQLITE_OK) {
       fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       sqlite3_close(data_base);
-      return false;
+      access = false;
    } 
    rc = sqlite3_step(result);
    if (rc == SQLITE_ROW) {
-      sqlite3_finalize(result);
-      return true;
+      access = true;
    }
-
    sqlite3_finalize(result);
-   return false;
+   sqlite3_free(statement);
+   return access;
 }
 
 bool exist_user_in_USERS(char* login) {
+   bool exist;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s';", login);
 
@@ -99,21 +95,21 @@ bool exist_user_in_USERS(char* login) {
    if (rc != SQLITE_OK) {
       fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       sqlite3_close(data_base);
-      return false;
+      exist = false;
    } 
    rc = sqlite3_step(result);
    if (rc == SQLITE_ROW) {
       sqlite3_finalize(result);
-      return true;
+      exist = true;
    }
    sqlite3_finalize(result);
-   return false;
+   sqlite3_free(statement);
+   return exist;
 }
 
 int get_socket_from_ONLINE_USERS(char* login) {
    int socket = -1;
    sqlite3_stmt *result;
-
    char* statement = sqlite3_mprintf("SELECT SOCKET FROM ONLINE_USERS WHERE LOGIN='%s';", login);
 
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
@@ -126,18 +122,14 @@ int get_socket_from_ONLINE_USERS(char* login) {
       socket = atoi((char*)sqlite3_column_text(result, 0));
    
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return socket;
 }
-/*
-void get_chats_by_login_db(char* login) {
-   int id = get_id_from_USERS(login);
-   char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i, OR USER2_ID=%i;", id, id);
-   exec_db(statement);
-}
-*/
+
 void get_chats_from_CHATS_CONSOLE(int id) {
    char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS WHERE USER1_ID=%i, OR USER2_ID=%i;", id, id);
    exec_db(statement);
+   sqlite3_free(statement);
 }
 
 int get_id_from_USERS(char* login) {
@@ -155,6 +147,7 @@ int get_id_from_USERS(char* login) {
       id = atoi((char*)sqlite3_column_text(result, 0));
    
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return id;
 }
 
@@ -169,6 +162,7 @@ int add_chat_to_CHATS(char* u1, char* u2) {
    exec_db(statement);
 
    chat_id = get_chat_id_from_CHATS(u1, u2);
+   sqlite3_free(statement);
    return chat_id;
 }
 
@@ -191,6 +185,7 @@ int get_chat_id_from_CHATS(char* u1, char* u2) {
       chat_id = atoi((char*)sqlite3_column_text(result, 0));
    
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return chat_id;
 }
 
@@ -211,6 +206,7 @@ int get_max_chat_id_from_CHATS() {
    }
 
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return id;
 }
 
@@ -228,6 +224,8 @@ char* get_login_from_USERS(int id) {
    if (rc == SQLITE_ROW) 
       login = sqlite3_mprintf("%s",(char*)sqlite3_column_text(result, 0));
 
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
    return login;
 }
 
@@ -248,6 +246,7 @@ int count_users_chats(int id) {
    }
 
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return chats;
 }
 
@@ -290,6 +289,7 @@ char** get_chats_from_CHATS(char* login) {
          break;
       }
    }
+   sqlite3_free(statement);
    return chats;
 }
 
@@ -299,6 +299,7 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
    char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');", chat_id, sender_id, message, date_time);
    exec_db(statement);
    free(date_time);
+   sqlite3_free(statement);
 }
 
 char** get_last_30_messages_from_CHAT(int chat_id) {
@@ -327,11 +328,13 @@ int get_max_message_id_from_CHAT(int chat_id) {
       max_id = atoi((char*)sqlite3_column_text(result, 0));
 
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return max_id;
 }
 
 char** get_messages_from_CHAT(int chat_id) {
-   int messages_c = count_messages_from_CHAT();
+   sqlite3_stmt *result;
+   int messages_c = count_messages_from_CHAT(chat_id);
    char** messages = malloc(sizeof(char*) * (messages_c + 1));
    messages[messages_c] = NULL;
 
@@ -358,11 +361,12 @@ char** get_messages_from_CHAT(int chat_id) {
    }
    
    sqlite3_finalize(result);
+   sqlite3_free(statement);
    return messages;
 }
 
 int count_messages_from_CHAT(int chat_id) {
-
+   return 0;
 }
 
 void delete_user_from_USERS(int id) {
