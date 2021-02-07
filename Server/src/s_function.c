@@ -36,10 +36,12 @@ char *ps_comma_dot(char **text){
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID) {
     int send_sock = get_socket_from_ONLINE_USERS(recipient_login);
     if (send_sock != 1) { // if ONLINE SENDING TO HIM
+        //printf("sender id = %d\n", get_id_from_USERS(sender_login));
         add_message_to_CHAT(chat_ID, get_id_from_USERS(sender_login), message);
     } 
 
-        char *buffer = concat("message/", sender_login);
+        char *buffer = "message/";
+        buffer = concat(buffer, sender_login);
         buffer = concat(buffer, "/");
         buffer = concat(buffer, message);
 

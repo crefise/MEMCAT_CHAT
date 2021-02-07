@@ -38,21 +38,21 @@ int main() {
             "    MESSAGE TEXT NOT NULL,"\
             "    AUTHOR_ID INT NOT NULL);");
 
-    add_user_to_USERS("test_user1 🤖", "a");
-    add_user_to_USERS("test_user2 💩", "a");
-    add_user_to_USERS("test_user3 😎", "a");
-    add_user_to_USERS("test_user4 😢", "a");
+    add_user_to_USERS("test_user1", "a");
+    add_user_to_USERS("test_user2", "a");
+    add_user_to_USERS("test_user3", "a");
+    add_user_to_USERS("test_user4", "a");
     add_user_to_USERS("test_user5", "a");
     add_user_to_USERS("test_user6", "a");
 
-    add_chat_to_CHATS("test_user1 🤖", "test_user2 💩");
-    add_chat_to_CHATS("test_user1 🤖", "test_user2 💩");
-    add_chat_to_CHATS("test_user2 💩", "test_user1 🤖");
-    add_chat_to_CHATS("test_user1 🤖", "test_user3 😎");
+    add_chat_to_CHATS("test_user1", "test_user2");
+    add_chat_to_CHATS("test_user1", "test_user2");
+    add_chat_to_CHATS("test_user2", "test_user1");
+    add_chat_to_CHATS("test_user1", "test_user3");
     add_chat_to_CHATS("test_user5", "test_user6");
 
-    delete_user_from_USERS("test_user4 😢");
-    delete_user_from_USERS("test_user4 😢");
+    delete_user_from_USERS("test_user4");
+    delete_user_from_USERS("test_user4");
     
     add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user6"), "Hellou bruh");
     add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user5"), "Hello man");
