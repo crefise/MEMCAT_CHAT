@@ -3,6 +3,7 @@
 #define FAVORIDE_CHAT_DEFINE "Favorite"
 //#define SERVERADDR "51.15.120.179"
 //#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
+//#define SERVERADDR "31.133.82.217" // DERLAS PC
 #define SERVERADDR "localhost"
 #define SERVERPORT 8000 // Порт сервера
 

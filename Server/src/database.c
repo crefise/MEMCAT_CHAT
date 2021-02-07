@@ -5,6 +5,12 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
+void double_free_for_CHATS(char** array) {
+   for (int i = 0; array[i]; i++) sqlite3_free(array[i]);
+   free(array);
+   array = NULL;
+}
+
 int get_max_id_in_USERS() {
    int max_id = 0;
    sqlite3_stmt* result;
@@ -169,11 +175,28 @@ int get_id_from_USERS(char* login) {
 
 int add_chat_to_CHATS(char* u1, char* u2) {
    int chat_id = get_chat_id_from_CHATS(u1, u2);
-   if (chat_id != 0) return chat_id;
+   if (chat_id != 0) {
+      set_console_color(RED);
+      char* err = sqlite3_mprintf("😕 Failed to add chat: Chat already exists\n");
+      write(1, err, strlen(err));
+      set_console_color(NORMAL);
+      sqlite3_free(err);
+      return chat_id;
+   }
+
    if (strcmp(u1, u2) == 0) return 0;
 
    int u1_id = get_id_from_USERS(u1);
    int u2_id = get_id_from_USERS(u2);
+   if (u1_id == 0 || u2_id == 0) {
+      set_console_color(RED);
+      char* err = sqlite3_mprintf("😕 Failed to add chat: User [%s] or [%s] does not exist\n", u1, u2);
+      write(1, err, strlen(err));
+      set_console_color(NORMAL);
+      sqlite3_free(err);
+      return 0;
+   }
+
    char* statement = sqlite3_mprintf("INSERT INTO CHATS(USER1_ID, USER2_ID) VALUES(%i, %i);", u1_id, u2_id);
 
    exec_db(statement);
@@ -308,8 +331,13 @@ char** get_chats_from_CHATS(char* login) {
          char* friend_login = sqlite3_mprintf("%s", get_login_from_USERS(friend_id));
          char* temp = sqlite3_mprintf("%i/%s", chat_id, friend_login);
 
-         chats[i] = malloc(sizeof(char) * strlen(temp));
+         /*
+         chats[i] = sqlite3_mprintf("%i/%s", chat_id, friend_login);
+         */
+         chats[i] = "";
          chats[i] = concat(chats[i], temp);
+
+         sqlite3_free(temp);
          i++;
       }
       else {
@@ -362,6 +390,14 @@ int get_max_message_id_from_CHAT(int chat_id) {
 }
 
 char** get_messages_from_CHAT(int chat_id) {
+   if (chat_id == 0) {
+      set_console_color(RED);
+      char* err = sqlite3_mprintf("😕 Failed to get messages: Chat with ID=%i does not exist\n", chat_id);
+      write(1, err, strlen(err));
+      set_console_color(NORMAL);
+      sqlite3_free(err);
+      return NULL;
+   }
    sqlite3_stmt *result;
    int messages_c = count_messages_from_CHAT(chat_id);
    char** messages = malloc(sizeof(char*) * (messages_c + 1));
@@ -385,7 +421,7 @@ char** get_messages_from_CHAT(int chat_id) {
       char* date_time = (char*)sqlite3_column_text(result, 2);
       char* message = (char*)sqlite3_column_text(result, 3);
 
-      char* temp = sqlite3_mprintf("%i/%i/%i/%s/%s", chat_id, message_id, author_id, message, date_time);
+      char* temp = sqlite3_mprintf("%i/%i/%i/%s/%s", chat_id, author_id, message_id, date_time, message);
 
       messages[i] = "";
       messages[i] = concat(messages[i], temp);
@@ -435,5 +471,55 @@ void delete_user_from_USERS(char* login) {
 void delete_message_from_CHAT(int message_id) {
    char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%i", message_id);
    exec_db(statement);
+   sqlite3_free(statement);
+}
+
+void get_all_users_from_USERS_CONSOLE() {
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT ID, LOGIN, PASSWORD FROM USERS;");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   while(rc == SQLITE_ROW) {
+      int id = atoi((char*)sqlite3_column_text(result, 0));
+      char* login = (char*)sqlite3_column_text(result, 1);
+      char* password = (char*)sqlite3_column_text(result, 2);
+
+      printf("%s\n", sqlite3_mprintf("%i/%s/%s", id, login, password));
+      rc = sqlite3_step(result);
+   }
+   
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+}
+
+void get_all_chats_from_CHATS_CONSOLE() {
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, USER1_ID, USER2_ID FROM CHATS;");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   while(rc == SQLITE_ROW) {
+      int chat_id = atoi((char*)sqlite3_column_text(result, 0));
+      int u1_id = atoi((char*)sqlite3_column_text(result, 0));
+      int u2_id = atoi((char*)sqlite3_column_text(result, 0));
+
+      printf("%s\n", sqlite3_mprintf("[%i]%i+%i", chat_id, u1_id, u2_id));
+      rc = sqlite3_step(result);
+   }
+   
+   sqlite3_finalize(result);
    sqlite3_free(statement);
 }

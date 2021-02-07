@@ -5,7 +5,7 @@ int sock;
 GtkWidget *stack;
 GtkWidget *login_window;
 int main ( void ) {
-    initializate_socket();
+    //initializate_socket();
     if (sock == -1)
         mx_printerr("NO_CONNECT_TO_SERVER\n");
 

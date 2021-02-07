@@ -20,6 +20,7 @@ extern sqlite3* data_base;
 #define BUF_SIZE 256;
 
 #define RED "\x1b[31m"
+#define YELLOW "\x1b[33m"
 #define GREEN "\x1b[32m"
 #define NORMAL "\x1b[0m"
 
@@ -39,6 +40,7 @@ void close_db();
 
 void add_user_to_USERS(char* login, char* password);
 void delete_user_from_USERS(char* login);
+void get_all_users_from_USERS_CONSOLE();
 int get_max_id_in_USERS();
 int get_id_from_USERS(char* login);
 char* get_login_from_USERS(int id);
@@ -47,6 +49,7 @@ void set_login_in_USERS(int id, char* login);
 void set_password_in_USERS(int id, char* password);
 bool check_user_in_USERS(char* login);
 bool check_login_password_in_USERS(char* login, char* password);
+int count_users_in_USERS(); // not ready
 
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
@@ -54,10 +57,12 @@ int get_socket_from_ONLINE_USERS(char* login);
 
 int add_chat_to_CHATS(char* u1, char* u2);
 void get_chats_from_CHATS_CONSOLE(int id);
+void get_all_chats_from_CHATS_CONSOLE();
 int get_chat_id_from_CHATS(char* u1, char* u2);
 char** get_chats_from_CHATS(char* login);
 char** get_all_chats_from_CHATS();
 int get_max_chat_id_from_CHATS();
+void double_free_for_CHATS(char** array);
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 void delete_message_from_CHAT(int message_id);
