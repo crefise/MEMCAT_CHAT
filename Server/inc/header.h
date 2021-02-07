@@ -71,6 +71,7 @@ char** get_messages_from_CHAT(int chat_id);
 int get_max_message_id_from_CHAT(int chat_id);
 char* get_message_from_CHAT(int chat_id, int message_id);
 int count_messages_from_CHAT(int chat_id);
+bool check_user_in_CHAT(int chat_id, char* user);
 
 /* Parsing */
 char** ps_registration(char* src);

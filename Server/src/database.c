@@ -350,11 +350,44 @@ char** get_chats_from_CHATS(char* login) {
 
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
+   /*
+   if (!check_user_in_CHAT(chat_id, get_login_from_USERS(sender_id))) {
+      set_console_color(RED);
+      char* err = sqlite3_mprintf("😕 Failed to add message: User [%s] is not in this chat\n", get_login_from_USERS(sender_id));
+      write(1, err, strlen(err));
+      set_console_color(NORMAL);
+      sqlite3_free(err);
+      return;
+   }
+   */
    char* date_time = get_server_date();
    char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');", chat_id, sender_id, message, date_time);
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
+}
+
+bool check_user_in_CHAT(int chat_id, char* user) {
+   bool exist = false;
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID from CHATS where LOGIN='%s';", user);
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+      sqlite3_close(data_base);
+      exist = false;
+   } 
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) {
+      sqlite3_finalize(result);
+      exist = true;
+   }
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+   return exist;
 }
 
 char** get_last_30_messages_from_CHAT(int chat_id) {
@@ -513,8 +546,8 @@ void get_all_chats_from_CHATS_CONSOLE() {
    rc = sqlite3_step(result);
    while(rc == SQLITE_ROW) {
       int chat_id = atoi((char*)sqlite3_column_text(result, 0));
-      int u1_id = atoi((char*)sqlite3_column_text(result, 0));
-      int u2_id = atoi((char*)sqlite3_column_text(result, 0));
+      int u1_id = atoi((char*)sqlite3_column_text(result, 1));
+      int u2_id = atoi((char*)sqlite3_column_text(result, 2));
 
       printf("%s\n", sqlite3_mprintf("[%i]%i+%i", chat_id, u1_id, u2_id));
       rc = sqlite3_step(result);

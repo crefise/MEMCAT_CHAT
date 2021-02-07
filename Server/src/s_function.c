@@ -161,7 +161,7 @@ void *user_connect(void* sock) {
                 send(client_socket, "-", 1, 0);
 */
                 exit = 0;
-                double_free(chats);
+                //makedouble_free(chats);
                 break;
                 
             case 3: // Хотим обновить сообщения в диалоге
