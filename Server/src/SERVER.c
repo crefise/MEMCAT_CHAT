@@ -19,6 +19,9 @@ int main() {
     printf("%s%s%s\n", GREEN, get_server_date(), NORMAL);
 
     open_db("Server/databases/data_base.db", &data_base);
+    close_db();
+    open_db("Server/databases/data_base.db", &data_base);
+
     exec_db("CREATE TABLE IF NOT EXISTS USERS("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
@@ -98,6 +101,11 @@ int main() {
 
 
     //Связываем сокет
+    
+    const int fl = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &fl, sizeof(int)) < 0) {
+        write(2, "error2\n", 7);
+    }
     if (bind(sock, (struct sockaddr *)&sock_info, sizeof(sock_info))) {
         write(2, "BIND() ERROR\n", 13);
         close(sock); // закрываем сокетб перед выходом

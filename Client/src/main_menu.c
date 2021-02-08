@@ -33,13 +33,18 @@ void un_ps_chat(char *str) {
         char *chat_name;
         int char_ID_int;
         int temp_size = 0;
+
         for (int z = 0; chats[i][z] != '/' && &chats[i][z] != NULL; z++)
             temp_size++;
+
         chat_ID_char = malloc(temp_size);
-        mx_printerr(i_to_s(strlen(chats[i])));
-        chat_name = malloc(strlen(chats[i]) - temp_size - 1);
+        //mx_printerr(i_to_s(strlen(chats[i])));
+        //chat_name = malloc(strlen(chats[i]) - temp_size - 1);
         chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
-        chat_name = strncpy(chat_name, &chats[i][temp_size+1], strlen(chats[i]) - temp_size - 1 );
+        //printf("chat name got it from: %s gg\n", &chats[i][temp_size+1]);
+        chat_name = strndup(&chats[i][temp_size+1], strlen(&chats[i][temp_size+1]));
+        //chat_name = strncpy(chat_name, &chats[i][temp_size+1], strlen(chats[i]) - temp_size - 1 );
+        //printf("chat name: %s\n", chat_name);
         mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));        
     }
     

@@ -57,6 +57,8 @@ void* massage_check_in(void* socket) {
             }
             if (buffer[0] == 'm') {
                 ps_massage_in(buffer);
+                mx_strdel(&buffer);
+                buffer = mx_strnew(256);
             }
             continue;
         }

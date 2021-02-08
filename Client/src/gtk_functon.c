@@ -211,6 +211,7 @@ void login_connect(GtkWidget *button, gpointer data) {
 
     char  *login = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_username));
     char *password = (char*) gtk_entry_get_text(GTK_ENTRY(temp->entry_password));
+    
 
     if (strcmp(login, "") == 0 || strcmp(password, "") == 0) {
         gtk_label_set_text(GTK_LABEL(temp->label_error), "Empty field(s)");
@@ -248,7 +249,7 @@ void login_connect(GtkWidget *button, gpointer data) {
             write(2, "LOGIN OKAY\n",11);
             USER_LOGIN = strdup(login);
             pthread_t pthreads[1];
-            start_in_check_function();
+            pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
             pthread_create(&pthreads[0], NULL, console_style, NULL);
             gtk_widget_hide(login_window);
             main_menu();

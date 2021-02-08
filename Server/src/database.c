@@ -69,7 +69,7 @@ void add_user_to_USERS(char* login, char* password) {
 }
 
 void add_user_to_ONLINE_USERS(char* login, int socket) {
-   char* statement = sqlite3_mprintf("INSERT INTO ONLINE_USERS (LOGIN,SOCKET) VALUES ('%s', %i);", login, socket);
+   char* statement = sqlite3_mprintf("INSERT INTO ONLINE_USERS (USER_ID, LOGIN, SOCKET) VALUES (%i, '%s', %i);", get_id_from_USERS(login), login, socket);
    exec_db(statement);
    sqlite3_free(statement);
 }
@@ -155,7 +155,7 @@ void get_chats_from_CHATS_CONSOLE(int id) {
 int get_id_from_USERS(char* login) {
    int id = 0;
    sqlite3_stmt *result;
-   char* statement = sqlite3_mprintf("SELECT ID FROM USERS WHERE LOGIN='%s';", login);
+   char* statement = sqlite3_mprintf("SELECT ID FROM USERS WHERE LOGIN='%s'", login);
 
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
