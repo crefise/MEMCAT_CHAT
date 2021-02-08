@@ -4,6 +4,7 @@
 GtkWidget *scrool_massages;
 
 void un_ps_chat(char *str) {
+    printf("str from un_ps_chat:\n%s\n", str);
     if (!str) {
         mx_printerr("NULL CHAT STR (un_ps_chat)\n");
         return;
@@ -54,8 +55,9 @@ void un_ps_chat(char *str) {
 void download_all_chat(CHAT_T* chats) {
     PAUSE = 1;
     char *buffer = concat(concat("dialogs[", USER_LOGIN), "]");
+    printf("Download all chat: buffer = %s\n", buffer);
     if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
-      write(2, "SERVER DONT CONNETCTED\n",23);
+        write(2, "SERVER DONT CONNETCTED\n",23);
     } 
 
     mx_strdel(&buffer);
@@ -64,13 +66,47 @@ void download_all_chat(CHAT_T* chats) {
     if (recv(sock, &buffer[0], 256, 0) == 0) {
         mx_printerr("ERROR SERVER CONNECTIONS (download all chat)\n");
     }
+
+    //////////////////////////////
+    printf("Testing getting mass\n");
+    int32_t ret;
+    char *data = (char*)&ret;
+    int left = sizeof(ret);
+    int rc;
+    do {
+        rc = read(sock, data, left);
+        if (rc <= 0) { /* instead of ret */
+            if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+                // use select() or epoll() to wait for the socket to be readable again
+            }
+            else if (errno != EINTR) {}
+        }
+        else {
+            data += rc;
+            left -= rc;
+        }
+    }
+    while (left > 0);
+    int chats_c = ntohl(ret);
+
+    char* buffer2 = mx_strnew(256);
+    for (int i = 0; i < chats_c; i++) {
+        recv(sock, &buffer2[0], 256, 0);
+        printf("Current buffer2 (data) = %s\n", buffer2);
+        mx_strdel(&buffer2);
+        buffer2 = mx_strnew(256);
+    }
+    free(buffer2);
+    ///////////////////////////////////
+
+    printf("Client got: buffer = %s\n", buffer);
     if (strcmp(buffer, "-") == 0) {
         mx_printerr("NULL CHATS");
         PAUSE = 0;
         return;
     }
     else {
-    un_ps_chat(buffer);
+        un_ps_chat(buffer);
     }
     PAUSE = 0;
     
@@ -81,13 +117,16 @@ void download_all_chat(CHAT_T* chats) {
 
 
 void select_chat(GtkWidget *button, gpointer data);
+
 GtkWidget *chats_list_box = NULL;
 GtkWidget *CONTAINER = NULL;
- GtkWidget *window; // my window
+GtkWidget *window; // my window
 char *OPENED_DIALOG;
+
 #define SIZE 4
 #define SIZE_C 2
 #define FAVORIDE_CHAT_DEFINE "Favorite"
+
     CHAT_T *MY_CHATS = NULL;
     CHAT_T *FAVORITE_CHAT = NULL;
     GtkWidget *collocutor_name = NULL;
@@ -138,6 +177,7 @@ void send_message(GtkWidget *button, gpointer data) {
     }
     mx_update_used_chat(used_chat);
     scrolling();
+    free(buffer);
 }
 
 void main_menu() {

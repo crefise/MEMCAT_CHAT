@@ -91,9 +91,8 @@ void *user_connect(void* sock) {
     char *login, *pass, *send_login, *send_text;
     bool exit = 0;
     bool logined = 0;
+
     while (!exit) {
-
-
         mx_printerr("--------ONLINE BASE NOW-----------\n");
         exec_db("SELECT * FROM ONLINE_USERS");
         mx_printerr("----------------------------------\n");
@@ -105,30 +104,19 @@ void *user_connect(void* sock) {
 
         if (nsize == 0) { // Если клиент вышел/ чистим все что надо
             if (logined) {
-               // Удаление пользователя из онлайн базы пользователей
-                char* temp_statement = "DELETE FROM ONLINE_USERS WHERE SOCKET=";
-                temp_statement = concat(temp_statement, i_to_s(client_socket));
-                temp_statement = concat(temp_statement, ";");
-                exec_db(temp_statement);
-                mx_strdel(&temp_statement);
-                mx_printerr("USER \"");
-                mx_printerr(login);
-                mx_printerr("\" CLOSED CONNECTION.\n");
+                // Удаление пользователя из онлайн базы пользователей
+                delete_user_from_ONLINE_USERS(client_socket);
+                printf("User [%s] closed connection\n", login);
             }
             else {
-                mx_printerr("UKNOWN USER CLOSED CONNECTION.\n");
+                printf("User [???] closed connection\n");
             }
             mx_strdel(&login);
             mx_strdel(&pass); 
             close(client_socket); // Закрываем сокет клиента
             break;
         }
-
-
-
-        mx_printerr("Server took : ");
-        mx_printerr(buffer);
-        mx_printerr("\n");
+        printf("Server took: %s\n", buffer);
 
         int solution = parse_solution(buffer); // Узнаем чего именно хочет клиент
         char *login_1, *login_2;
@@ -143,41 +131,68 @@ void *user_connect(void* sock) {
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
-                mx_printerrln("T02");
+                //mx_printerrln("T02");
                 char** chats = get_chats_from_CHATS(login);
-                mx_printerrln("T02");
-                for (int i = 0; chats != NULL && chats[i] != NULL; i++)
-                {
-                    mx_printerr("CHECK erROR\n");
-                    mx_printerr(chats[i]);
-                    mx_printerr("\n");
-
+                //mx_printerrln("T02");
+                for (int i = 0; chats != NULL && chats[i] != NULL; i++) {
+                    //mx_printerr("CHECK erROR\n");
+                    //mx_printerr(chats[i]);
+                    //mx_printerr("\n");
                 }
                 
                 if (chats == NULL) {
                     if (send(client_socket, "-", 1, 0) == -1)
-                        mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
+                        mx_printerr("ERROR SENDING (UPDATE DIALOG): chats == NULL\n");
                 }
                 else {
-                                    mx_printerr("CHECK erROR\n");
-                temp = ps_comma_dot(chats);
-                                mx_printerr("CHECK erROR\n");
-                if (send(client_socket, temp, strlen(temp), 0) == -1)
-                    mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
-                mx_del_strarr(&chats);
-                mx_strdel(&temp);
+                    mx_printerr("CHECK erROR\n");
+                    temp = ps_comma_dot(chats);
+                    mx_printerr("CHECK erROR\n");
 
+                    if (send(client_socket, temp, strlen(temp), 0) == -1)
+                        mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
+
+                    mx_strdel(&temp);
                 }
-                /*
-                mx_printerr("TEST_1\n");
+
+                ///////////////////////////////////////
+                mx_printerr("Testing sending massive\n");
+                int size_chats_int = 0;
+                for (; chats[size_chats_int] != NULL; size_chats_int++);
+                int32_t conv = htonl(size_chats_int);
+                char *data = (char*)&conv;
+                int left = sizeof(conv);
+                int rc;
+                do {
+                    rc = write(client_socket, data, left);
+                    if (rc < 0) {
+                        if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+                            // use select() or epoll() to wait for the socket to be writable again
+                        }
+                        else if (errno != EINTR) {}
+                    }
+                    else {
+                        data += rc;
+                        left -= rc;
+                    }
+                }
+                while (left > 0);
+
                 for (int i = 0; chats[i]; i++) {
-                    mx_printerr("TEST_FOR\n");
-                    send(client_socket, chats[i], strlen(chats[i]), 0);
+                    char* temp2 = sqlite3_mprintf("%s", chats[i]);
+                    printf("Sending data: %s\n", temp2);
+                    send(client_socket, temp2, strlen(temp2), 0);
+                    sqlite3_free(temp2);
                 }
-                send(client_socket, "-", 1, 0);
-*/
+                ///////////////////////////////////////////
+
+
+                //send(client_socket, "-", 1, 0);
+                
+
+
                 exit = 0;
-                //makedouble_free(chats);
+                mx_del_strarr(&chats);
                 break;
                 
             case 3: // Хотим обновить сообщения в диалоге
@@ -193,7 +208,6 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case 6: // isuser? isuser[login] // ADD NEW CHAT
-                
                 ps_isuser(&login_1,&login_2, buffer);
                 mx_printerr("LOGIN|");
                 mx_printerr(login_1);

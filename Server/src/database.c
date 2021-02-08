@@ -57,7 +57,7 @@ void exec_db(char* statement) {
 } 
 
 void close_db() {
-   char* statement = "TRUNCATE TABLE ONLINE_USERS";
+   char* statement = "TRUNCATE TABLE ONLINE_USERS;";
    exec_db(statement);
    sqlite3_close(data_base);
 }

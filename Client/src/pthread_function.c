@@ -62,7 +62,7 @@ void* massage_check_in(void* socket) {
             }
             continue;
         }
-        mx_printerr("PAUSE ");
+        //mx_printerr("PAUSE ");
     }
     return NULL;
 }
@@ -97,31 +97,24 @@ char* parce_for_send_to_client(char *str) {
 
 
 void *console_style() {
-
-
     bool exit = false;
     while (!exit) {
-
         char *buff = NULL;
         mx_strdel(&buff);
         buff = mx_strnew(256);
 
-
         fgets(buff, 256, stdin); // Считываем команду с строки
-
 
         int solution = check_console_style(buff); // Обработка команды
         char *will_send = NULL;
 
-        
-
         switch (solution) {
         case 1: // send 
             will_send = parce_for_send_to_client(buff);
-        if (send(sock, &will_send[0], strlen(will_send), 0) == 0) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
-            mx_printerr("CONSOLE ERR\n");
-            return NULL;
-        } 
+            if (send(sock, &will_send[0], strlen(will_send), 0) == 0) { // А тут мы ждем ответа от сервера/ нормально ли прошла регистрация!
+                mx_printerr("CONSOLE ERR\n");
+                return NULL;
+            } 
             break;
         case -1:
             mx_printerr("UKNOWN COMMAND\n");
