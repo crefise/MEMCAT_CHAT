@@ -1,5 +1,17 @@
 #include "../inc/header.h"
-
+int PAUSE = 0;
+pthread_t *pthreads_check_in;
+void start_in_check_function() {
+    pthreads_check_in = malloc(sizeof(pthread_t));
+    pthread_create(pthreads_check_in, NULL, massage_check_in, &sock);
+}
+void exit_in_check_function() {
+    mx_printerrln("PTHREAD maybe  EXIT");
+    
+    pthread_exit(pthreads_check_in);
+    free(pthreads_check_in);
+    mx_printerrln("PTHREAD HAS EXIT");
+}
 
 void ps_massage_in(char *str) {
     char *temp_1 = mx_strncpy(temp_1,  &str[8], strlen(str) - 8); // Обрезаем massage
@@ -38,16 +50,17 @@ void* massage_check_in(void* socket) {
     int sock = *(int *)socket;
     char *buffer = mx_strnew(256);
     while(1==1) {
-    if (recv(sock, &buffer[0], 256, 0) == 0) {
-        mx_printerr("MASSAGE_CHECK_IN ERROR\n");
-        return NULL;
-    } 
-    mx_printerr("Massage that in: ");
-    mx_printerrln(buffer);
-    if (buffer[0] == 'm') {
-        ps_massage_in(buffer);
-    }
-
+        while (!PAUSE) {
+            if (recv(sock, &buffer[0], 256, MSG_DONTWAIT) == 0) {
+                mx_printerr("MASSAGE_CHECK_IN ERROR\n");
+                return NULL;
+            }
+            if (buffer[0] == 'm') {
+                ps_massage_in(buffer);
+            }
+            continue;
+        }
+        mx_printerr("PAUSE ");
     }
     return NULL;
 }

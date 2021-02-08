@@ -63,11 +63,25 @@ void ps_isuser(char **login_1, char **login_2, char *text) { // isuser[login/log
     for (int i = 8+size_login_1; text[i] != ']'; i++)
         size_login_2++;
     
-    *login_1 =  malloc(size_login_1);
-    *login_2 =  malloc(size_login_2);
+    *login_1 =  mx_strnew(size_login_1);
+    *login_2 =  mx_strnew(size_login_2);
     *login_1 = strncpy(*login_1, &text[7], size_login_1);
     *login_2 = strncpy(*login_2, &text[8+size_login_1], size_login_2);
+    /*
+    char *temp = NULL;
+    if ((*login_1)[strlen(*login_1) - 1] == '\n') {
+        mx_printerr("DELETE NEW STR");
+        temp = &((*login_1)[strlen(*login_1) - 1]);
+        free(temp);
+    }
+    if ((*login_2)[strlen(*login_2) - 1] == '\n') {
+        mx_printerr("DELETE NEW STR");
+        temp = &(*(login_2)[strlen(*login_2) - 1]);
+        free(temp);
+    }
+    */
 }
+      
 
 
 void *user_connect(void* sock) {
@@ -181,7 +195,15 @@ void *user_connect(void* sock) {
             case 6: // isuser? isuser[login] // ADD NEW CHAT
                 
                 ps_isuser(&login_1,&login_2, buffer);
+                mx_printerr("LOGIN|");
+                mx_printerr(login_1);
+                mx_printerr("|\n");
+                mx_printerr("LOGIN|");
+                mx_printerr(login_2);
+                mx_printerr("|\n");
                 if (get_id_from_USERS(login_1) == 0) { // Если такого логина не существует
+
+                    mx_printerr("USER OR DIALOG DOES NOT EXIST\n");
                     if (send(client_socket, "0", 1, 0) == -1) { //
                         write(2, "USER CLOSE CONNECTION\n",21);
                     }

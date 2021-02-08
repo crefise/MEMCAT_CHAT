@@ -219,6 +219,7 @@ void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и в�
 }
 
 void search_dialog(GtkWidget *button, gpointer data) {
+    PAUSE = 1;
   GtkWidget *search_str = data;
   char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(search_str)));
   if (strlen(text) == 0 || mx_find_name_chat(MY_CHATS, text) != NULL || strcmp(USER_LOGIN, text) == 0) {
@@ -251,7 +252,9 @@ void search_dialog(GtkWidget *button, gpointer data) {
 
     mx_strdel(&buffer);
     mx_strdel(&text);
+
   }
+      PAUSE = 0;
 }
 
 void select_chat(GtkWidget *button, gpointer data) {

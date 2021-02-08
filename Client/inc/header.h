@@ -127,4 +127,13 @@ extern GtkWidget *chats_list_box;
 extern GtkWidget *CONTAINER;
 
 extern GtkWidget *window; // my window
+
+
+
+
+extern int PAUSE;
+
+
+void exit_in_check_function();
+void start_in_check_function();
 #endif

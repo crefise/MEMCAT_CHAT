@@ -47,7 +47,8 @@ void un_ps_chat(char *str) {
 }
 
 void download_all_chat(CHAT_T* chats) {
-  char *buffer = concat(concat("dialogs[", USER_LOGIN), "]");
+    PAUSE = 1;
+    char *buffer = concat(concat("dialogs[", USER_LOGIN), "]");
     if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
       write(2, "SERVER DONT CONNETCTED\n",23);
     } 
@@ -60,11 +61,13 @@ void download_all_chat(CHAT_T* chats) {
     }
     if (strcmp(buffer, "-") == 0) {
         mx_printerr("NULL CHATS");
+        PAUSE = 0;
         return;
     }
     else {
     un_ps_chat(buffer);
     }
+    PAUSE = 0;
     
 
 }
