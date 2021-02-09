@@ -116,6 +116,7 @@ void download_message_in_chat(CHAT_T *chat) {
 
 
 void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
+    mx_printerr("CHAT_ID HERE : "); mx_printerrln(i_to_s(CHAT_ID));
     CHAT_T *new_chat;
     if (*chat == NULL) {
         *chat = mx_create_new_chat(name, CHAT_ID);

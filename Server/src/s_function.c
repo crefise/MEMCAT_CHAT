@@ -70,16 +70,25 @@ void send_chats_to_client(char** chats, int client_socket) {
 }
 
 void send_messages_to_client(char** messages, int client_socket) {
-
+        mx_printerrln("Testing\n");
         mx_printerr("Testing sending massive\n");
+        if (messages == NULL) {
+            mx_printerrln("messages = null");
+            return;
+        }
         int size_chats_int = 0;
         for (; messages[size_chats_int] != NULL; size_chats_int++);
+        mx_printerrln("Testing\n");
         int32_t conv = htonl(size_chats_int);
         char *data = (char*)&conv;
+        mx_printerrln("Testing\n");
         int left = sizeof(conv);
         int rc;
+        mx_printerrln("Testing\n");
         do {
+            mx_printerrln("Testing\n");
             rc = write(client_socket, data, left);
+            mx_printerrln("Testing\n");
             if (rc < 0) {
                 if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
                     // use select() or epoll() to wait for the socket to be writable again
@@ -236,7 +245,7 @@ void *user_connect(void* sock) {
                 
             case 3: // Хотим обновить сообщения в диалоге
                 write(2, "UPPDATE TEXT IN DIALOG\n",23);
-
+                mx_printerrln(ps_delete_text(buffer));
                 char** messages = get_messages_from_CHAT(atoi(ps_delete_text(buffer)));
                 send_messages_to_client(messages, client_socket);
                 if (messages) {
