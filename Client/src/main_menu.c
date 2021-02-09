@@ -67,6 +67,8 @@ void download_all_chat(CHAT_T* chats) {
         mx_printerr("ERROR SERVER CONNECTIONS (download all chat)\n");
     }
 
+
+        /*
     //////////////////////////////
     printf("Testing getting mass\n");
     int32_t ret;
@@ -75,7 +77,7 @@ void download_all_chat(CHAT_T* chats) {
     int rc;
     do {
         rc = read(sock, data, left);
-        if (rc <= 0) { /* instead of ret */
+        if (rc <= 0) {  instead of ret 
             if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
                 // use select() or epoll() to wait for the socket to be readable again
             }
@@ -98,7 +100,7 @@ void download_all_chat(CHAT_T* chats) {
     }
     free(buffer2);
     ///////////////////////////////////
-
+*/
     printf("Client got: buffer = %s\n", buffer);
     if (strcmp(buffer, "-") == 0) {
         mx_printerr("NULL CHATS");

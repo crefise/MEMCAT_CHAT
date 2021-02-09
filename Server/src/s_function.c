@@ -156,6 +156,7 @@ void *user_connect(void* sock) {
                 }
 
                 ///////////////////////////////////////
+                /*
                 mx_printerr("Testing sending massive\n");
                 int size_chats_int = 0;
                 for (; chats[size_chats_int] != NULL; size_chats_int++);
@@ -185,14 +186,16 @@ void *user_connect(void* sock) {
                     sqlite3_free(temp2);
                 }
                 ///////////////////////////////////////////
-
+                */
 
                 //send(client_socket, "-", 1, 0);
                 
 
 
                 exit = 0;
-                mx_del_strarr(&chats);
+                if (chats) {
+                    mx_del_strarr(&chats);
+                }
                 break;
                 
             case 3: // Хотим обновить сообщения в диалоге
