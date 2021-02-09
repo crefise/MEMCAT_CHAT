@@ -143,7 +143,10 @@ void send_massage_to_client(char* message, char* sender_login, char* recipient_l
     char *buffer = "message/";
     buffer = concat(buffer, sender_login);
     buffer = concat(buffer, "/");
+    buffer = concat(buffer, i_to_s(chat_ID));
+    buffer = concat(buffer, "/");
     buffer = concat(buffer, message);
+        
 
     if (send(send_sock, buffer, strlen(buffer), 0) == -1)
        mx_printerrln("UKNOWN ERROR SENDONG (send_massage_to_client)");
