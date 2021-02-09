@@ -5,6 +5,7 @@
 //#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
 //#define SERVERADDR "31.133.82.217" // DERLAS PC
 #define SERVERADDR "localhost"
+//#define SERVERADDR "10.11.8.11"
 #define SERVERPORT 8000 // Порт сервера
 
 #include <stdio.h>
@@ -22,12 +23,14 @@
 
 /*gtk_function.c*/
 #include "gtk/gtk.h"
+
 struct user_info {
     GtkWidget *entry_username;
     GtkWidget *entry_password;
     GtkWidget *entry_confirm_password;
     GtkWidget *label_error;
 };
+
 void load_css ( void );
 GtkWidget *createWindow ( const gint width, const gint height, const gchar *const title );
 GtkWidget *create_login_box (GtkWidget *stack);

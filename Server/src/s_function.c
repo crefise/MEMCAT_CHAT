@@ -18,13 +18,113 @@ char* get_server_date() {
    return time_date;
 }
 
+void send_chats_to_client(char** chats, int client_socket) {
+    for (int i = 0; chats != NULL && chats[i] != NULL; i++) {}
+        if (chats == NULL) {
+            if (send(client_socket, "-", 1, 0) == -1)
+                mx_printerr("ERROR SENDING (UPDATE DIALOG): chats == NULL\n");
+        }
+        else {
+            mx_printerr("CHECK erROR\n");
+            char* temp = ps_comma_dot(chats);
+            mx_printerr("CHECK erROR\n");
+
+            if (send(client_socket, temp, strlen(temp), 0) == -1)
+                mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
+
+            mx_strdel(&temp);
+        }
+        /*
+        mx_printerr("Testing sending massive\n");
+        int size_chats_int = 0;
+        for (; chats[size_chats_int] != NULL; size_chats_int++);
+        int32_t conv = htonl(size_chats_int);
+        char *data = (char*)&conv;
+        int left = sizeof(conv);
+        int rc;
+        do {
+            rc = write(client_socket, data, left);
+            if (rc < 0) {
+                if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+                    // use select() or epoll() to wait for the socket to be writable again
+                }
+                else if (errno != EINTR) {}
+            }
+            else {
+                data += rc;
+                left -= rc;
+            }
+        }
+        while (left > 0);
+
+        for (int i = 0; chats[i]; i++) {
+            char* temp2 = sqlite3_mprintf("%s", chats[i]);
+            printf("Sending data: %s\n", temp2);
+            send(client_socket, temp2, strlen(temp2), 0);
+            sqlite3_free(temp2);
+        }
+    */
+
+    //send(client_socket, "-", 1, 0);
+}
+
+void send_messages_to_client(char** messages, int client_socket) {
+    for (int i = 0; messages != NULL && messages[i] != NULL; i++) {}
+        if (messages == NULL) {
+            if (send(client_socket, "-", 1, 0) == -1)
+                mx_printerr("ERROR SENDING (UPDATE DIALOG): chats == NULL\n");
+        }
+        else {
+            mx_printerr("CHECK erROR\n");
+            char* temp = ps_comma_dot(messages);
+            mx_printerr("CHECK erROR\n");
+
+            if (send(client_socket, temp, strlen(temp), 0) == -1)
+                mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
+
+            mx_strdel(&temp);
+        }
+        /*
+        mx_printerr("Testing sending massive\n");
+        int size_chats_int = 0;
+        for (; chats[size_chats_int] != NULL; size_chats_int++);
+        int32_t conv = htonl(size_chats_int);
+        char *data = (char*)&conv;
+        int left = sizeof(conv);
+        int rc;
+        do {
+            rc = write(client_socket, data, left);
+            if (rc < 0) {
+                if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+                    // use select() or epoll() to wait for the socket to be writable again
+                }
+                else if (errno != EINTR) {}
+            }
+            else {
+                data += rc;
+                left -= rc;
+            }
+        }
+        while (left > 0);
+
+        for (int i = 0; chats[i]; i++) {
+            char* temp2 = sqlite3_mprintf("%s", chats[i]);
+            printf("Sending data: %s\n", temp2);
+            send(client_socket, temp2, strlen(temp2), 0);
+            sqlite3_free(temp2);
+        }
+    */
+
+    //send(client_socket, "-", 1, 0);
+}
+
 void double_free(char** array) {
    for (int i = 0; array[i]; i++) free(array[i]);
    free(array);
    array = NULL;
 }
 
-char *ps_comma_dot(char **text){
+char *ps_comma_dot(char **text) {
 
     char *result = strdup(text[0]);
     for (int i = 1; text[i] ; i++) {
@@ -40,10 +140,10 @@ void send_massage_to_client(char* message, char* sender_login, char* recipient_l
         add_message_to_CHAT(chat_ID, get_id_from_USERS(sender_login), message);
     } 
 
-        char *buffer = "message/";
-        buffer = concat(buffer, sender_login);
-        buffer = concat(buffer, "/");
-        buffer = concat(buffer, message);
+    char *buffer = "message/";
+    buffer = concat(buffer, sender_login);
+    buffer = concat(buffer, "/");
+    buffer = concat(buffer, message);
 
     if (send(send_sock, buffer, strlen(buffer), 0) == -1)
        mx_printerrln("UKNOWN ERROR SENDONG (send_massage_to_client)");
@@ -131,67 +231,8 @@ void *user_connect(void* sock) {
             case 2: // Хотим обновить диалоги
                 write(2, "UPPDATE DIALOGS\n",16);
                 login_1 = ps_update_dialog(buffer);
-                //mx_printerrln("T02");
                 char** chats = get_chats_from_CHATS(login);
-                //mx_printerrln("T02");
-                for (int i = 0; chats != NULL && chats[i] != NULL; i++) {
-                    //mx_printerr("CHECK erROR\n");
-                    //mx_printerr(chats[i]);
-                    //mx_printerr("\n");
-                }
-                
-                if (chats == NULL) {
-                    if (send(client_socket, "-", 1, 0) == -1)
-                        mx_printerr("ERROR SENDING (UPDATE DIALOG): chats == NULL\n");
-                }
-                else {
-                    mx_printerr("CHECK erROR\n");
-                    temp = ps_comma_dot(chats);
-                    mx_printerr("CHECK erROR\n");
-
-                    if (send(client_socket, temp, strlen(temp), 0) == -1)
-                        mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
-
-                    mx_strdel(&temp);
-                }
-
-                ///////////////////////////////////////
-                /*
-                mx_printerr("Testing sending massive\n");
-                int size_chats_int = 0;
-                for (; chats[size_chats_int] != NULL; size_chats_int++);
-                int32_t conv = htonl(size_chats_int);
-                char *data = (char*)&conv;
-                int left = sizeof(conv);
-                int rc;
-                do {
-                    rc = write(client_socket, data, left);
-                    if (rc < 0) {
-                        if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
-                            // use select() or epoll() to wait for the socket to be writable again
-                        }
-                        else if (errno != EINTR) {}
-                    }
-                    else {
-                        data += rc;
-                        left -= rc;
-                    }
-                }
-                while (left > 0);
-
-                for (int i = 0; chats[i]; i++) {
-                    char* temp2 = sqlite3_mprintf("%s", chats[i]);
-                    printf("Sending data: %s\n", temp2);
-                    send(client_socket, temp2, strlen(temp2), 0);
-                    sqlite3_free(temp2);
-                }
-                ///////////////////////////////////////////
-                */
-
-                //send(client_socket, "-", 1, 0);
-                
-
-
+                send_chats_to_client(chats, client_socket);
                 exit = 0;
                 if (chats) {
                     mx_del_strarr(&chats);
@@ -200,6 +241,11 @@ void *user_connect(void* sock) {
                 
             case 3: // Хотим обновить сообщения в диалоге
                 write(2, "UPPDATE TEXT IN DIALOG\n",23);
+                char** messages = get_messages_from_CHAT(chat_ID);
+                send_messages_to_client(messages, client_socket);
+                if (messages) {
+                    double_free(messages);
+                }
                 exit = 1;
                 break;
             case 4: // We wanna register

@@ -39,13 +39,8 @@ void un_ps_chat(char *str) {
             temp_size++;
 
         chat_ID_char = malloc(temp_size);
-        //mx_printerr(i_to_s(strlen(chats[i])));
-        //chat_name = malloc(strlen(chats[i]) - temp_size - 1);
         chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
-        //printf("chat name got it from: %s gg\n", &chats[i][temp_size+1]);
         chat_name = strndup(&chats[i][temp_size+1], strlen(&chats[i][temp_size+1]));
-        //chat_name = strncpy(chat_name, &chats[i][temp_size+1], strlen(chats[i]) - temp_size - 1 );
-        //printf("chat name: %s\n", chat_name);
         mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));        
     }
     
@@ -68,8 +63,7 @@ void download_all_chat(CHAT_T* chats) {
     }
 
 
-        /*
-    //////////////////////////////
+    /*
     printf("Testing getting mass\n");
     int32_t ret;
     char *data = (char*)&ret;
@@ -99,8 +93,8 @@ void download_all_chat(CHAT_T* chats) {
         buffer2 = mx_strnew(256);
     }
     free(buffer2);
-    ///////////////////////////////////
-*/
+    */
+
     printf("Client got: buffer = %s\n", buffer);
     if (strcmp(buffer, "-") == 0) {
         mx_printerr("NULL CHATS");
@@ -111,8 +105,6 @@ void download_all_chat(CHAT_T* chats) {
         un_ps_chat(buffer);
     }
     PAUSE = 0;
-    
-
 }
 
 
