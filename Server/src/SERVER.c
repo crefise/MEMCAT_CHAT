@@ -42,6 +42,10 @@ int main() {
             "    AUTHOR_ID INT NOT NULL);");
 
 
+    
+    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user6"), "Hellou bruh");
+    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user5"), "Hello man");
+
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
     get_all_chats_from_CHATS_CONSOLE();

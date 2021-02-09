@@ -322,21 +322,25 @@ bool curr_sybmobol(char *str) {
 }
 
 void reg_func(char *buffer, int client_socket) {
+
+
     char** temp = ps_registration(buffer); // нужно удалить память ? НАпомнить сереги
     if (check_user_in_USERS(temp[0])) { // if 1 человек уже зарегестрирован
+        mx_printerr("USER CANT CREATE ACC, BECOUSE HE DID IT ALREADY\n");
         if (send(client_socket, "0", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
-        mx_printerr("USER CANT CREATE ACC, BECOUSE HE DID IT ALREADY");
+        
     } 
     else {
+        mx_printerr("USER  CREATE ACC\n");
         if (send(client_socket, "1", 1, 0) == -1) { // 1 - success registration, 0 - bad registration
             write(2, "USER CLOSE CONNECTION\n",21);
         }
         add_user_to_USERS(temp[0], temp[1]);
     }
 
-    exec_db("SELECT * FROM USERS"); // base show
+    get_all_users_from_USERS_CONSOLE();
 }
 
 void log_func(char *buffer, int client_socket, bool *logined, char **login, char** pass) {

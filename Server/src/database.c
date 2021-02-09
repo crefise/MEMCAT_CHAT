@@ -106,18 +106,17 @@ bool check_user_in_USERS(char* login) {
    bool exist = false;
    sqlite3_stmt *result;
    char* statement = sqlite3_mprintf("SELECT ID from USERS where LOGIN='%s';", login);
-
-   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);   
    if (rc != SQLITE_OK) {
       set_console_color(RED);
       fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
+
       sqlite3_close(data_base);
       exist = false;
    } 
    rc = sqlite3_step(result);
    if (rc == SQLITE_ROW) {
-      sqlite3_finalize(result);
       exist = true;
    }
    sqlite3_finalize(result);
