@@ -71,6 +71,7 @@ void download_message_in_chat(CHAT_T *chat) {
     char *buffer = "";
     buffer = concat(buffer, "text/");
     buffer = concat(buffer, i_to_s(chat->CHAT_ID));
+    mx_printerr("WILL SEND IF WANT UPDATE : "); mx_printerrln(buffer);
     if (send(sock, buffer, strlen(buffer), 0) == 0) {
         mx_printerrln("ERROR SENDING(download_message_in_chat)");
     }
@@ -116,7 +117,6 @@ void download_message_in_chat(CHAT_T *chat) {
 
 
 void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
-    mx_printerr("CHAT_ID HERE : "); mx_printerr(i_to_s(CHAT_ID)); mx_printerr(" CHAT NAME NOW IS : "); mx_printerrln(name);
     CHAT_T *new_chat;
     if (*chat == NULL) {
         *chat = mx_create_new_chat(name, CHAT_ID);
@@ -130,9 +130,10 @@ void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
             temp = temp->next;
         }
         temp_1 = temp;
-        temp->CHAT_ID = CHAT_ID;
+        
         temp = temp->next;
         temp = malloc(sizeof(CHAT_T));
+        temp->CHAT_ID = CHAT_ID;
         temp->name_chat = strdup(name);
         temp->message_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         temp->chat_button = gtk_button_new_with_label(temp->name_chat);
@@ -151,7 +152,7 @@ void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
 CHAT_T* mx_create_new_chat(char* name, int CHAT_ID) {
     CHAT_T *temp = malloc(sizeof(CHAT_T));
     temp->name_chat = strdup(name);
-    temp->CHAT_ID = CHAT_ID;
+    temp->CHAT_ID = CHAT_ID;  
     temp->message_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     temp->chat_button = gtk_button_new_with_label(temp->name_chat);
     temp->messages = NULL;
@@ -357,7 +358,9 @@ void search_dialog(GtkWidget *button, gpointer data) {
 }
 
 void select_chat(GtkWidget *button, gpointer data) {
+    
     CHAT_T *used_chat = data;
+    mx_printerr(" SELECT CHAT CHAT_ID HERE : "); mx_printerr(i_to_s(used_chat->CHAT_ID)); mx_printerr(" CHAT NAME NOW IS : "); mx_printerrln(used_chat->name_chat);
     if (!used_chat->messages) {
         mx_printerrln("downloading messages....");
         download_message_in_chat(used_chat);
