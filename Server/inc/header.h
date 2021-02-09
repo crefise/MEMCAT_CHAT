@@ -70,6 +70,7 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 void delete_message_from_CHAT(int message_id);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
+void get_all_messages_from_CHAT_CONSOLE();
 int get_max_message_id_from_CHAT(int chat_id);
 char* get_message_from_CHAT(int chat_id, int message_id);
 int count_messages_from_CHAT(int chat_id);

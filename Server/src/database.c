@@ -556,3 +556,34 @@ void get_all_chats_from_CHATS_CONSOLE() {
    sqlite3_finalize(result);
    sqlite3_free(statement);
 }
+
+void get_all_messages_from_CHAT_CONSOLE() {
+   sqlite3_stmt *result;
+
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE FROM CHAT");
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   for(int i = 0; rc == SQLITE_ROW; i++, rc = sqlite3_step(result)) {
+      int chat_id = atoi((char*)sqlite3_column_text(result, 0));
+      int message_id = atoi((char*)sqlite3_column_text(result, 1));
+      int author_id = atoi((char*)sqlite3_column_text(result, 2));
+      char* date_time = (char*)sqlite3_column_text(result, 3);
+      char* message = (char*)sqlite3_column_text(result, 4);
+
+      char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
+
+      mx_printerrln(temp);
+
+      sqlite3_free(temp);
+   }
+   
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+}

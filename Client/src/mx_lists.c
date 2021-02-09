@@ -67,7 +67,7 @@ void download_message_in_chat(CHAT_T *chat) {
         return;
     }
     PAUSE = 1;
-
+    mx_printerr("CHECK CHAT ID NOW IS "); mx_printerr(i_to_s(chat->CHAT_ID)); mx_printerr(" AND CHAT NOW IS "); mx_printerrln(chat->name_chat);
     char *buffer = "";
     buffer = concat(buffer, "text/");
     buffer = concat(buffer, i_to_s(chat->CHAT_ID));
@@ -116,7 +116,7 @@ void download_message_in_chat(CHAT_T *chat) {
 
 
 void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
-    mx_printerr("CHAT_ID HERE : "); mx_printerrln(i_to_s(CHAT_ID));
+    mx_printerr("CHAT_ID HERE : "); mx_printerr(i_to_s(CHAT_ID)); mx_printerr(" CHAT NAME NOW IS : "); mx_printerrln(name);
     CHAT_T *new_chat;
     if (*chat == NULL) {
         *chat = mx_create_new_chat(name, CHAT_ID);

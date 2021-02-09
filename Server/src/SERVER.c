@@ -51,6 +51,8 @@ int main() {
     get_all_chats_from_CHATS_CONSOLE();
     mx_printerr("-----users----\n");
     get_all_users_from_USERS_CONSOLE();
+    mx_printerr("-----messages----\n");
+    get_all_messages_from_CHAT_CONSOLE();
 
     mx_printerr("======== ALL DB =========\n");
 
