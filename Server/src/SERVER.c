@@ -51,18 +51,7 @@ int main() {
     get_all_chats_from_CHATS_CONSOLE();
     mx_printerr("-----users----\n");
     get_all_users_from_USERS_CONSOLE();
-    mx_printerr("-----chats test_user5's-----\n");
-    char** chats = get_chats_from_CHATS("test_user5");
-    for (int i = 0; chats != NULL && chats[i] != NULL; i++) {
-        mx_printerrln(chats[i]);
-    }
-    double_free(chats);
-    mx_printerr("-----chat test_user5's id_1-----\n");
-    //char** messages = get_all_messages_from_CHAT();
-    //for (int i = 0; messages != NULL && messages[i] != NULL; i++) {
-        //mx_printerrln(messages[i]);
-    //}
-    //double_free(messages);
+
     mx_printerr("======== ALL DB =========\n");
 
     print_emoji("😍");

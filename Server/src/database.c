@@ -300,6 +300,7 @@ int count_users_chats(int id) {
 char** get_chats_from_CHATS(char* login) {
    sqlite3_stmt *result;
    int user_id = get_id_from_USERS(login);
+   if (user_id == 0) return NULL;
    int friend_id;
    int chats_c = count_users_chats(user_id);
    if (chats_c == 0) return NULL;
