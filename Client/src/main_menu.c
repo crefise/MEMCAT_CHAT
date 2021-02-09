@@ -41,6 +41,7 @@ void un_ps_chat(char *str) {
         chat_ID_char = malloc(temp_size);
         chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
         chat_name = strndup(&chats[i][temp_size+1], strlen(&chats[i][temp_size+1]));
+        mx_printerrln("DJSAOJASJDASJDJKAS\n");
         mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));        
     }
     
@@ -63,37 +64,7 @@ void download_all_chat(CHAT_T* chats) {
     }
 
 
-    /*
-    printf("Testing getting mass\n");
-    int32_t ret;
-    char *data = (char*)&ret;
-    int left = sizeof(ret);
-    int rc;
-    do {
-        rc = read(sock, data, left);
-        if (rc <= 0) {  instead of ret 
-            if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
-                // use select() or epoll() to wait for the socket to be readable again
-            }
-            else if (errno != EINTR) {}
-        }
-        else {
-            data += rc;
-            left -= rc;
-        }
-    }
-    while (left > 0);
-    int chats_c = ntohl(ret);
 
-    char* buffer2 = mx_strnew(256);
-    for (int i = 0; i < chats_c; i++) {
-        recv(sock, &buffer2[0], 256, 0);
-        printf("Current buffer2 (data) = %s\n", buffer2);
-        mx_strdel(&buffer2);
-        buffer2 = mx_strnew(256);
-    }
-    free(buffer2);
-    */
 
     printf("Client got: buffer = %s\n", buffer);
     if (strcmp(buffer, "-") == 0) {

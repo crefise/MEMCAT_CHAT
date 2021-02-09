@@ -1,5 +1,6 @@
 #include "../inc/header.h"
-
+       #include <sys/types.h>
+       #include <sys/socket.h>
 void set_console_color(char* color) {
     write(1, color, strlen(color));
 }
@@ -69,25 +70,10 @@ void send_chats_to_client(char** chats, int client_socket) {
 }
 
 void send_messages_to_client(char** messages, int client_socket) {
-    for (int i = 0; messages != NULL && messages[i] != NULL; i++) {}
-        if (messages == NULL) {
-            if (send(client_socket, "-", 1, 0) == -1)
-                mx_printerr("ERROR SENDING (UPDATE DIALOG): chats == NULL\n");
-        }
-        else {
-            mx_printerr("CHECK erROR\n");
-            char* temp = ps_comma_dot(messages);
-            mx_printerr("CHECK erROR\n");
 
-            if (send(client_socket, temp, strlen(temp), 0) == -1)
-                mx_printerr("ERROR SENDING (UPDATE DIALOG)\n");
-
-            mx_strdel(&temp);
-        }
-        /*
         mx_printerr("Testing sending massive\n");
         int size_chats_int = 0;
-        for (; chats[size_chats_int] != NULL; size_chats_int++);
+        for (; messages[size_chats_int] != NULL; size_chats_int++);
         int32_t conv = htonl(size_chats_int);
         char *data = (char*)&conv;
         int left = sizeof(conv);
@@ -107,15 +93,17 @@ void send_messages_to_client(char** messages, int client_socket) {
         }
         while (left > 0);
 
-        for (int i = 0; chats[i]; i++) {
-            char* temp2 = sqlite3_mprintf("%s", chats[i]);
-            printf("Sending data: %s\n", temp2);
-            send(client_socket, temp2, strlen(temp2), 0);
-            sqlite3_free(temp2);
+        for (int i = 0; messages[i]; i++) {
+            char* temp2 = sqlite3_mprintf("%s\0", messages[i]);
+           // char *ddd = strdup("Hello");
+            //printf("Sending data: %s\n", ddd);
+            if (send(client_socket, temp2, strlen(temp2), 0) == 0 ) {
+                mx_printerrln("Error");
+            }
+            mx_printerrln("DDD");
+            mx_strdel(&temp2);
+            usleep(10000);
         }
-    */
-
-    //send(client_socket, "-", 1, 0);
 }
 
 void double_free(char** array) {
@@ -186,7 +174,11 @@ void ps_isuser(char **login_1, char **login_2, char *text) { // isuser[login/log
 }
       
 
-
+char* ps_delete_text(char *buffer) {
+    char *result = mx_strnew(strlen(buffer) - 5);
+    result = strncpy(result, &buffer[5], strlen(buffer) - 5);
+    return result;
+}
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
@@ -244,12 +236,13 @@ void *user_connect(void* sock) {
                 
             case 3: // Хотим обновить сообщения в диалоге
                 write(2, "UPPDATE TEXT IN DIALOG\n",23);
-                char** messages = get_messages_from_CHAT(chat_ID);
+
+                char** messages = get_messages_from_CHAT(atoi(ps_delete_text(buffer)));
                 send_messages_to_client(messages, client_socket);
                 if (messages) {
                     double_free(messages);
                 }
-                exit = 1;
+                exit = 0;
                 break;
             case 4: // We wanna register
                 reg_func(buffer,client_socket);
@@ -261,12 +254,6 @@ void *user_connect(void* sock) {
                 break;
             case 6: // isuser? isuser[login] // ADD NEW CHAT
                 ps_isuser(&login_1,&login_2, buffer);
-                mx_printerr("LOGIN|");
-                mx_printerr(login_1);
-                mx_printerr("|\n");
-                mx_printerr("LOGIN|");
-                mx_printerr(login_2);
-                mx_printerr("|\n");
                 if (get_id_from_USERS(login_1) == 0) { // Если такого логина не существует
 
                     mx_printerr("USER OR DIALOG DOES NOT EXIST\n");

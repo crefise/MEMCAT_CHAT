@@ -1,5 +1,52 @@
 #include "../inc/header.h"
 
+void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
+    int counter = 0, const_temp = 0;
+    for (int i = 0; buffer[const_temp+i] != '/'; i++)
+        counter++;
+    char *CHAT_ID_CHAR = mx_strnew(counter);
+    CHAT_ID_CHAR = strncpy(CHAT_ID_CHAR, &buffer[const_temp], counter);
+    const_temp += (counter + 1);
+    counter = 0;
+
+
+    for (int i = 0; buffer[const_temp+i] != '/'; i++)
+        counter++;
+    char* login = mx_strnew(counter);
+    CHAT_ID_CHAR = strncpy(login, &buffer[const_temp], counter);
+    const_temp += (counter + 1);
+    counter = 0;
+    for (int i = 0; buffer[const_temp+i] != '/'; i++)
+        counter++;
+    char* message_id = mx_strnew(counter);
+    message_id = strncpy(message_id, &buffer[const_temp], counter);
+    const_temp += (counter + 1);
+    counter = 0;
+
+
+    for (int i = 0; buffer[const_temp+i] != '/'; i++)
+        counter++;
+    char* data = mx_strnew(counter);
+    data = strncpy(data, &buffer[const_temp], counter);
+    const_temp += (counter + 1);
+    counter = 0;
+
+    char *message = mx_strnew(strlen(buffer) - const_temp);
+    message = mx_strncpy(message, &buffer[const_temp], strlen(buffer) - const_temp);
+
+
+    add_new_message(&(chat->messages), message, login);
+    gtk_box_pack_start(GTK_BOX(chat->message_list_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   
+
+    //mx_strdel(&CHAT_ID_CHAR);
+    mx_strdel(&login);
+    mx_strdel(&message_id);
+    mx_strdel(&data);
+    mx_strdel(&message);
+    
+}
+
+
 CHAT_T* mx_get_index_chat(CHAT_T *chat, int index) {
     CHAT_T *temp = chat;
     int i = 0;
@@ -13,32 +60,88 @@ CHAT_T* mx_get_index_chat(CHAT_T *chat, int index) {
    // write(2, "Index error(mx_get_index_chat())\n", 33);
     return NULL;
 }
-void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
-    if (*chat == NULL) {
-        *chat = mx_create_new_chat(name, CHAT_ID);
-        return;
-    }
-    CHAT_T *temp = *chat;
-    CHAT_T *temp_1 = NULL;
-    while(temp->next!= NULL) {
-        temp = temp->next;
-    }
-    temp_1 = temp;
-    temp->CHAT_ID = CHAT_ID;
-    temp = temp->next;
-    temp = malloc(sizeof(CHAT_T));
-    temp->name_chat = strdup(name);
-    temp->message_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    temp->chat_button = gtk_button_new_with_label(temp->name_chat);
-    if (strcmp(name, "Favorite") == 0) {
-        gtk_widget_set_name(GTK_WIDGET(temp->chat_button), "main_menu_key");
+
+void download_message_in_chat(CHAT_T *chat) {
+    PAUSE = 1;
+
+    char *buffer = "";
+    buffer = concat(buffer, "text/");
+    buffer = concat(buffer, i_to_s(chat->CHAT_ID));
+    if (send(sock, buffer, strlen(buffer), 0) == 0) {
+        mx_printerrln("ERROR SENDING(download_message_in_chat)");
     }
     else {
-        gtk_widget_set_name(GTK_WIDGET(temp->chat_button), "chat");
+        printf("Testing getting mass\n");
+        int32_t ret;
+        char *data = (char*)&ret;
+        int left = sizeof(ret);
+        int rc;
+        do {
+            rc = read(sock, data, left);
+            if (rc <= 0) {
+                if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
+                    // use select() or epoll() to wait for the socket to be readable again
+                }
+                else if (errno != EINTR) {}
+            }
+            else {
+                data += rc;
+                left -= rc;
+            }
+        }
+        while (left > 0);
+        int messages_c = ntohl(ret);
+        mx_printerr("INT : ");
+        mx_printerrln(i_to_s(messages_c));
+        
+        for (int i = 0; i < messages_c; i++) {
+            char* buffer2 = mx_strnew(256);
+            if (recv(sock, &buffer2[0], 256, 0) == 0) {
+                mx_printerrln("CLOSE CONNECTION");
+            }
+            mx_printerrln(buffer2);
+            mx_load_dowloaded_messages(buffer2, chat);
+            mx_strdel(&buffer2);
+        }
     }
-    temp->messages = NULL;
-    temp->next = NULL;
-    temp_1->next = temp;
+
+    mx_printerrln("END...");
+   PAUSE = 0;
+}
+
+
+
+void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID) {
+    CHAT_T *new_chat;
+    if (*chat == NULL) {
+        *chat = mx_create_new_chat(name, CHAT_ID);
+        new_chat = *chat;
+    }
+    else {
+
+        CHAT_T *temp = *chat;
+        CHAT_T *temp_1 = NULL;
+        while(temp->next!= NULL) {
+            temp = temp->next;
+        }
+        temp_1 = temp;
+        temp->CHAT_ID = CHAT_ID;
+        temp = temp->next;
+        temp = malloc(sizeof(CHAT_T));
+        temp->name_chat = strdup(name);
+        temp->message_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        temp->chat_button = gtk_button_new_with_label(temp->name_chat);
+        if (strcmp(name, "Favorite") == 0) {
+            gtk_widget_set_name(GTK_WIDGET(temp->chat_button), "main_menu_key");
+        }
+        else {
+            gtk_widget_set_name(GTK_WIDGET(temp->chat_button), "chat");
+        }
+        temp->messages = NULL;
+        temp->next = NULL;
+        temp_1->next = temp;
+        new_chat = temp;
+    }
 }
 CHAT_T* mx_create_new_chat(char* name, int CHAT_ID) {
     CHAT_T *temp = malloc(sizeof(CHAT_T));
@@ -136,21 +239,15 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender) {
         while (temp->next != NULL){
             temp = temp->next;
         }
-        mx_printerrln("OOO");
         temp_1 = temp;
         temp = temp->next;
-        mx_printerrln("OOO");
         temp = malloc(sizeof(MESSAGE_T));
-        mx_printerrln("OOO");
         temp->message_text = strdup(text);
         temp->sender = strdup(sender);
-        mx_printerrln("OOO");
         //temp->text_label = gtk_label_new(text);
         set_label(&temp, text, sender);
         temp_1->next = temp;
-        mx_printerrln("OOO");
         temp->next = NULL;
-        mx_printerrln("OOO");
         if (strcmp(sender, USER_LOGIN) == 0)
             gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_my");
         else
@@ -188,9 +285,7 @@ if (message == NULL) {
     //download from server
 }
 else {
-        mx_printerrln("WTD?");
     add_new_message(&(*chat)->messages, message, sender);
-        mx_printerrln("WTD?");
     gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), mx_take_last_message((*chat)->messages)->text_label, FALSE, FALSE, 5);
 }
 
@@ -258,6 +353,9 @@ void search_dialog(GtkWidget *button, gpointer data) {
 
 void select_chat(GtkWidget *button, gpointer data) {
     CHAT_T *used_chat = data;
+    if (used_chat->messages == NULL) {
+        download_message_in_chat(used_chat);
+    }
     if (strcmp(used_chat->name_chat, OPENED_DIALOG) == 0) { // Если мы кликнулы на тот диалог что у нас уже открыт
         return;
     }
@@ -275,7 +373,7 @@ void select_chat(GtkWidget *button, gpointer data) {
     OPENED_DIALOG = strdup(used_chat->name_chat);
     gtk_label_set_text(GTK_LABEL(collocutor_name), OPENED_DIALOG); // Имя для собеседника
     select_chat_on_off(used_chat,'+'); // подсветка
-
+    
     gtk_widget_hide(will_hide);
     gtk_widget_show_all(will_show);
     scrolling();

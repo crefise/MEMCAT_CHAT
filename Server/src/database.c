@@ -454,7 +454,7 @@ char** get_messages_from_CHAT(int chat_id) {
       char* date_time = (char*)sqlite3_column_text(result, 2);
       char* message = (char*)sqlite3_column_text(result, 3);
 
-      char* temp = sqlite3_mprintf("%i/%i/%i/%s/%s", chat_id, author_id, message_id, date_time, message);
+      char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
 
       messages[i] = "";
       messages[i] = concat(messages[i], temp);
