@@ -62,6 +62,10 @@ CHAT_T* mx_get_index_chat(CHAT_T *chat, int index) {
 }
 
 void download_message_in_chat(CHAT_T *chat) {
+    if (strcmp(chat->name_chat, FAVORITE_CHAT->name_chat) == 0) {
+        mx_printerrln("is favorite chat... stoping...");
+        return;
+    }
     PAUSE = 1;
 
     char *buffer = "";
@@ -353,7 +357,8 @@ void search_dialog(GtkWidget *button, gpointer data) {
 
 void select_chat(GtkWidget *button, gpointer data) {
     CHAT_T *used_chat = data;
-    if (used_chat->messages == NULL) {
+    if (!used_chat->messages) {
+        mx_printerrln("downloading messages....");
         download_message_in_chat(used_chat);
     }
     if (strcmp(used_chat->name_chat, OPENED_DIALOG) == 0) { // Если мы кликнулы на тот диалог что у нас уже открыт

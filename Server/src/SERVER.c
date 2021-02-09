@@ -41,24 +41,6 @@ int main() {
             "    MESSAGE TEXT NOT NULL,"\
             "    AUTHOR_ID INT NOT NULL);");
 
-    add_user_to_USERS("test_user1", "a");
-    add_user_to_USERS("test_user2", "a");
-    add_user_to_USERS("test_user3", "a");
-    add_user_to_USERS("test_user4", "a");
-    add_user_to_USERS("test_user5", "a");
-    add_user_to_USERS("test_user6", "a");
-
-    add_chat_to_CHATS("test_user1", "test_user2");
-    add_chat_to_CHATS("test_user1", "test_user2");
-    add_chat_to_CHATS("test_user2", "test_user1");
-    add_chat_to_CHATS("test_user1", "test_user3");
-    add_chat_to_CHATS("test_user5", "test_user6");
-
-    delete_user_from_USERS("test_user4");
-    delete_user_from_USERS("test_user4");
-    
-    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user6"), "Hellou bruh");
-    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user5"), "Hello man");
 
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
@@ -72,11 +54,11 @@ int main() {
     }
     double_free(chats);
     mx_printerr("-----chat test_user5's id_1-----\n");
-    char** messages = get_messages_from_CHAT(3);
-    for (int i = 0; messages != NULL && messages[i] != NULL; i++) {
-        mx_printerrln(messages[i]);
-    }
-    double_free(messages);
+    //char** messages = get_all_messages_from_CHAT();
+    //for (int i = 0; messages != NULL && messages[i] != NULL; i++) {
+        //mx_printerrln(messages[i]);
+    //}
+    //double_free(messages);
     mx_printerr("======== ALL DB =========\n");
 
     print_emoji("😍");

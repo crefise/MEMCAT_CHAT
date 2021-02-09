@@ -123,22 +123,21 @@ void send_message(GtkWidget *button, gpointer data) {
     if(text && strlen(text) > 0) {
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
-
-
-        buffer = concat("message/", used_chat->name_chat);
-        buffer = concat(buffer, "/");
-        buffer = concat(buffer, i_to_s(used_chat->CHAT_ID));
-        buffer = concat(buffer, "/");
-        buffer = concat(buffer, text);
-        mx_printerr("PARSE STR:  |");
-        mx_printerr(buffer);
-        mx_printerr("\n");
-        if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
-            mx_printerrln("ERROR SENDING MESSAGE\n");
-        } 
-        mx_printerrln("SENDING SUCCSESS");
-        // send massage to server
-
+        if (strcmp(FAVORITE_CHAT->name_chat, used_chat->name_chat) != 0) {
+            buffer = concat("message/", used_chat->name_chat);
+            buffer = concat(buffer, "/");
+            buffer = concat(buffer, i_to_s(used_chat->CHAT_ID));
+            buffer = concat(buffer, "/");
+            buffer = concat(buffer, text);
+            mx_printerr("PARSE STR:  |");
+            mx_printerr(buffer);
+            mx_printerr("\n");
+            if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
+                mx_printerrln("ERROR SENDING MESSAGE\n");
+            } 
+            mx_printerrln("SENDING SUCCSESS");
+            // send massage to server
+        }
     }
     mx_update_used_chat(used_chat);
     scrolling();
