@@ -136,6 +136,7 @@ send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
     gtk_widget_set_name(GTK_WIDGET(setting_str), "setting_str");
     gtk_widget_set_name(GTK_WIDGET(setting_key), "main_menu_key");
     gtk_widget_set_name(GTK_WIDGET(collocutor_name), "collocutor_name");
+    gtk_widget_set_name(GTK_WIDGET(input_key), "input_key");
 
 
 // PACK ALL
@@ -145,10 +146,10 @@ send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
 
     gtk_box_pack_start(GTK_BOX(message_box), setting_str, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 10);
+    gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 0);
 
-    gtk_box_pack_start(GTK_BOX(input_box), input_str, TRUE, TRUE, 2);
-    gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(input_box), input_str, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 0);
 
     gtk_box_pack_start(GTK_BOX(chats_box), search_box, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(chats_box), scrool_chats, TRUE, TRUE, 5);
@@ -174,8 +175,9 @@ send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
     gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
     gtk_container_add(GTK_CONTAINER(window), main_box);
-// CONTAIN ALL END
     gtk_container_add(GTK_CONTAINER(input_key), send_message_button_image);
+
+// CONTAIN ALL END
 
 
  

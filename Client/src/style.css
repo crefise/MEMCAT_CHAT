@@ -11,8 +11,9 @@ window
 entry
 {
     background:         rgb(36, 24, 24);
-    color:              rgb(154, 159, 192);
     font-size:          15px;
+    border: solid rgb(36, 24, 24);
+    border-radius: 0%;
 
 }
 
@@ -64,4 +65,14 @@ button
 {
     color:              rgb(218, 214, 34);
     font-size:          20px;  
+}
+#input_key 
+{
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    border: none;
+    background-color: rgb(36, 24, 24);
+    border-radius: 0;
 }
