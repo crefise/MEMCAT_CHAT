@@ -1,89 +1,14 @@
 #include "../inc/header.h"
 int PAUSE = 0;
 pthread_t *pthreads_check_in;
-void start_in_check_function() {
-    pthreads_check_in = malloc(sizeof(pthread_t));
-    pthread_create(pthreads_check_in, NULL, massage_check_in, &sock);
-}
-void exit_in_check_function() {
-    mx_printerrln("PTHREAD maybe  EXIT");
-    
-    pthread_exit(pthreads_check_in);
-    free(pthreads_check_in);
-    mx_printerrln("PTHREAD HAS EXIT");
-}
-
-void ps_massage_in(char *str) {
-    char *temp_1 = mx_strncpy(temp_1,  &str[8], strlen(str) - 8); // Обрезаем massage
-
-///////////////////////// GETTING LOGIN AND TEXT MMESSAGE//////////////////////////////////
-    int info_counter = 0;
-    for (int i = 0; temp_1[i] != '/'; i++)
-        info_counter++;
-    char *login = mx_strnew(info_counter);
-    login = strncpy(login, temp_1, info_counter);
-    char *temp_2 = mx_strnew(strlen(temp_1) - info_counter - 1);
-    temp_2 = strncpy(temp_2, &temp_1[info_counter+1], strlen(temp_1) - info_counter - 1);
-    mx_strdel(&temp_1);
-
-    info_counter = 0;
-    for (int i = 0; temp_2[i] != '/'; i++)
-        info_counter++;
-    char *chat_ID_char = mx_strnew(info_counter);
-    chat_ID_char = strncpy(chat_ID_char, temp_2, info_counter);
-
-    char *text_message = mx_strnew(strlen(temp_2) - info_counter - 1);
-    text_message = strncpy(text_message, &temp_2[info_counter+1], strlen(temp_2) - info_counter - 1);
-//////////////////////////////////////////////////////////////////////////////////////////
-/*
-    mx_printerrln("USED_CHECK");
-    mx_printerr("\n|");
-    mx_printerr(login);
-    mx_printerr("|\n");
-*/
-    CHAT_T *used_chat = mx_find_name_chat(MY_CHATS, login);
-    if (used_chat == NULL || !used_chat) {
-        mx_add_new_chat(&MY_CHATS,login, atoi(chat_ID_char));
-        used_chat = mx_find_name_chat(MY_CHATS, login);
-        gtk_box_pack_start(GTK_BOX(chats_list_box), used_chat->chat_button, FALSE, FALSE, 1);
-        gtk_container_add(GTK_CONTAINER(CONTAINER), used_chat->message_list_box);
-        g_signal_connect(G_OBJECT(used_chat->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)used_chat);
-        gtk_widget_show_all(window);
-
-    }
-    mx_fill_message_list_box(&used_chat, login, login, text_message);
-        mx_printerrln("USED_CHECK");
-    if (strcmp(OPENED_DIALOG, login) == 0) 
-        mx_update_used_chat(used_chat);
-    return;
-}
 
 
 
 
-void* massage_check_in(void* socket) {
-    mx_printerr("PTHREAD MASSAGE WAITER IS WORKING...\n");
-    int sock = *(int *)socket;
-    char *buffer = mx_strnew(256);
-    while(1==1) {
-        while (!PAUSE) {
-            if (recv(sock, &buffer[0], 256, MSG_DONTWAIT) == 0) {
-                mx_printerr("MASSAGE_CHECK_IN ERROR\n");
-                return NULL;
-            }
-            if (buffer[0] == 'm') {
-                mx_printerr("CHECK IN : ");
-                mx_printerrln(buffer);
-                ps_massage_in(buffer);
-                mx_strdel(&buffer);
-                buffer = mx_strnew(256);
-            }
-            continue;
-        }
-        //mx_printerr("PAUSE ");
-    }
-    return NULL;
-}
+
+
+
+
 
 static int check_console_style(char *str) {
     char send_command[6] = "/send ";

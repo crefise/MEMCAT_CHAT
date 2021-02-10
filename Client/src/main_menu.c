@@ -1,52 +1,5 @@
 #include "../inc/header.h"
-#include <ctype.h>
 
-GtkWidget *scrool_massages;
-
-void un_ps_chat(char *str) {
-    printf("str from un_ps_chat:\n%s\n", str);
-    if (!str) {
-        mx_printerr("NULL CHAT STR (un_ps_chat)\n");
-        return;
-    }
-    str = concat(str, ";");
-    int count_chat = 0;
-    for (int i = 0; str[i]; i++)
-        if (str[i] == ';')
-            count_chat++;
-
-    char **chats = malloc(sizeof(char*) * count_chat);
-    int begin_size = 0;
-
-    for (int i = 0; i < count_chat; i++) {
-        int size = 0;
-        while(str[begin_size + size] != ';' ) {
-            size++;
-        }
-        chats[i] = mx_strnew(size);
-        chats[i] = strncpy(chats[i], &str[begin_size], size);
-        begin_size += size;
-        begin_size++;
-    }
-
-    for (int i = 0; i < count_chat; i++) {
-        char *chat_ID_char;
-        char *chat_name;
-        int char_ID_int;
-        int temp_size = 0;
-
-        for (int z = 0; chats[i][z] != '/' && &chats[i][z] != NULL; z++)
-            temp_size++;
-
-        chat_ID_char = malloc(temp_size);
-        chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
-        chat_name = strndup(&chats[i][temp_size+1], strlen(&chats[i][temp_size+1]));
-        mx_printerrln("DJSAOJASJDASJDJKAS\n");
-        mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));        
-    }
-    
-    
-}
 
 void download_all_chat(CHAT_T* chats) {
     PAUSE = 1;
@@ -73,7 +26,7 @@ void download_all_chat(CHAT_T* chats) {
         return;
     }
     else {
-        un_ps_chat(buffer);
+        mx_ps_off_chat_message(buffer);
     }
     PAUSE = 0;
 }
@@ -105,44 +58,6 @@ void scrolling()
     gtk_adjustment_set_value(adj, value);
 }
 
-
-
-void send_message(GtkWidget *button, gpointer data) {
-    char *buffer = NULL;
-    //struct message_struct *messages = input;
-    GtkWidget *input_str = data;
-    CHAT_T *used_chat = NULL;
-    if (strcmp(OPENED_DIALOG, FAVORIDE_CHAT_DEFINE) == 0) {
-        used_chat = FAVORITE_CHAT; 
-    }
-    else {
-        used_chat = mx_find_name_chat(MY_CHATS, OPENED_DIALOG);
-    }
-
-    char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(input_str)));
-    if(text && strlen(text) > 0) {
-        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
-        gtk_entry_set_text(GTK_ENTRY(input_str), "");
-        if (strcmp(FAVORITE_CHAT->name_chat, used_chat->name_chat) != 0) {
-            buffer = concat("message/", used_chat->name_chat);
-            buffer = concat(buffer, "/");
-            buffer = concat(buffer, i_to_s(used_chat->CHAT_ID));
-            buffer = concat(buffer, "/");
-            buffer = concat(buffer, text);
-            mx_printerr("PARSE STR:  |");
-            mx_printerr(buffer);
-            mx_printerr("\n");
-            if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
-                mx_printerrln("ERROR SENDING MESSAGE\n");
-            } 
-            mx_printerrln("SENDING SUCCSESS");
-            // send massage to server
-        }
-    }
-    mx_update_used_chat(used_chat);
-    scrolling();
-    free(buffer);
-}
 
 void main_menu() {
    
@@ -258,13 +173,13 @@ void main_menu() {
 
 
 // SIGNAL
-    g_signal_connect(input_key, "clicked", G_CALLBACK (send_message), input_str);
+    g_signal_connect(input_key, "clicked", G_CALLBACK (mx_send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
       g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
-    g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);
-        
-    g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(search_dialog), (gpointer)search_str);
+    
+    g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
+    g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
 //END SIGNAL
 
 

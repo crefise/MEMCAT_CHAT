@@ -19,6 +19,8 @@
 #include <netdb.h>
 #include <pthread.h>
 #include <ctype.h>
+#include <ctype.h>
+
 
 
 /*gtk_function.c*/
@@ -73,11 +75,10 @@ bool curr_sybmobol(char *str);
 
 /* socket_function */
 extern int sock;
-void initializate_socket();
+void mx_initializate_socket();
 /* END socket_function */
 
 /* PTHREAD_FUNCTION.c */
-void *massage_check_in(void * sock);
 void *console_style();
 
 extern GtkWidget *stack;
@@ -119,7 +120,6 @@ CHAT_T* mx_find_name_chat(CHAT_T *chat, char* name);
 MESSAGE_T* mx_take_last_message(MESSAGE_T *message);
 void mx_update_used_chat(CHAT_T *used_chat);
 void select_chat_on_off(CHAT_T *chat, char mode);
-void search_dialog(GtkWidget *button, gpointer data);
 void select_chat(GtkWidget *button, gpointer data);
 extern char* USER_LOGIN;
 extern char *OPENED_DIALOG;
@@ -128,7 +128,7 @@ extern CHAT_T *FAVORITE_CHAT;
 extern GtkWidget *collocutor_name;
 extern GtkWidget *chats_list_box;
 extern GtkWidget *CONTAINER;
-
+extern GtkWidget *scrool_massages;
 extern GtkWidget *window; // my window
 
 
@@ -139,4 +139,23 @@ extern int PAUSE;
 
 void exit_in_check_function();
 void start_in_check_function();
+
+
+// PARSE
+void mx_ps_off_chat_message(char *str);
+void mx_ps_message_that_in(char *str);
+// PARSE OFF
+
+// CHATS
+void mx_search_dialog(GtkWidget *button, gpointer data);
+// CHATS END
+
+
+
+// MESSAGES
+void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat);
+void mx_download_message_in_chat(CHAT_T *chat);
+void mx_send_message(GtkWidget *button, gpointer data);
+void* mx_massage_check_in(void* socket);
+// MESSAGES END
 #endif

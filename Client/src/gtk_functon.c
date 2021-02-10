@@ -249,7 +249,7 @@ void login_connect(GtkWidget *button, gpointer data) {
             write(2, "LOGIN OKAY\n",11);
             USER_LOGIN = strdup(login);
             pthread_t pthreads[1];
-            pthread_create(&pthreads[0], NULL, massage_check_in, &sock);
+            pthread_create(&pthreads[0], NULL, mx_massage_check_in, &sock);
             pthread_create(&pthreads[0], NULL, console_style, NULL);
             gtk_widget_hide(login_window);
             main_menu();

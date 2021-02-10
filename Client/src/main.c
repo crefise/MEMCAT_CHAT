@@ -3,9 +3,9 @@
 int sock;
 GtkWidget *stack;
 GtkWidget *login_window;
-
+GtkWidget *scrool_massages;
 int main ( void ) {
-    initializate_socket();
+    mx_initializate_socket();
     if (sock == -1)
         mx_printerr("NO_CONNECT_TO_SERVER\n");
 

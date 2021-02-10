@@ -1,50 +1,6 @@
 #include "../inc/header.h"
 
-void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
-    int counter = 0, const_temp = 0;
-    for (int i = 0; buffer[const_temp+i] != '/'; i++)
-        counter++;
-    char *CHAT_ID_CHAR = mx_strnew(counter);
-    CHAT_ID_CHAR = strncpy(CHAT_ID_CHAR, &buffer[const_temp], counter);
-    const_temp += (counter + 1);
-    counter = 0;
 
-
-    for (int i = 0; buffer[const_temp+i] != '/'; i++)
-        counter++;
-    char* login = mx_strnew(counter);
-    CHAT_ID_CHAR = strncpy(login, &buffer[const_temp], counter);
-    const_temp += (counter + 1);
-    counter = 0;
-    for (int i = 0; buffer[const_temp+i] != '/'; i++)
-        counter++;
-    char* message_id = mx_strnew(counter);
-    message_id = strncpy(message_id, &buffer[const_temp], counter);
-    const_temp += (counter + 1);
-    counter = 0;
-
-
-    for (int i = 0; buffer[const_temp+i] != '/'; i++)
-        counter++;
-    char* data = mx_strnew(counter);
-    data = strncpy(data, &buffer[const_temp], counter);
-    const_temp += (counter + 1);
-    counter = 0;
-
-    char *message = mx_strnew(strlen(buffer) - const_temp);
-    message = mx_strncpy(message, &buffer[const_temp], strlen(buffer) - const_temp);
-
-
-    add_new_message(&(chat->messages), message, login);
-    gtk_box_pack_start(GTK_BOX(chat->message_list_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   
-
-    //mx_strdel(&CHAT_ID_CHAR);
-    mx_strdel(&login);
-    mx_strdel(&message_id);
-    mx_strdel(&data);
-    mx_strdel(&message);
-    
-}
 
 
 CHAT_T* mx_get_index_chat(CHAT_T *chat, int index) {
@@ -59,59 +15,6 @@ CHAT_T* mx_get_index_chat(CHAT_T *chat, int index) {
     }
    // write(2, "Index error(mx_get_index_chat())\n", 33);
     return NULL;
-}
-
-void download_message_in_chat(CHAT_T *chat) {
-    if (strcmp(chat->name_chat, FAVORITE_CHAT->name_chat) == 0) {
-        mx_printerrln("is favorite chat... stoping...");
-        return;
-    }
-    PAUSE = 1;
-    mx_printerr("CHECK CHAT ID NOW IS "); mx_printerr(i_to_s(chat->CHAT_ID)); mx_printerr(" AND CHAT NOW IS "); mx_printerrln(chat->name_chat);
-    char *buffer = "";
-    buffer = concat(buffer, "text/");
-    buffer = concat(buffer, i_to_s(chat->CHAT_ID));
-    mx_printerr("WILL SEND IF WANT UPDATE : "); mx_printerrln(buffer);
-    if (send(sock, buffer, strlen(buffer), 0) == 0) {
-        mx_printerrln("ERROR SENDING(download_message_in_chat)");
-    }
-    else {
-        printf("Testing getting mass\n");
-        int32_t ret;
-        char *data = (char*)&ret;
-        int left = sizeof(ret);
-        int rc;
-        do {
-            rc = read(sock, data, left);
-            if (rc <= 0) {
-                if ((errno == EAGAIN) || (errno == EWOULDBLOCK)) {
-                    // use select() or epoll() to wait for the socket to be readable again
-                }
-                else if (errno != EINTR) {}
-            }
-            else {
-                data += rc;
-                left -= rc;
-            }
-        }
-        while (left > 0);
-        int messages_c = ntohl(ret);
-        mx_printerr("INT : ");
-        mx_printerrln(i_to_s(messages_c));
-        
-        for (int i = 0; i < messages_c; i++) {
-            char* buffer2 = mx_strnew(256);
-            if (recv(sock, &buffer2[0], 256, 0) == 0) {
-                mx_printerrln("CLOSE CONNECTION");
-            }
-            mx_printerrln(buffer2);
-            mx_load_dowloaded_messages(buffer2, chat);
-            mx_strdel(&buffer2);
-        }
-    }
-
-    mx_printerrln("END...");
-   PAUSE = 0;
 }
 
 
@@ -286,17 +189,7 @@ MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index){
    // write(2, "Index error(mx_get_index_message())\n", 36);
     return NULL;
 }
-void mx_fill_message_list_box(CHAT_T **chat, char *login, char *sender, char* message) { // WILL DO
-if (message == NULL) {
-    //download from server
-}
-else {
-    add_new_message(&(*chat)->messages, message, sender);
-    gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), mx_take_last_message((*chat)->messages)->text_label, FALSE, FALSE, 5);
-}
 
-
-}
 
 
 void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и выключения подсветки для чата
@@ -318,44 +211,6 @@ void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и в�
     }
 }
 
-void search_dialog(GtkWidget *button, gpointer data) {
-    PAUSE = 1;
-  GtkWidget *search_str = data;
-  char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(search_str)));
-  if (strlen(text) == 0 || mx_find_name_chat(MY_CHATS, text) != NULL || strcmp(USER_LOGIN, text) == 0) {
-      mx_printerr("CHAT EXIST or CHAT NAME is YOUR LOGIN\n");
-      // CAHT IS EXIST ERROR
-      mx_strdel(&text);
-  } 
-  else {
-    char *buffer = malloc(256); 
-    char *will_send = concat(concat(concat(concat("isuser[", text), "/"), USER_LOGIN), "]");
-    gtk_entry_set_text(GTK_ENTRY(search_str), "");
-    if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
-        write(2, "SERVER DONT CONNETCTED\n",23);
-    }
-    if (recv(sock, &buffer[0], 256, 0) == 0) {
-        write(2, "SERVER DONT CONNETCTED\n",23);
-    }
-
-    if (atoi(buffer)) {
-        mx_add_new_chat(&MY_CHATS, text, atoi(buffer));
-        gtk_box_pack_start(GTK_BOX(chats_list_box), mx_find_name_chat(MY_CHATS, text)->chat_button, FALSE, FALSE, 1);
-        gtk_container_add(GTK_CONTAINER(CONTAINER), mx_find_name_chat(MY_CHATS, text)->message_list_box);
-        g_signal_connect(G_OBJECT(mx_find_name_chat(MY_CHATS, text)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_find_name_chat(MY_CHATS, text));
-        gtk_widget_show_all(window);
-    } 
-    else {
-        mx_printerr("ERROR CREATING DIALOG");
-    }
-
-
-    mx_strdel(&buffer);
-    mx_strdel(&text);
-
-  }
-      PAUSE = 0;
-}
 
 void select_chat(GtkWidget *button, gpointer data) {
     
@@ -363,7 +218,7 @@ void select_chat(GtkWidget *button, gpointer data) {
     mx_printerr(" SELECT CHAT CHAT_ID HERE : "); mx_printerr(i_to_s(used_chat->CHAT_ID)); mx_printerr(" CHAT NAME NOW IS : "); mx_printerrln(used_chat->name_chat);
     if (!used_chat->messages) {
         mx_printerrln("downloading messages....");
-        download_message_in_chat(used_chat);
+        mx_download_message_in_chat(used_chat);
     }
     if (strcmp(used_chat->name_chat, OPENED_DIALOG) == 0) { // Если мы кликнулы на тот диалог что у нас уже открыт
         return;

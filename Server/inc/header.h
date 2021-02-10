@@ -102,3 +102,6 @@ void set_console_color(char* color);
 void print_emoji(char* emoji);
 
 #endif
+
+
+// Подключить функциюю которая будет подключать ентри поле ( на энтер издает сигнал активате) и потом через г сигнал
