@@ -226,7 +226,7 @@ void login_connect(GtkWidget *button, gpointer data) {
     buffer = concat(buffer,login);
     buffer = concat(buffer,password);
 
-    if (!curr_sybmobol(login) || !curr_sybmobol(password)){ // проверка на коректность ввода
+    if (!mx_check_curr_sybmobol(login) || !mx_check_curr_sybmobol(password)){ // проверка на коректность ввода
         gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD SYMBOL");
         return;
     }
@@ -277,7 +277,7 @@ void register_connect(GtkWidget *button, gpointer data) {
         return;
     }
 
-    if (!curr_sybmobol(login) || !curr_sybmobol(password) || !curr_sybmobol(password_repeat)){ // проверка на коректность ввода
+    if (!mx_check_curr_sybmobol(login) || !mx_check_curr_sybmobol(password) || !mx_check_curr_sybmobol(password_repeat)){ // проверка на коректность ввода
         gtk_label_set_text(GTK_LABEL(temp->label_error), "BAD SYMBOL");
         return;
     }

@@ -69,7 +69,7 @@ void mx_printerrln(const char *s);
 /* END string.c */
 
 /* help_function.c */
-bool curr_sybmobol(char *str);
+bool mx_check_curr_sybmobol(char *str);
 /* END help_function.c */
 
 
@@ -86,7 +86,7 @@ extern GtkWidget *stack;
 
 char *mx_strnew(const int size);
 
-
+extern struct sockaddr_in serv_addr;
 
 
 typedef struct MESSAGE_S 
@@ -108,7 +108,7 @@ typedef struct CHAT_S
     int CHAT_ID;
 }              CHAT_T;
 
-
+void mx_reconect();
 
 CHAT_T* mx_get_index_chat(CHAT_T *chat, int index);
 void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID);
@@ -130,8 +130,9 @@ extern GtkWidget *chats_list_box;
 extern GtkWidget *CONTAINER;
 extern GtkWidget *scrool_massages;
 extern GtkWidget *window; // my window
-
-
+extern GtkWidget *chats_box;
+extern GtkWidget *message_box;
+extern GtkWidget *reconnect_widget;
 
 
 extern int PAUSE;
@@ -148,6 +149,7 @@ void mx_ps_message_that_in(char *str);
 
 // CHATS
 void mx_search_dialog(GtkWidget *button, gpointer data);
+void mx_download_all_chat(CHAT_T* chats);
 // CHATS END
 
 

@@ -1,44 +1,17 @@
 #include "../inc/header.h"
 
 
-void download_all_chat(CHAT_T* chats) {
-    PAUSE = 1;
-    char *buffer = concat(concat("dialogs[", USER_LOGIN), "]");
-    printf("Download all chat: buffer = %s\n", buffer);
-    if (send(sock, buffer, strlen(buffer), 0) == -1) { // send data to server
-        write(2, "SERVER DONT CONNETCTED\n",23);
-    } 
-
-    mx_strdel(&buffer);
-    buffer = mx_strnew(256);
-
-    if (recv(sock, &buffer[0], 256, 0) == 0) {
-        mx_printerr("ERROR SERVER CONNECTIONS (download all chat)\n");
-    }
-
-
-
-
-    printf("Client got: buffer = %s\n", buffer);
-    if (strcmp(buffer, "-") == 0) {
-        mx_printerr("NULL CHATS");
-        PAUSE = 0;
-        return;
-    }
-    else {
-        mx_ps_off_chat_message(buffer);
-    }
-    PAUSE = 0;
-}
-
-
-
 
 void select_chat(GtkWidget *button, gpointer data);
 
 GtkWidget *chats_list_box = NULL;
 GtkWidget *CONTAINER = NULL;
 GtkWidget *window; // my window
+GtkWidget *chats_box;
+GtkWidget *message_box;
+GtkWidget *reconnect_widget;
+
+
 char *OPENED_DIALOG;
 
 #define SIZE 4
@@ -58,10 +31,9 @@ void scrolling()
     gtk_adjustment_set_value(adj, value);
 }
 
-
 void main_menu() {
    
-    GtkWidget *main_box, *message_box, *input_box, *search_box, *chats_box; // Боксы 
+    GtkWidget *main_box, *input_box, *search_box, *chats_box; // Боксы 
     GtkWidget *input_key, *input_str;// for imput_box
     GtkWidget *search_str, *search_key;
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
@@ -70,11 +42,14 @@ void main_menu() {
     GtkWidget* search_chat_box;
     GtkWidget* main_menu_box;
 
+    //animation 
+    GdkPixbufAnimation* reconnect_animation_GIF;
+    GtkWidget* reconnect_animation_IMG;
 
     GtkWidget *send_message_button_image;
     GtkWidget *search_key_image;
- 
- 
+
+    
     gtk_init(NULL, NULL);
     load_css();
     
@@ -90,7 +65,7 @@ void main_menu() {
   // Делаем запрос на сервер что нужны чаты конкретного пользователя
   // Сервер присылает все чаты и мы их пакуем
     FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);
-    download_all_chat(MY_CHATS);
+    mx_download_all_chat(MY_CHATS);
     OPENED_DIALOG = strdup("Favorite");
     select_chat_on_off(FAVORITE_CHAT,'+'); // подсветка
 
@@ -121,6 +96,9 @@ void main_menu() {
 
     collocutor_name = gtk_label_new("Favorite");
 
+
+    reconnect_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
 // END CREATE NEW THING
 
 // DOWNLOAD IMG
@@ -129,8 +107,9 @@ search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
 
 // END DOWNLOAD IMG
 
-
-
+reconnect_animation_GIF = gdk_pixbuf_animation_new_from_file ("Client/GIFS/reconnect.gif", NULL);
+reconnect_animation_IMG = gtk_image_new();
+gtk_image_set_from_animation (GTK_IMAGE(reconnect_animation_IMG), reconnect_animation_GIF);
 
 //SETNAME
     gtk_widget_set_name(GTK_WIDGET(chats_box), "chats_box"); // SETNAME FOR CHATLIST BOX
@@ -147,11 +126,12 @@ search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
     gtk_widget_set_name(GTK_WIDGET(search_str), "search_str");
 
 
-
+//main_menu_box
 // PACK ALL
     gtk_box_pack_start(GTK_BOX(main_box), chats_box, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
-
+    gtk_box_pack_start(GTK_BOX(main_box), reconnect_widget, TRUE, TRUE, 0);
+    
 
     gtk_box_pack_start(GTK_BOX(message_box), setting_str, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
@@ -173,6 +153,12 @@ search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
     for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
         gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
     }
+
+    gtk_box_pack_start(GTK_BOX(reconnect_widget), reconnect_animation_IMG, TRUE, TRUE, 0);
+
+
+    //gtk_container_add(GTK_CONTAINER(window), reconnect_widget); 
+    
 // END PACK
 
 // CONTAIN ALL
@@ -191,15 +177,15 @@ search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
 // CONTAIN ALL END
 
 
- 
-   gtk_widget_show_all(window);
 
+    gtk_widget_show_all(window);
+    gtk_widget_hide(reconnect_widget);
 
 // SIGNAL
     g_signal_connect(input_key, "clicked", G_CALLBACK (mx_send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
-      g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
+        g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
     
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);

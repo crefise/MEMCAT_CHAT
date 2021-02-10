@@ -7,8 +7,9 @@ void* mx_massage_check_in(void* socket) {
     while(1==1) {
         while (!PAUSE) {
             if (recv(sock, &buffer[0], 256, MSG_DONTWAIT) == 0) {
-                mx_printerr("MASSAGE_CHECK_IN ERROR\n");
-                return NULL;
+                mx_printerr("MASSAGE_CHECK_IN ERROR\n Starting reconnect....\n");
+                mx_reconect();
+                continue;
             }
             if (buffer[0] == 'm') {
                 mx_printerr("CHECK IN : ");

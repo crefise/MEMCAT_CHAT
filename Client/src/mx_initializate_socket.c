@@ -1,7 +1,6 @@
 #include "../inc/header.h"
-
+struct sockaddr_in serv_addr;
 void mx_initializate_socket(){
-    struct sockaddr_in serv_addr;
     struct hostent *server;
     sock = socket(AF_INET, SOCK_STREAM, 0); // Сокет который ведет к серверу
     struct sockaddr_in dest_addr;
