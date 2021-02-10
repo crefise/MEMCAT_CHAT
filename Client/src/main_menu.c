@@ -10,7 +10,7 @@ GtkWidget *window; // my window
 GtkWidget *chats_box;
 GtkWidget *message_box;
 GtkWidget *reconnect_widget;
-
+GtkWidget *main_box;
 
 char *OPENED_DIALOG;
 
@@ -33,7 +33,7 @@ void scrolling()
 
 void main_menu() {
    
-    GtkWidget *main_box, *input_box, *search_box, *chats_box; // Боксы 
+    GtkWidget *input_box, *search_box, *chats_box; // Боксы 
     GtkWidget *input_key, *input_str;// for imput_box
     GtkWidget *search_str, *search_key;
     GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
@@ -42,9 +42,10 @@ void main_menu() {
     GtkWidget* search_chat_box;
     GtkWidget* main_menu_box;
 
-    //animation 
+    //reconnect
     GdkPixbufAnimation* reconnect_animation_GIF;
     GtkWidget* reconnect_animation_IMG;
+    GtkWidget *reconect_label;
 
     GtkWidget *send_message_button_image;
     GtkWidget *search_key_image;
@@ -98,6 +99,7 @@ void main_menu() {
 
 
     reconnect_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    reconect_label = gtk_label_new("Reconnecting....");
 
 // END CREATE NEW THING
 
@@ -125,12 +127,21 @@ gtk_image_set_from_animation (GTK_IMAGE(reconnect_animation_IMG), reconnect_anim
     gtk_widget_set_name(GTK_WIDGET(search_key), "search_key");
     gtk_widget_set_name(GTK_WIDGET(search_str), "search_str");
 
+    gtk_widget_set_name(GTK_WIDGET(reconect_label), "reconect_label");
+
 
 //main_menu_box
 // PACK ALL
+
+
+    gtk_box_pack_start(GTK_BOX(main_menu_box), main_box, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(main_menu_box), reconnect_widget, TRUE, TRUE, 0);
+
+    gtk_box_pack_end(GTK_BOX(reconnect_widget), reconect_label, TRUE, TRUE, 0);
+
     gtk_box_pack_start(GTK_BOX(main_box), chats_box, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(main_box), reconnect_widget, TRUE, TRUE, 0);
+
     
 
     gtk_box_pack_start(GTK_BOX(message_box), setting_str, FALSE, FALSE, 0);
@@ -169,7 +180,7 @@ gtk_image_set_from_animation (GTK_IMAGE(reconnect_animation_IMG), reconnect_anim
     }
     gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
-    gtk_container_add(GTK_CONTAINER(window), main_box);
+    gtk_container_add(GTK_CONTAINER(window), main_menu_box);
     gtk_container_add(GTK_CONTAINER(input_key), send_message_button_image);
     gtk_container_add(GTK_CONTAINER(search_key), search_key_image);
     

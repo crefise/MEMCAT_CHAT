@@ -133,7 +133,7 @@ extern GtkWidget *window; // my window
 extern GtkWidget *chats_box;
 extern GtkWidget *message_box;
 extern GtkWidget *reconnect_widget;
-
+extern GtkWidget *main_box;
 
 extern int PAUSE;
 
