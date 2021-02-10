@@ -12,8 +12,8 @@ int main ( void ) {
     GtkWidget *login_box;
     GtkWidget *login_grid;
     GtkWidget *register_grid;
-
     GtkWidget *stack_box;
+
 
 
     /// ***

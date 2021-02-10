@@ -70,6 +70,8 @@ void main_menu() {
     GtkWidget* search_chat_box;
     GtkWidget* main_menu_box;
 
+
+    GtkWidget *send_message_button_image;
     
  
  
@@ -96,7 +98,8 @@ void main_menu() {
     setting_key = gtk_button_new_with_label("SETTINGS");
 
 // CREATE NEW THING
-    input_key = gtk_button_new_with_label("SEND");
+    input_key = gtk_button_new();
+    //input_key = gtk_button_new_with_label("SEND");
     input_str = gtk_entry_new();
 
     search_key = gtk_button_new_with_label("SEARCH");
@@ -119,6 +122,13 @@ void main_menu() {
     collocutor_name = gtk_label_new("Favorite");
 
 // END CREATE NEW THING
+
+// DOWNLOAD IMG
+send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
+
+// END DOWNLOAD IMG
+
+
 
 
 //SETNAME
@@ -165,7 +175,7 @@ void main_menu() {
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
     gtk_container_add(GTK_CONTAINER(window), main_box);
 // CONTAIN ALL END
-
+    gtk_container_add(GTK_CONTAINER(input_key), send_message_button_image);
 
 
  
