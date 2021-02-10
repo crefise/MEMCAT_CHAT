@@ -1,85 +1,172 @@
+
 window
 {
-    background-color:   #524f74;
+    background: linear-gradient(to top, #6743b9, #8ecafc);
 }
 
-#setting_str 
-{
-    background-color: rgb(48, 46, 46);
-}
+
 
 entry
 {
-    background:         rgb(117, 100, 100);
+    background:        none;
+    border-color: rgb(231, 223, 223);
     font-size:          15px;
-    border: solid rgb(36, 24, 24);
-    border-radius: 0%;
+    border-radius: 5px;
+    box-shadow: 0 0 2px 1px whitesmoke;
+
 
 }
-label {
-    color: rgb(206, 195, 195);
+label 
+{    
+    color: rgb(231, 223, 223);
     font-size: 20px;
 }
+
+button 
+{
+
+    text-shadow: none;
+    text-decoration: none;
+    background: none;
+    box-shadow: 0 0 2px 1px whitesmoke;
+}
+
+
+
+
+/* MAIN BOX */
 #chats_box 
 {
-    background-color: rgb(18, 22, 18);
+    background: linear-gradient(to right, #214ab9, #4470e9);
+    border: #1129ff;
 }
+#message_box 
+{
+    background: linear-gradient(to right, #97b2fc, #bfcffa);
+}
+/* END MAIN BOX */
+
+
+/* CHAT BOX */
+#chat 
+{       
+    background: none;
+    font-size:          30px;
+    border-radius:             0;
+    border : none;
+ 
+
+}
+
+#chat_active 
+{
+    background: none;
+    font-size:          30px;
+    border-radius:             0;
+    box-shadow: 0 0 5px 2px whitesmoke;
+    
+}
+#main_menu_key_active 
+{
+    background: none;
+    font-size:          30px;
+    border-radius:             0;
+    box-shadow: 0 0 5px 2px whitesmoke;
+}
+/* END CHAT BOX */
+
+
+
+#setting_str 
+{
+  
+}
+
+
+/* MESSAGE BOX */
 #message_my
 {
-    background:         rgb(20, 4, 4);
-    color:              rgb(188, 191, 207);
-    font-size:          15px;
+    background: #b5bdc8;
+    background:rgb(87, 40, 141);
+    font-size: 16px; 
+    padding: 10px; 
+    box-shadow: 5px 5px 5px rgba(32, 32, 32, 0.6);
+    color: #fff; 
+    border: 1px solid rgb(41, 41, 41); 
+    border-radius: 10px; 
     margin-left:        100px;
 }
 #message_interlocutor
 {
-    background:         rgb(145, 119, 119);
-    color:              rgb(255, 255, 255);
-    font-size:          15px;
+    background: #b5bdc8;
+    background:rgb(28, 129, 33);
+    font-size: 16px; 
+    padding: 10px; 
+    box-shadow: 5px 5px 5px rgba(161, 35, 35, 0.6);
+    color: #fff; 
+    border: 1px solid rgb(41, 41, 41); 
+    border-radius: 10px; 
     margin-right:        100px;
 }
-#chat 
-{
-    background:         rgb(20, 4, 4);
-    color:              rgb(188, 191, 207);
-    font-size:          30px;
-    border:             solid 2px rgb(51, 44, 44);
-}
-button 
-{
-    
-    
-    text-shadow: none;
-    text-decoration: none;
-    background: none;
-    color : rgb(255, 255, 255);
-}
-#chat_active 
-{
-    background:         rgb(20, 4, 4);
-    color:              rgb(188, 191, 207);
-    font-size:          30px;
-    border:             solid 2px rgb(238, 215, 14); 
+/* END MESSAGE BOX */
 
-}
-#main_menu_key_active 
-{
-    background: rgb(54, 51, 51);
-    color : rgb(255, 255, 255);
-    border:             solid 1px rgb(238, 215, 14); 
-}
+
+
 #collocutor_name 
 {
     color:              rgb(218, 214, 34);
     font-size:          20px;  
 }
+
+
+
+
+/* INPUT BOX */
 #input_key 
 {
     outline: none;
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    border: none;
-    background-color: rgb(36, 24, 24);
     border-radius: 0;
+
+
+    border: solid 2px white;
+    border-left: none;
+}
+#input_str 
+{
+    background: none;
+    border: solid 2px white;
+    border-radius: 0;
+    box-shadow: none;
+    border-right: none;
+}
+/* END  INPUT BOX */
+
+
+
+/* SEARCH BOX */
+#search_key {
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    border: solid 2px white;
+    border-radius: 0%;
+    border-left: none;
+}
+#search_str {
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    border: solid 2px white;
+    border-radius: 0%;
+    border-right: none;
+
+}
+/* END SEARCH BOX */
+#send_message_button_image {
+
 }

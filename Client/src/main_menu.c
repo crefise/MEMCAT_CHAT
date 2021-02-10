@@ -72,7 +72,7 @@ void main_menu() {
 
 
     GtkWidget *send_message_button_image;
-    
+    GtkWidget *search_key_image;
  
  
     gtk_init(NULL, NULL);
@@ -81,7 +81,7 @@ void main_menu() {
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "MEMCAT CHAT");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 
 
 
@@ -102,7 +102,7 @@ void main_menu() {
     //input_key = gtk_button_new_with_label("SEND");
     input_str = gtk_entry_new();
 
-    search_key = gtk_button_new_with_label("SEARCH");
+    search_key = gtk_button_new();
     search_str = gtk_entry_new();
 
     main_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -124,7 +124,8 @@ void main_menu() {
 // END CREATE NEW THING
 
 // DOWNLOAD IMG
-send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
+send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.png");
+search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
 
 // END DOWNLOAD IMG
 
@@ -133,10 +134,18 @@ send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
 
 //SETNAME
     gtk_widget_set_name(GTK_WIDGET(chats_box), "chats_box"); // SETNAME FOR CHATLIST BOX
+    gtk_widget_set_name(GTK_WIDGET(message_box), "message_box");
     gtk_widget_set_name(GTK_WIDGET(setting_str), "setting_str");
     gtk_widget_set_name(GTK_WIDGET(setting_key), "main_menu_key");
     gtk_widget_set_name(GTK_WIDGET(collocutor_name), "collocutor_name");
     gtk_widget_set_name(GTK_WIDGET(input_key), "input_key");
+
+    gtk_widget_set_name(GTK_WIDGET(send_message_button_image), "send_message_button_image");
+    gtk_widget_set_name(GTK_WIDGET(input_str), "input_str");
+
+    gtk_widget_set_name(GTK_WIDGET(search_key), "search_key");
+    gtk_widget_set_name(GTK_WIDGET(search_str), "search_str");
+
 
 
 // PACK ALL
@@ -176,6 +185,8 @@ send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.jpg");
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
     gtk_container_add(GTK_CONTAINER(window), main_box);
     gtk_container_add(GTK_CONTAINER(input_key), send_message_button_image);
+    gtk_container_add(GTK_CONTAINER(search_key), search_key_image);
+    
 
 // CONTAIN ALL END
 
