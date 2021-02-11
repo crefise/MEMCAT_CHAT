@@ -14,7 +14,7 @@ GtkWidget *main_box;
 char *OPENED_DIALOG;
 CHAT_T *MY_CHATS = NULL;
 CHAT_T *FAVORITE_CHAT = NULL;
-GtkWidget *collocutor_name = NULL;
+
 
 
 

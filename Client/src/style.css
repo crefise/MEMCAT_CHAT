@@ -31,9 +31,6 @@ button
     box-shadow: 0 0 2px 1px whitesmoke;
 }
 
-
-
-
 /* MAIN BOX */
 #chats_box 
 {
@@ -58,6 +55,7 @@ button
     text-decoration: none;
 
     background: #3D4A58;
+
 }
 /* END MAIN BOX */
 
@@ -97,21 +95,9 @@ button
  
     
 }
-#main_menu_key_active 
-{
-    background: none;
-    font-size:          30px;
-    border-radius:             0;
 
-}
 /* END CHAT BOX */
 
-
-
-#setting_str 
-{
-  
-}
 
 
 /* MESSAGE BOX */
@@ -144,12 +130,6 @@ button
 /* END MESSAGE BOX */
 
 
-
-#collocutor_name 
-{
-    color:              rgb(218, 214, 34);
-    font-size:          20px;  
-}
 
 
 
@@ -206,17 +186,33 @@ button
     border: none;
 
 }
-#search_box {
+#search_box 
+{
     
     background: #334257;
     border-radius: 23px;
     }
 
-
-#setting_str {
+#setting_str 
+{
     background: #384450;
 }
-/* END SEARCH BOX */
-#send_message_button_image {
 
+#main_menu_key {
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
 }
+#main_menu_key_active 
+{
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+}
+/* END SEARCH BOX */

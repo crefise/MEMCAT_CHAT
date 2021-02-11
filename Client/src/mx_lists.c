@@ -103,7 +103,7 @@ MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index){
 
 
 void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и выключения подсветки для чата
-    if (strcmp(chat->name_chat, "Favorite") == 0) {
+    if (strcmp(chat->name_chat, FAVORITE_CHAT_DEFINE) == 0) {
         if (mode == '+') { 
             gtk_widget_set_name(GTK_WIDGET(chat->chat_button), "main_menu_key_active");
         }
@@ -145,7 +145,6 @@ void select_chat(GtkWidget *button, gpointer data) {
      GtkWidget *will_show = used_chat->message_list_box;
 
     OPENED_DIALOG = strdup(used_chat->name_chat);
-    gtk_label_set_text(GTK_LABEL(collocutor_name), OPENED_DIALOG); // Имя для собеседника
     select_chat_on_off(used_chat,'+'); // подсветка
     
     gtk_widget_hide(will_hide);

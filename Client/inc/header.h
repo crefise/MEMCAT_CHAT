@@ -1,7 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#define FAVORITE_CHAT_DEFINE "Favorite"
+#define FAVORITE_CHAT_DEFINE "HOME"
 
 /* IP CONFIG */
 
@@ -12,10 +12,6 @@
 #define SERVERADDR "10.11.8.11"
 #define SERVERPORT 8000 // Порт сервера
 
-/* IP CONFIG */
-
-
-#define FAVORIDE_CHAT_DEFINE "Favorite"
 
 /* LIB INCLUDING */
 #include <sys/socket.h>
@@ -64,7 +60,6 @@ extern char* USER_LOGIN;
 extern char *OPENED_DIALOG;
 extern CHAT_T *MY_CHATS;
 extern CHAT_T *FAVORITE_CHAT;
-extern GtkWidget *collocutor_name;
 extern GtkWidget *chats_list_box;
 extern GtkWidget *CONTAINER;
 extern GtkWidget *scrool_massages;

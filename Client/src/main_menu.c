@@ -30,7 +30,8 @@ void main_menu() {
     GtkWidget* setting_str;                         // Бокс для верхней полоски настроек
     GtkWidget* home_key;                            // Кнопка домой (фаворит чат);
     GtkWidget* setting_key;                         // Кнопка настроек
-    
+    GtkWidget* home_key_IMG;                        // Картинка для кнопки
+    GtkWidget* settings_key_IMG;                    // Картинка для кнопки настроек
     
     GtkWidget* main_menu_box;                       // Бокс в котором хранятся реконект и основное меню
 
@@ -53,7 +54,7 @@ void main_menu() {
 
 
     FAVORITE_CHAT = mx_create_new_chat((char*)FAVORITE_CHAT_DEFINE, -1);        // Создания главного чата (фаворит)
-    OPENED_DIALOG = strdup("Favorite");
+    OPENED_DIALOG = strdup(FAVORITE_CHAT_DEFINE);
     select_chat_on_off(FAVORITE_CHAT,'+');                                      // Делаем подсветку чата
 
     mx_download_all_chat(MY_CHATS);                                             // Загружаем все чаты пользователя
@@ -86,15 +87,16 @@ void main_menu() {
     input_str = gtk_entry_new();
 
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    setting_key = gtk_button_new_with_label("SETTINGS");
+    setting_key = gtk_button_new();
 
-    collocutor_name = gtk_label_new("Favorite");
 
         /*  (КОНЕЦ)Инициализация обьектов для чата */
 
 
         /*  Загрузка медиа */
-
+    settings_key_IMG = gtk_image_new_from_file ("Client/img/home_img.png");
+    home_key_IMG = gtk_image_new_from_file ("Client/img/home_img.png");
+    
     send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.png");
     search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
 
@@ -115,7 +117,6 @@ void main_menu() {
 
     gtk_widget_set_name(GTK_WIDGET(setting_str), "setting_str");
     gtk_widget_set_name(GTK_WIDGET(setting_key), "main_menu_key");
-    gtk_widget_set_name(GTK_WIDGET(collocutor_name), "collocutor_name");
 
 
 
@@ -129,6 +130,9 @@ void main_menu() {
     gtk_widget_set_name(GTK_WIDGET(search_str), "search_str");
 
     gtk_widget_set_name(GTK_WIDGET(reconect_label), "reconect_label");
+
+    gtk_widget_set_name(GTK_WIDGET(main_menu_box), "main_menu_box");
+    
 
         /* (Конец)Присваивания имен */
 
@@ -160,7 +164,6 @@ void main_menu() {
 
     gtk_box_pack_start(GTK_BOX(setting_str), FAVORITE_CHAT->chat_button, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), setting_key, FALSE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(setting_str), collocutor_name, TRUE, TRUE, 5);
 
     for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
         gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
@@ -184,6 +187,10 @@ void main_menu() {
     gtk_container_add(GTK_CONTAINER(window), main_menu_box);
     gtk_container_add(GTK_CONTAINER(input_key), send_message_button_image);
     gtk_container_add(GTK_CONTAINER(search_key), search_key_image);
+    gtk_container_add(GTK_CONTAINER(FAVORITE_CHAT->chat_button), home_key_IMG);
+    gtk_container_add(GTK_CONTAINER(setting_key), settings_key_IMG);
+    
+   
         /* (END)Containing */
 
 
