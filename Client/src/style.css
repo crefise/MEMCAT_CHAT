@@ -37,12 +37,27 @@ button
 /* MAIN BOX */
 #chats_box 
 {
-    background: linear-gradient(to right, #214ab9, #4470e9);
-    border: #1129ff;
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+
+    border: none;
+    background: #313C4D;
+
 }
 #message_box 
 {
-    background: linear-gradient(to right, #97b2fc, #bfcffa);
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+
+    background: #3D4A58;
 }
 /* END MAIN BOX */
 
@@ -50,20 +65,36 @@ button
 /* CHAT BOX */
 #chat 
 {       
+    border: none;
     background: none;
-    font-size:          30px;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+
     border-radius:             0;
     border : none;
- 
+    
+    background: #334257;
+
 
 }
 
 #chat_active 
 {
+    border: none;
     background: none;
-    font-size:          30px;
-    border-radius:             0;
-    box-shadow: 0 0 5px 2px whitesmoke;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+
+
+    border: solid 1px #3E89AA;
+    background: none;
+    font-size: 30px;
+    border-radius: 0;
+ 
     
 }
 #main_menu_key_active 
@@ -71,7 +102,7 @@ button
     background: none;
     font-size:          30px;
     border-radius:             0;
-    box-shadow: 0 0 5px 2px whitesmoke;
+
 }
 /* END CHAT BOX */
 
@@ -86,27 +117,29 @@ button
 /* MESSAGE BOX */
 #message_my
 {
-    background: #b5bdc8;
-    background:rgb(87, 40, 141);
-    font-size: 16px; 
-    padding: 10px; 
-    box-shadow: 5px 5px 5px rgba(32, 32, 32, 0.6);
-    color: #fff; 
-    border: 1px solid rgb(41, 41, 41); 
-    border-radius: 10px; 
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
     margin-left:        100px;
+
+    background: #4E5866;
+    border-radius: 4px;
 }
 #message_interlocutor
 {
-    background: #b5bdc8;
-    background:rgb(28, 129, 33);
-    font-size: 16px; 
-    padding: 10px; 
-    box-shadow: 5px 5px 5px rgba(161, 35, 35, 0.6);
-    color: #fff; 
-    border: 1px solid rgb(41, 41, 41); 
-    border-radius: 10px; 
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
     margin-right:        100px;
+
+    background: #212E37;
+    border-radius: 4px;
 }
 /* END MESSAGE BOX */
 
@@ -124,26 +157,34 @@ button
 /* INPUT BOX */
 #input_key 
 {
+    border: none;
+    background: none;
     outline: none;
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    border-radius: 0;
-
-
-    border: solid 2px white;
-    border-left: none;
 }
 #input_str 
 {
+      border: none;
     background: none;
-    border: solid 2px white;
-    border-radius: 0;
+    outline: none;
     box-shadow: none;
-    border-right: none;
+    text-shadow: none;
+    text-decoration: none;
 }
 /* END  INPUT BOX */
 
+#input_box {
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+
+    background: #212E37;
+}
 
 
 /* SEARCH BOX */
@@ -152,19 +193,28 @@ button
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    border: solid 2px white;
-    border-radius: 0%;
-    border-left: none;
+
+
+    border: none;
 }
 #search_str {
     outline: none;
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    border: solid 2px white;
-    border-radius: 0%;
-    border-right: none;
 
+    border: none;
+
+}
+#search_box {
+    
+    background: #334257;
+    border-radius: 23px;
+    }
+
+
+#setting_str {
+    background: #384450;
 }
 /* END SEARCH BOX */
 #send_message_button_image {
