@@ -134,7 +134,7 @@ void select_chat(GtkWidget *button, gpointer data) {
         return;
     }
     GtkWidget *will_hide; 
-    if (strcmp(FAVORIDE_CHAT_DEFINE, OPENED_DIALOG) == 0) { // Если открытый чат это сохраненки
+    if (strcmp(FAVORITE_CHAT_DEFINE, OPENED_DIALOG) == 0) { // Если открытый чат это сохраненки
         will_hide = FAVORITE_CHAT->message_list_box;
         select_chat_on_off(FAVORITE_CHAT,'-'); // подсветка
     }

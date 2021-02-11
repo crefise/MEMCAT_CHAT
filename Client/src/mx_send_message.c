@@ -5,7 +5,7 @@ void mx_send_message(GtkWidget *button, gpointer data) {
     //struct message_struct *messages = input;
     GtkWidget *input_str = data;
     CHAT_T *used_chat = NULL;
-    if (strcmp(OPENED_DIALOG, FAVORIDE_CHAT_DEFINE) == 0) {
+    if (strcmp(OPENED_DIALOG, FAVORITE_CHAT_DEFINE) == 0) {
         used_chat = FAVORITE_CHAT; 
     }
     else {
