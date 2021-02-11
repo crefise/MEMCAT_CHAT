@@ -20,10 +20,12 @@ void main_menu() {
     GtkWidget *input_box;                           // Бокс для строки сообщений
     GtkWidget *input_str;                           // Вводимая строка
     GtkWidget *input_key;                           // Кнопка ввода
+    GtkWidget *send_message_button_image;           // Картинка для кнопки ввода
 
     GtkWidget *search_box;                          // Бокс для строки поиска
     GtkWidget *search_str;                          // Вводимая строка
     GtkWidget *search_key;                          // Кнопка ввода
+    GtkWidget *search_key_image;                    // Картинка для кнопки поиска
 
     GtkWidget *scrool_chats;                        // Для скролла чатов
     GtkWidget *chats_box;                           // Бокс в котором храняться чаты
@@ -35,20 +37,19 @@ void main_menu() {
     GtkWidget* setting_key;                         // Кнопка настроек
     
     
-    GtkWidget* main_menu_box;
+    GtkWidget* main_menu_box;                       // Бокс в котором хранятся реконект и основное меню
 
 
     GdkPixbufAnimation* reconnect_animation_GIF;    // Для гиффки реконекта 
     GtkWidget* reconnect_animation_IMG;             // Картинка в которую будет загружена гиффка
     GtkWidget *reconect_label;                      // текст для реконекта
 
-    GtkWidget *send_message_button_image;
-    GtkWidget *search_key_image;
 
-    
+ 
     gtk_init(NULL, NULL);
-    load_css();
+    load_css();                                     // Подгружаем CSS
     
+                /* Инициализация окна */
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "MEMCAT CHAT");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
@@ -56,19 +57,25 @@ void main_menu() {
 
 
 
-
-  // Прогружаем все чаты
-  // Делаем запрос на сервер что нужны чаты конкретного пользователя
-  // Сервер присылает все чаты и мы их пакуем
-    FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);
-    mx_download_all_chat(MY_CHATS);
+    FAVORITE_CHAT = mx_create_new_chat((char*)FAVORIDE_CHAT_DEFINE, -1);        // Создания главного чата (фаворит)
     OPENED_DIALOG = strdup("Favorite");
-    select_chat_on_off(FAVORITE_CHAT,'+'); // подсветка
+    select_chat_on_off(FAVORITE_CHAT,'+');                                      // Делаем подсветку чата
+
+    mx_download_all_chat(MY_CHATS);                                             // Загружаем все чаты пользователя
+
+
+
+            /* Инициализация обьектов для чата */
+
+    main_menu_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); 
+
+    main_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    reconnect_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new_with_label("SETTINGS");
 
-// CREATE NEW THING
+
     input_key = gtk_button_new();
     //input_key = gtk_button_new_with_label("SEND");
     input_str = gtk_entry_new();
@@ -76,7 +83,7 @@ void main_menu() {
     search_key = gtk_button_new();
     search_str = gtk_entry_new();
 
-    main_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+
     chats_list_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     message_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     input_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -85,7 +92,7 @@ void main_menu() {
     chats_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 
-    main_menu_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // сделать главное меню
+
     
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
     scrool_chats = gtk_scrolled_window_new(NULL, NULL); 
@@ -93,7 +100,7 @@ void main_menu() {
     collocutor_name = gtk_label_new("Favorite");
 
 
-    reconnect_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
     reconect_label = gtk_label_new("Reconnecting....");
 
 // END CREATE NEW THING
@@ -119,6 +126,8 @@ gtk_image_set_from_animation (GTK_IMAGE(reconnect_animation_IMG), reconnect_anim
     gtk_widget_set_name(GTK_WIDGET(send_message_button_image), "send_message_button_image");
     gtk_widget_set_name(GTK_WIDGET(input_str), "input_str");
 
+
+    gtk_widget_set_name(GTK_WIDGET(search_box), "search_box");
     gtk_widget_set_name(GTK_WIDGET(search_key), "search_key");
     gtk_widget_set_name(GTK_WIDGET(search_str), "search_str");
 
