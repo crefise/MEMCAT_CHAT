@@ -4,6 +4,22 @@ int sock;
 GtkWidget *stack;
 GtkWidget *login_window;
 GtkWidget *scrool_massages;
+GtkWidget *chats_list_box = NULL;
+GtkWidget *CONTAINER = NULL;
+GtkWidget *window; // my window
+GtkWidget *chats_box;
+GtkWidget *message_box;
+GtkWidget *reconnect_widget;
+GtkWidget *main_box;
+char *OPENED_DIALOG;
+CHAT_T *MY_CHATS = NULL;
+CHAT_T *FAVORITE_CHAT = NULL;
+GtkWidget *collocutor_name = NULL;
+
+
+
+
+
 int main ( void ) {
     mx_initializate_socket();
     if (sock == -1)

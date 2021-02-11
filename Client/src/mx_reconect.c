@@ -13,8 +13,6 @@ void mx_reconect() {
         mx_printerrln("reconecting..");
         usleep(100000);
     }
-    mx_printerrln("RECONECT IS OKAY!!!");
-    //login
     char *will_send = "connect";
     will_send = concat(will_send, USER_LOGIN);
     if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
@@ -35,8 +33,5 @@ void mx_reconect() {
     else {
         gtk_widget_show_all(mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_list_box);
     }
-    
-
-
     return;
 }

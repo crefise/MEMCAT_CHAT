@@ -8,6 +8,11 @@
 #define SERVERADDR "10.11.8.11"
 #define SERVERPORT 8000 // Порт сервера
 
+#define SIZE 4
+#define SIZE_C 2
+#define FAVORIDE_CHAT_DEFINE "Favorite"
+
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

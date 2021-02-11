@@ -4,23 +4,7 @@
 
 void select_chat(GtkWidget *button, gpointer data);
 
-GtkWidget *chats_list_box = NULL;
-GtkWidget *CONTAINER = NULL;
-GtkWidget *window; // my window
-GtkWidget *chats_box;
-GtkWidget *message_box;
-GtkWidget *reconnect_widget;
-GtkWidget *main_box;
 
-char *OPENED_DIALOG;
-
-#define SIZE 4
-#define SIZE_C 2
-#define FAVORIDE_CHAT_DEFINE "Favorite"
-
-    CHAT_T *MY_CHATS = NULL;
-    CHAT_T *FAVORITE_CHAT = NULL;
-    GtkWidget *collocutor_name = NULL;
 
 
 void scrolling()
@@ -33,19 +17,30 @@ void scrolling()
 
 void main_menu() {
    
-    GtkWidget *input_box, *search_box, *chats_box; // Боксы 
-    GtkWidget *input_key, *input_str;// for imput_box
-    GtkWidget *search_str, *search_key;
-    GtkWidget *messages_label[SIZE], *chat_list_label[SIZE_C];
-    GtkWidget *scrool_chats;
-    GtkWidget* setting_str, *home_key, *setting_key; // верхняя полоска настроек
-    GtkWidget* search_chat_box;
+    GtkWidget *input_box;                           // Бокс для строки сообщений
+    GtkWidget *input_str;                           // Вводимая строка
+    GtkWidget *input_key;                           // Кнопка ввода
+
+    GtkWidget *search_box;                          // Бокс для строки поиска
+    GtkWidget *search_str;                          // Вводимая строка
+    GtkWidget *search_key;                          // Кнопка ввода
+
+    GtkWidget *scrool_chats;                        // Для скролла чатов
+    GtkWidget *chats_box;                           // Бокс в котором храняться чаты
+
+
+
+    GtkWidget* setting_str;                         // Бокс для верхней полоски настроек
+    GtkWidget* home_key;                            // Кнопка домой (фаворит чат);
+    GtkWidget* setting_key;                         // Кнопка настроек
+    
+    
     GtkWidget* main_menu_box;
 
-    //reconnect
-    GdkPixbufAnimation* reconnect_animation_GIF;
-    GtkWidget* reconnect_animation_IMG;
-    GtkWidget *reconect_label;
+
+    GdkPixbufAnimation* reconnect_animation_GIF;    // Для гиффки реконекта 
+    GtkWidget* reconnect_animation_IMG;             // Картинка в которую будет загружена гиффка
+    GtkWidget *reconect_label;                      // текст для реконекта
 
     GtkWidget *send_message_button_image;
     GtkWidget *search_key_image;
@@ -89,7 +84,7 @@ void main_menu() {
     search_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     chats_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    search_chat_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // Сделать поиск боксов
+
     main_menu_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); // сделать главное меню
     
     scrool_massages = gtk_scrolled_window_new(NULL, NULL); 
