@@ -27,6 +27,7 @@ void mx_search_dialog(GtkWidget *button, gpointer data) {
         gtk_container_add(GTK_CONTAINER(CONTAINER), mx_find_name_chat(MY_CHATS, text)->message_list_box);
         g_signal_connect(G_OBJECT(mx_find_name_chat(MY_CHATS, text)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_find_name_chat(MY_CHATS, text));
         gtk_widget_show_all(window);
+        gtk_widget_hide(reconnect_widget);
     } 
     else {
         mx_printerr("ERROR CREATING DIALOG");
