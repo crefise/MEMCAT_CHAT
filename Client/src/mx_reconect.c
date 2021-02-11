@@ -14,6 +14,14 @@ void mx_reconect() {
         usleep(100000);
     }
     mx_printerrln("RECONECT IS OKAY!!!");
+    //login
+    char *will_send = "connect";
+    will_send = concat(will_send, USER_LOGIN);
+    if (send(sock, will_send, strlen(will_send), 0) == -1) { // send data to server
+        write(2, "SERVER DONT CONNETCTED\n",23);
+        return;
+    }
+
     gtk_widget_show_all(window);
     gtk_widget_hide(reconnect_widget);
 

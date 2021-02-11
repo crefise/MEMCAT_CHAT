@@ -101,6 +101,8 @@ void double_free(char** array);
 void set_console_color(char* color);
 void print_emoji(char* emoji);
 
+
+char* mx_ps_reconnect(char * buffer, int client_socket);
 #endif
 
 

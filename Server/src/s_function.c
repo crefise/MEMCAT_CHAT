@@ -100,7 +100,7 @@ void send_messages_to_client(char** messages, int client_socket) {
             if (send(client_socket, temp2, strlen(temp2), 0) == 0 ) {
                 mx_printerrln("Error");
             }
-            mx_strdel(&temp2);
+            sqlite3_free(temp2);
             usleep(10000);
         }
 }
@@ -121,22 +121,30 @@ char *ps_comma_dot(char **text) {
 
 }
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID) {
+    if (!message)
+        mx_printerrln(message);
+    if (!sender_login)
+        mx_printerrln(sender_login);
+    if (!recipient_login)
+        mx_printerrln(recipient_login);
     int send_sock = get_socket_from_ONLINE_USERS(recipient_login);
     if (send_sock != 1) { // if ONLINE SENDING TO HIM
         //printf("sender id = %d\n", get_id_from_USERS(sender_login));
+        mx_printerr("IF OKAY!");
         add_message_to_CHAT(chat_ID, get_id_from_USERS(sender_login), message);
     } 
-
+    mx_printerr("OKAY!");
     char *buffer = "message/";
     buffer = concat(buffer, sender_login);
     buffer = concat(buffer, "/");
     buffer = concat(buffer, i_to_s(chat_ID));
     buffer = concat(buffer, "/");
     buffer = concat(buffer, message);
-        
+        mx_printerr("OKAY!");
 
     if (send(send_sock, buffer, strlen(buffer), 0) == -1)
        mx_printerrln("UKNOWN ERROR SENDONG (send_massage_to_client)");
+       mx_printerr("OKAY!");
 }
 char *ps_update_dialog(char *buffer) { // dialogs[login]
     int login_size = 0;
@@ -278,7 +286,12 @@ void *user_connect(void* sock) {
                 mx_strdel(&buffer);
                 exit = 0;
                 break;
-
+            case 7:
+                login = mx_ps_reconnect(buffer, client_socket);
+                mx_printerr("ALL OK");
+                mx_printerrln(login);
+                exit = 0;
+                break;
             case -1: // ошибка сообщения
                 write(2, "-1 ERROR\n",9);
                 exit = 1;
@@ -310,6 +323,8 @@ int parse_solution(char *text) {
         return 5;
     if (text[0] == 'i')
         return 6;
+    if (text[0] == 'c')
+        return 7;
     return -1;
 }
 
