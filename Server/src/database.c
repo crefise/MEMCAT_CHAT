@@ -348,18 +348,16 @@ char** get_chats_from_CHATS(char* login) {
 
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
-   /*
    if (!check_user_in_CHAT(chat_id, get_login_from_USERS(sender_id))) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to add message: User [%s] is not in this chat\n", get_login_from_USERS(sender_id));
-      write(1, err, strlen(err));
+      write(2, err, strlen(err));
       set_console_color(NORMAL);
       sqlite3_free(err);
       return;
    }
-   */
    char* date_time = get_server_date();
-   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME) VALUES(%i, %i, '%s', '%s');", chat_id, sender_id, message, date_time);
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', 'message');", chat_id, sender_id, message, date_time);
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
