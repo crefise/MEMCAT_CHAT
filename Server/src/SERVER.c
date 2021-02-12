@@ -10,13 +10,8 @@ sqlite3* data_base;
 
 int main() {
     /**** START DATABASE BLOCK ****/
-    print_emoji("😍");
-    write(1, " ###### DATABASE BLOCK ###### ", 30);
-    print_emoji("😍");
-    write(1, "\n", 1);
-
-    printf("Server start date: ");
-    printf("%s%s%s\n", GREEN, get_server_date(), NORMAL);
+    printf("😍 ###### DATABASE BLOCK ###### 😍\n");
+    printf("Server start date: %s%s%s\n", GREEN, get_server_date(), NORMAL);
 
     open_db("Server/databases/data_base.db", &data_base);
     clear_ONLINE_USERS();
@@ -42,7 +37,6 @@ int main() {
             "    REFERENCE_FILE TEXT,"\
             "    AUTHOR_ID INT NOT NULL);");
 
-
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");
     get_all_chats_from_CHATS_CONSOLE();
@@ -50,13 +44,11 @@ int main() {
     get_all_users_from_USERS_CONSOLE();
     mx_printerr("-----messages----\n");
     get_all_messages_from_CHAT_CONSOLE();
-
+    mx_printerr("-----online users----\n");
+    exec_db("SELECT * FROM ONLINE_USERS;");
     mx_printerr("======== ALL DB =========\n");
 
-    print_emoji("😍");
-    write(1, " ###### DATABASE BLOCK ###### ", 30);
-    print_emoji("😍");
-    write(1, "\n", 1);
+    printf("😍 ###### DATABASE BLOCK ###### 😍\n");
     /**** END DATABASE BLOCK ****/
 
     // Инициализируем сокет!
