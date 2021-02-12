@@ -6,8 +6,8 @@ static int callback(void *data, int argc, char **argv, char **azColName){
 }
 
 void init_db() {
-   printf("😍 ###### DATABASE BLOCK ###### 😍\n");
-   printf("Server start date: %s%s%s\n", GREEN, get_server_date(), NORMAL);
+   //printf("😍 ###### DATABASE BLOCK ###### 😍\n");
+   //printf("Server start date: %s%s%s\n", GREEN, get_server_date(), NORMAL);
 
    open_db("Server/databases/data_base.db", &data_base);
    clear_ONLINE_USERS();
@@ -33,6 +33,7 @@ void init_db() {
            "    REFERENCE_FILE TEXT,"\
            "    AUTHOR_ID INT NOT NULL);");
 
+   /*
    mx_printerr("======== ALL DB =========\n");
    mx_printerr("-----chats----\n");
    get_all_chats_from_CHATS_CONSOLE();
@@ -43,8 +44,9 @@ void init_db() {
    mx_printerr("-----online users----\n");
    exec_db("SELECT * FROM ONLINE_USERS;");
    mx_printerr("======== ALL DB =========\n");
+   */
 
-   printf("😍 ###### DATABASE BLOCK ###### 😍\n");
+   //printf("😍 ###### DATABASE BLOCK ###### 😍\n");
 }
 
 int get_max_id_in_USERS() {
@@ -55,7 +57,7 @@ int get_max_id_in_USERS() {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -75,10 +77,10 @@ void open_db(char* path, sqlite3** db) {
    int rc = sqlite3_open(path, db);
    if (rc) {
       set_console_color(RED);
-      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(*db));
+      //fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(*db));
       set_console_color(NORMAL);
    }
-   else fprintf(stdout, "Database [%s] opened successfully\n", path);
+   //else fprintf(stdout, "Database [%s] opened successfully\n", path);
 }
 
 void exec_db(char* statement) {
@@ -86,7 +88,7 @@ void exec_db(char* statement) {
    int rc = sqlite3_exec(data_base, statement, callback, 0, &zErrMsg);
    if( rc != SQLITE_OK ) {
       set_console_color(RED);
-      fprintf(stderr, "😕 SQL error: %s\n", zErrMsg);
+      //fprintf(stderr, "😕 SQL error: %s\n", zErrMsg);
       set_console_color(NORMAL);
       sqlite3_free(zErrMsg);
    } 
@@ -122,7 +124,7 @@ bool check_login_password_in_USERS(char* login, char* password) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
       access = false;
@@ -143,7 +145,7 @@ bool check_user_in_USERS(char* login) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);   
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
 
       sqlite3_close(data_base);
@@ -166,7 +168,7 @@ int get_socket_from_ONLINE_USERS(char* login) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -193,7 +195,7 @@ int get_id_from_USERS(char* login) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -211,7 +213,7 @@ int add_chat_to_CHATS(char* u1, char* u2) {
    if (chat_id != 0) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to add chat: Chat already exists\n");
-      write(1, err, strlen(err));
+      //write(1, err, strlen(err));
       set_console_color(NORMAL);
       sqlite3_free(err);
       return chat_id;
@@ -224,7 +226,7 @@ int add_chat_to_CHATS(char* u1, char* u2) {
    if (u1_id == 0 || u2_id == 0) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to add chat: User [%s] or [%s] does not exist\n", u1, u2);
-      write(1, err, strlen(err));
+      //write(1, err, strlen(err));
       set_console_color(NORMAL);
       sqlite3_free(err);
       return 0;
@@ -251,7 +253,7 @@ int get_chat_id_from_CHATS(char* u1, char* u2) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -272,7 +274,7 @@ int get_max_chat_id_from_CHATS() {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -295,7 +297,7 @@ char* get_login_from_USERS(int id) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -316,7 +318,7 @@ int count_users_chats(int id) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
    if (rc != SQLITE_OK) {
          set_console_color(RED);
-         fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+         //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
          set_console_color(NORMAL);
          sqlite3_close(data_base);
          return chats;
@@ -346,7 +348,7 @@ char** get_chats_from_CHATS(char* login) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
       return NULL;
@@ -409,7 +411,7 @@ bool check_user_in_CHAT(int chat_id, char* user) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
       exist = false;
@@ -443,7 +445,7 @@ int get_max_message_id_from_CHAT(int chat_id) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -460,7 +462,7 @@ char** get_messages_from_CHAT(int chat_id) {
    if (chat_id == 0) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to get messages: Chat with ID=%i does not exist\n", chat_id);
-      write(1, err, strlen(err));
+      //write(1, err, strlen(err));
       set_console_color(NORMAL);
       sqlite3_free(err);
       return NULL;
@@ -477,7 +479,7 @@ char** get_messages_from_CHAT(int chat_id) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -506,7 +508,7 @@ int count_messages_from_CHAT(int chat_id) {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -526,7 +528,7 @@ void delete_user_from_USERS(char* login) {
    if (id == 0) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to delete data: User [%s] does not exist\n", login);
-      write(1, err, strlen(err));
+      //write(1, err, strlen(err));
       set_console_color(NORMAL);
       sqlite3_free(err);
    }
@@ -554,7 +556,7 @@ void get_all_users_from_USERS_CONSOLE() {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -564,7 +566,7 @@ void get_all_users_from_USERS_CONSOLE() {
       char* login = (char*)sqlite3_column_text(result, 1);
       char* password = (char*)sqlite3_column_text(result, 2);
 
-      printf("%s\n", sqlite3_mprintf("%i/%s/%s", id, login, password));
+      //printf("%s\n", sqlite3_mprintf("%i/%s/%s", id, login, password));
       rc = sqlite3_step(result);
    }
    
@@ -579,7 +581,7 @@ void get_all_chats_from_CHATS_CONSOLE() {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -589,7 +591,7 @@ void get_all_chats_from_CHATS_CONSOLE() {
       int u1_id = atoi((char*)sqlite3_column_text(result, 1));
       int u2_id = atoi((char*)sqlite3_column_text(result, 2));
 
-      printf("%s\n", sqlite3_mprintf("[%i]%i+%i", chat_id, u1_id, u2_id));
+      //printf("%s\n", sqlite3_mprintf("[%i]%i+%i", chat_id, u1_id, u2_id));
       rc = sqlite3_step(result);
    }
    
@@ -605,7 +607,7 @@ void get_all_messages_from_CHAT_CONSOLE() {
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -619,7 +621,7 @@ void get_all_messages_from_CHAT_CONSOLE() {
 
       char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
 
-      mx_printerrln(temp);
+      //mx_printerrln(temp);
 
       sqlite3_free(temp);
    }

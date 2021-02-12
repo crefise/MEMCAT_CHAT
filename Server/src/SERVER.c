@@ -4,14 +4,8 @@ void *user_connect(void* sock);
 int parse_solution(char *text);
 int ph_count = 0;
 int PORT_CONTS;
-sqlite3* data_base;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-/* 🥰😍🤭🤨😎😕😢😡🥱💩🤡🤖 */
+sqlite3* data_base;
 
 int main(int argc, char *argv[]) {
         if (argc != 2) {
