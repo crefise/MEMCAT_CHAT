@@ -42,6 +42,7 @@ void write_file(int sockfd);
 void open_db(char* path, sqlite3** db);
 void exec_db(char* statement);
 void close_db(); 
+void init_db();
 
 void add_user_to_USERS(char* login, char* password);
 void delete_user_from_USERS(char* login);

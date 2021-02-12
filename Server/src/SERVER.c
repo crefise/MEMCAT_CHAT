@@ -9,47 +9,7 @@ sqlite3* data_base;
 /* 🥰😍🤭🤨😎😕😢😡🥱💩🤡🤖 */
 
 int main() {
-    /**** START DATABASE BLOCK ****/
-    printf("😍 ###### DATABASE BLOCK ###### 😍\n");
-    printf("Server start date: %s%s%s\n", GREEN, get_server_date(), NORMAL);
-
-    open_db("Server/databases/data_base.db", &data_base);
-    clear_ONLINE_USERS();
-
-    exec_db("CREATE TABLE IF NOT EXISTS USERS("\
-            "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
-            "    LOGIN TEXT(32) NOT NULL UNIQUE,"\
-            "    PASSWORD TEXT NOT NULL);");
-    exec_db("CREATE TABLE IF NOT EXISTS CHATS("\
-            "    CHAT_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
-            "    USER1_ID INT NOT NULL,"\
-            "    USER2_ID INT NOT NULL);");
-    exec_db("CREATE TABLE IF NOT EXISTS ONLINE_USERS("\
-            "    USER_ID INTEGER PRIMARY KEY,"\
-            "    LOGIN TEXT NOT NULL UNIQUE,"\
-            "    SOCKET INT NOT NULL UNIQUE)");
-    exec_db("CREATE TABLE IF NOT EXISTS CHAT("\
-            "    CHAT_ID INT NOT NULL,"\
-            "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
-            "    DATE_TIME DATETIME NOT NULL,"\
-            "    MESSAGE TEXT NOT NULL,"\
-            "    TYPE TEXT NOT NULL,"\
-            "    REFERENCE_FILE TEXT,"\
-            "    AUTHOR_ID INT NOT NULL);");
-
-    mx_printerr("======== ALL DB =========\n");
-    mx_printerr("-----chats----\n");
-    get_all_chats_from_CHATS_CONSOLE();
-    mx_printerr("-----users----\n");
-    get_all_users_from_USERS_CONSOLE();
-    mx_printerr("-----messages----\n");
-    get_all_messages_from_CHAT_CONSOLE();
-    mx_printerr("-----online users----\n");
-    exec_db("SELECT * FROM ONLINE_USERS;");
-    mx_printerr("======== ALL DB =========\n");
-
-    printf("😍 ###### DATABASE BLOCK ###### 😍\n");
-    /**** END DATABASE BLOCK ****/
+    init_db();
 
     // Инициализируем сокет!
     int sock = socket(AF_INET, SOCK_STREAM, 0);
