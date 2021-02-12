@@ -14,7 +14,8 @@ void mx_send_message(GtkWidget *button, gpointer data) {
 
     char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(input_str)));
     if(text && strlen(text) > 0) {
-        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text);
+        char *date = mx_get_client_date();
+        mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text, date);
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
         if (strcmp(FAVORITE_CHAT->name_chat, used_chat->name_chat) != 0) {
             buffer = concat("message/", used_chat->name_chat);

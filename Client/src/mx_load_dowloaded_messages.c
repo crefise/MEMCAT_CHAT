@@ -26,8 +26,8 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
 
     for (int i = 0; buffer[const_temp+i] != '/'; i++)
         counter++;
-    char* data = mx_strnew(counter);
-    data = strncpy(data, &buffer[const_temp], counter);
+    char* date = mx_strnew(counter);
+    date = strncpy(date, &buffer[const_temp], counter);
     const_temp += (counter + 1);
     counter = 0;
 
@@ -39,11 +39,27 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
 
     add_new_message(&(chat->messages), message, login);
     gtk_box_pack_start(GTK_BOX(chat->message_list_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   
+    
+    GtkWidget *date_label = gtk_label_new(date);
+    gtk_widget_set_name(date_label, "date_label");
+    gtk_box_pack_start(GTK_BOX(chat->message_list_box), date_label, FALSE, FALSE, 5);
+    scrolling();
+
 
     //mx_strdel(&CHAT_ID_CHAR);
     mx_strdel(&login);
     mx_strdel(&message_id);
-    mx_strdel(&data);
+    mx_strdel(&date);
     mx_strdel(&message);
     
 }
+
+/*
+    add_new_message(&(*chat)->messages, message, sender);
+    gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), mx_take_last_message((*chat)->messages)->text_label, FALSE, FALSE, 5);
+
+    GtkWidget *date_label = gtk_label_new(date);
+    gtk_widget_set_name(date_label, "date_label");
+    gtk_box_pack_start(GTK_BOX((*chat)->message_list_box), date_label, FALSE, FALSE, 5);
+    scrolling();
+*/

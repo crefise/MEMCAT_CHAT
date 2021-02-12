@@ -216,3 +216,9 @@ button
     text-decoration: none;
 }
 /* END SEARCH BOX */
+
+
+#date_label {
+    
+    font-size: 13px;
+}

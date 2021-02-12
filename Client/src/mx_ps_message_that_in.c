@@ -30,8 +30,8 @@ void mx_ps_message_that_in(char *str) {
         gtk_widget_show_all(window);
 
     }
-
-    mx_fill_message_list_box(&used_chat, login, login, text_message);
+    char *date = mx_get_client_date();
+    mx_fill_message_list_box(&used_chat, login, login, text_message, date);
     if (strcmp(OPENED_DIALOG, login) == 0) 
         mx_update_used_chat(used_chat);
     return;

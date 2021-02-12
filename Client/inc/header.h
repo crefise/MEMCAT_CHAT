@@ -111,7 +111,7 @@ void mx_add_new_chat(CHAT_T** chat,char *name, int CHAT_ID);
 CHAT_T* mx_create_new_chat(char* name, int CHAT_ID);
 void add_new_message(MESSAGE_T **message, char *text, char *sender);
 MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index);
-void mx_fill_message_list_box(CHAT_T **chat, char *login, char *sender, char* message);
+void mx_fill_message_list_box(CHAT_T **chat, char *login, char *sender, char* message, char *date);
 CHAT_T* mx_find_name_chat(CHAT_T *chat, char* name);
 MESSAGE_T* mx_take_last_message(MESSAGE_T *message);
 void mx_update_used_chat(CHAT_T *used_chat);
@@ -128,5 +128,5 @@ void mx_download_message_in_chat(CHAT_T *chat);
 void mx_send_message(GtkWidget *button, gpointer data);
 void* mx_massage_check_in(void* socket);
 void select_chat(GtkWidget *button, gpointer data);
-
+char* mx_get_client_date();
 #endif
