@@ -53,7 +53,6 @@ button
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-
     background: #3D4A58;
 
 }
@@ -109,10 +108,11 @@ button
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    margin-left:        100px;
-
-    background: #4E5866;
+    background: #4E5866; 
     border-radius: 4px;
+    padding: 10px;
+    
+
 }
 #message_interlocutor
 {
@@ -122,10 +122,10 @@ button
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;
-    margin-right:        100px;
-
     background: #212E37;
     border-radius: 4px;
+    padding: 10px;
+
 }
 /* END MESSAGE BOX */
 

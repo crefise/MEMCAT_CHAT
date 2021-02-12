@@ -39,6 +39,8 @@ void mx_ps_off_chat_message(char *str) {
         chat_ID_char = malloc(temp_size);
         chat_ID_char = strncpy(chat_ID_char, chats[i], temp_size);
         chat_name = strndup(&chats[i][temp_size+1], strlen(&chats[i][temp_size+1]));
-        mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));        
+        mx_printerrln("CHECK?");
+        mx_add_new_chat(&MY_CHATS, chat_name, atoi(chat_ID_char));  
+        mx_printerrln("CHECK END");      
     }
 }

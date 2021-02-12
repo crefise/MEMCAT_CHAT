@@ -25,7 +25,7 @@ void mx_ps_message_that_in(char *str) {
         mx_add_new_chat(&MY_CHATS,login, atoi(chat_ID_char));
         used_chat = mx_find_name_chat(MY_CHATS, login);
         gtk_box_pack_start(GTK_BOX(chats_list_box), used_chat->chat_button, FALSE, FALSE, 1);
-        gtk_container_add(GTK_CONTAINER(CONTAINER), used_chat->message_list_box);
+        gtk_container_add(GTK_CONTAINER(CONTAINER), used_chat->message_box);
         g_signal_connect(G_OBJECT(used_chat->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)used_chat);
         gtk_widget_show_all(window);
 

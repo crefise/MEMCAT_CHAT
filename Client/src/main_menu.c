@@ -58,7 +58,7 @@ void main_menu() {
     select_chat_on_off(FAVORITE_CHAT,'+');                                      // Делаем подсветку чата
 
     mx_download_all_chat(MY_CHATS);                                             // Загружаем все чаты пользователя
-
+    mx_printerrln("test okay...");
 
 
             /* Инициализация обьектов для чата */
@@ -89,7 +89,7 @@ void main_menu() {
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new();
 
-
+   mx_printerrln("test okay1...");
         /*  (КОНЕЦ)Инициализация обьектов для чата */
 
 
@@ -107,7 +107,7 @@ void main_menu() {
 
         /*  (Конец)Загрузка медиа */
 
-
+   mx_printerrln("test okay2...");
 
 
         /* Присваивания имен */
@@ -132,11 +132,13 @@ void main_menu() {
     gtk_widget_set_name(GTK_WIDGET(reconect_label), "reconect_label");
 
     gtk_widget_set_name(GTK_WIDGET(main_menu_box), "main_menu_box");
-    
 
+ 
+    
+    
         /* (Конец)Присваивания имен */
 
-
+   mx_printerrln("test okay3...");
 
         /* Пакуем обьекты */
     gtk_box_pack_start(GTK_BOX(main_menu_box), main_box, TRUE, TRUE, 0);
@@ -173,14 +175,15 @@ void main_menu() {
 
          /* (Конец)Пакуем обьекты */
 
-
+   mx_printerrln("test okay4...");
 
         /* Containing */
-    CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);                               // Содержит в себе все чаты
+        gtk_widget_set_halign(scrool_massages,GTK_ALIGN_FILL);
 
-    
-    for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) 
-        gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_list_box); 
+    CONTAINER = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);                               // Содержит в себе все чаты
+   for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) 
+        gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_box); 
+          // gtk_widget_set_name(GTK_WIDGET(CONTAINER), "scrool_massages");
     
     gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
@@ -192,7 +195,7 @@ void main_menu() {
     
    
         /* (END)Containing */
-
+   mx_printerrln("test okay5...");
 
 
     gtk_widget_show_all(window);
@@ -208,7 +211,7 @@ void main_menu() {
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
           /* (Конец)Проверка сигналов */
-
+   mx_printerrln("test okay6...");
     gtk_main();
   exit(0);
 }

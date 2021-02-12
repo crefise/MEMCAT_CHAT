@@ -37,12 +37,12 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
     if (login == NULL || strlen(login) == 0)
         return;
 
-    add_new_message(&(chat->messages), message, login);
-    gtk_box_pack_start(GTK_BOX(chat->message_list_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   
+    add_new_message(&(chat->messages), message, login, &chat);
+    gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   
     
-    GtkWidget *date_label = gtk_label_new(date);
-    gtk_widget_set_name(date_label, "date_label");
-    gtk_box_pack_start(GTK_BOX(chat->message_list_box), date_label, FALSE, FALSE, 5);
+   // GtkWidget *date_label = gtk_label_new(date);
+   // gtk_widget_set_name(date_label, "date_label");
+  //  gtk_box_pack_start(GTK_BOX(chat->message_text_box), date_label, FALSE, FALSE, 5);
     scrolling();
 
 

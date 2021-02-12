@@ -29,4 +29,5 @@ void mx_download_all_chat(CHAT_T* chats) {
         mx_ps_off_chat_message(buffer);
     }
     PAUSE = 0;
+    //mx_printerrln("exit okay!");
 }
