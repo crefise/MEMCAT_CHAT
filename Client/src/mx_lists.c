@@ -40,7 +40,7 @@ void set_label(MESSAGE_T **message, char *text, char *sender) {
 }
 
 void add_new_message(MESSAGE_T **message, char *text, char *sender) {
-    if (text == NULL || sender == NULL)
+    if (!text || !sender)
         return;
     if (*message == NULL) {
         (*message) = malloc(sizeof(MESSAGE_T));

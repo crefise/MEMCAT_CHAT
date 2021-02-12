@@ -34,6 +34,8 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
     char *message = mx_strnew(strlen(buffer) - const_temp);
     message = mx_strncpy(message, &buffer[const_temp], strlen(buffer) - const_temp);
 
+    if (login == NULL || strlen(login) == 0)
+        return;
 
     add_new_message(&(chat->messages), message, login);
     gtk_box_pack_start(GTK_BOX(chat->message_list_box), mx_take_last_message(chat->messages)->text_label, FALSE, FALSE, 5);   

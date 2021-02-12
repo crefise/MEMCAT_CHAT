@@ -2,7 +2,6 @@
 
 void mx_ps_message_that_in(char *str) {
     char *temp_1 = mx_strncpy(temp_1,  &str[8], strlen(str) - 8); // Обрезаем massage
-
 ///////////////////////// GETTING LOGIN AND TEXT MMESSAGE//////////////////////////////////
     int info_counter = 0;
     for (int i = 0; temp_1[i] != '/'; i++)
@@ -12,7 +11,6 @@ void mx_ps_message_that_in(char *str) {
     char *temp_2 = mx_strnew(strlen(temp_1) - info_counter - 1);
     temp_2 = strncpy(temp_2, &temp_1[info_counter+1], strlen(temp_1) - info_counter - 1);
     mx_strdel(&temp_1);
-
     info_counter = 0;
     for (int i = 0; temp_2[i] != '/'; i++)
         info_counter++;
@@ -32,8 +30,8 @@ void mx_ps_message_that_in(char *str) {
         gtk_widget_show_all(window);
 
     }
+
     mx_fill_message_list_box(&used_chat, login, login, text_message);
-        mx_printerrln("USED_CHECK");
     if (strcmp(OPENED_DIALOG, login) == 0) 
         mx_update_used_chat(used_chat);
     return;
