@@ -1,18 +1,18 @@
 
 window
 {
-    background: linear-gradient(to top, #6743b9, #8ecafc);
+    background: #3D4A58;
 }
 
 
 
 entry
 {
-    background:        none;
+    background:        #334257;
     border-color: rgb(231, 223, 223);
     font-size:          15px;
     border-radius: 5px;
-    box-shadow: 0 0 2px 1px whitesmoke;
+    
 
 
 }
@@ -27,8 +27,8 @@ button
 
     text-shadow: none;
     text-decoration: none;
-    background: none;
-    box-shadow: 0 0 2px 1px whitesmoke;
+    background: #334257;
+    box-shadow: none;
 }
 
 /* MAIN BOX */
