@@ -3,12 +3,40 @@
 void *user_connect(void* sock);
 int parse_solution(char *text);
 int ph_count = 0;
-
+int PORT_CONTS;
 sqlite3* data_base;
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 /* 🥰😍🤭🤨😎😕😢😡🥱💩🤡🤖 */
 
-int main() {
+int main(int argv, char *argc[]) {
+    if (argv != 2) {
+        mx_printerrln("usage : ./uchat_server [PORT]");
+        return 0;
+    }
+    /*
+    if ((PORT_CONTS = atoi(argc[1])) == 0) {
+        mx_printerrln("port does not correct");
+        return 0;
+    }
+    pid_t pid = fork();
+    if (!pid) {
+        umask(0);
+        setsid();
+        chdir("/");
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+    } else {
+        mx_printerr ("Server starter PID: ");
+        mx_printerrln(i_to_s(pid));
+        return 0;
+    }
+    */
     /**** START DATABASE BLOCK ****/
     print_emoji("😍");
     write(1, " ###### DATABASE BLOCK ###### ", 30);
@@ -70,7 +98,7 @@ int main() {
     //Вводим информацию для связывания
     struct sockaddr_in sock_info;
     sock_info.sin_family = AF_INET;
-    sock_info.sin_port = htons(8000); // переводим порт в сетевой порядок
+    sock_info.sin_port = htons(PORT_CONTS); // переводим порт в сетевой порядок
     sock_info.sin_addr.s_addr = 0;    // сервер принимает подключения на все свои IP-адреса
 
 

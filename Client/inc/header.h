@@ -9,8 +9,7 @@
 //#define SERVERADDR "10.11.6.1" // Айпи для моего ПК(VOVA)
 //#define SERVERADDR "31.133.82.217" // DERLAS PC
 //#define SERVERADDR "localhost"
-#define SERVERADDR "10.11.8.11"
-#define SERVERPORT 8000 // Порт сервера
+
 
 
 /* LIB INCLUDING */
@@ -28,6 +27,8 @@
 #include <pthread.h>
 #include <ctype.h>
 #include "gtk/gtk.h"
+#include <sys/stat.h>
+
 /*  (END)LIB INCLUDING */
 
 struct user_info {
@@ -100,7 +101,7 @@ bool mx_isdigit(char c);
 void mx_del_strarr(char ***arr);
 void mx_printerrln(const char *s);
 bool mx_check_curr_sybmobol(char *str);
-void mx_initializate_socket();
+void mx_initializate_socket(char *SERVERADDR, int SERVERPORT);
 void *console_style();
 char *mx_strnew(const int size);
 extern struct sockaddr_in serv_addr;

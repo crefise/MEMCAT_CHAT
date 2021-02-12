@@ -20,8 +20,12 @@ CHAT_T *FAVORITE_CHAT = NULL;
 
 
 
-int main ( void ) {
-    mx_initializate_socket();
+int main ( int argc, char* argv[] ) {
+    if (argc != 3) {
+        mx_printerrln("usage: ./uchat [IP] [PORT]");
+        return 0;
+    }
+    mx_initializate_socket(argv[1], atoi(argv[2]));
     if (sock == -1)
         mx_printerr("NO_CONNECT_TO_SERVER\n");
 
