@@ -34,6 +34,9 @@ void log_func(char *buffer, int client_socket, bool *logined,  char **login, cha
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID);
 void send_chats_to_client(char** chats, int client_socket);
 void send_messages_to_client(char** messages, int client_socket); 
+void send_file(int sockfd, char* filename);
+void write_file(int sockfd);
+
 
 /* database */
 void open_db(char* path, sqlite3** db);

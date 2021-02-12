@@ -400,3 +400,44 @@ void mx_del_strarr(char ***arr) {
     free(*arr);
     *arr = NULL;
 }
+
+
+void send_file(int sockfd, char* filename) {
+    FILE *fp;
+
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        perror("[-]Error in reading file.");
+        return;
+    }
+
+    int n;
+    char data[1024] = {0};
+
+    while(fgets(data, 1024, fp) != NULL) {
+        if (send(sockfd, data, sizeof(data), 0) == -1) {
+        perror("[-]Error in sending file.");
+        exit(1);
+    }
+    bzero(data, 1024);
+  }
+}
+
+void write_file(int sockfd) {
+  int n;
+  FILE *fp;
+  char *filename = "recv.txt";
+  char buffer[1024];
+
+  fp = fopen(filename, "w");
+  while (1) {
+    n = recv(sockfd, buffer, 1024, 0);
+    if (n <= 0){
+      break;
+      return;
+    }
+    fprintf(fp, "%s", buffer);
+    bzero(buffer, 1024);
+  }
+  return;
+}
