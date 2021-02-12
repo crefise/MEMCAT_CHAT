@@ -57,8 +57,6 @@ void exec_db(char* statement) {
 } 
 
 void close_db() {
-   char* statement = "TRUNCATE TABLE ONLINE_USERS;";
-   exec_db(statement);
    sqlite3_close(data_base);
 }
 
@@ -592,4 +590,8 @@ void get_all_messages_from_CHAT_CONSOLE() {
    
    sqlite3_finalize(result);
    sqlite3_free(statement);
+}
+
+void clear_ONLINE_USERS() {
+   exec_db("DROP TABLE ONLINE_USERS;");
 }

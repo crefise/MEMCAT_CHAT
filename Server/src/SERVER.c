@@ -19,8 +19,7 @@ int main() {
     printf("%s%s%s\n", GREEN, get_server_date(), NORMAL);
 
     open_db("Server/databases/data_base.db", &data_base);
-    close_db();
-    open_db("Server/databases/data_base.db", &data_base);
+    clear_ONLINE_USERS();
 
     exec_db("CREATE TABLE IF NOT EXISTS USERS("\
             "    ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
@@ -39,12 +38,10 @@ int main() {
             "    MESSAGE_ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
             "    DATE_TIME DATETIME NOT NULL,"\
             "    MESSAGE TEXT NOT NULL,"\
+            "    TYPE TEXT NOT NULL,"\
+            "    REFERENCE_FILE TEXT,"\
             "    AUTHOR_ID INT NOT NULL);");
 
-
-    
-    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user6"), "Hellou bruh");
-    //add_message_to_CHAT(get_chat_id_from_CHATS("test_user5", "test_user6"), get_id_from_USERS("test_user5"), "Hello man");
 
     mx_printerr("======== ALL DB =========\n");
     mx_printerr("-----chats----\n");

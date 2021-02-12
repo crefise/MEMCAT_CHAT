@@ -56,6 +56,7 @@ int count_users_in_USERS(); // not ready
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
 int get_socket_from_ONLINE_USERS(char* login);
+void clear_ONLINE_USERS();
 
 int add_chat_to_CHATS(char* u1, char* u2);
 void get_chats_from_CHATS_CONSOLE(int id);
@@ -68,7 +69,7 @@ void double_free_for_CHATS(char** array);
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 void delete_message_from_CHAT(int message_id);
-void update_message_in_CHAT(int message_id, char* message)
+void update_message_in_CHAT(int message_id, char* message);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
 void get_all_messages_from_CHAT_CONSOLE();
