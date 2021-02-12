@@ -94,11 +94,11 @@ void main_menu() {
 
 
         /*  Загрузка медиа */
-    settings_key_IMG = gtk_image_new_from_file ("Client/img/home_img.png");
+    settings_key_IMG = gtk_image_new_from_file ("Client/img/setting_img.png");
     home_key_IMG = gtk_image_new_from_file ("Client/img/home_img.png");
     
     send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.png");
-    search_key_image = gtk_image_new_from_file ("Client/img/search_key_img.png");
+    search_key_image = gtk_image_new_from_file ("Client/img/search_img.png");
 
     reconnect_animation_GIF = gdk_pixbuf_animation_new_from_file ("Client/GIFS/reconnect.gif", NULL);
 

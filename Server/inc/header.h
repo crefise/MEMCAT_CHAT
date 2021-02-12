@@ -68,7 +68,7 @@ void double_free_for_CHATS(char** array);
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 void delete_message_from_CHAT(int message_id);
-void update_message_in_CHAT(int message_id, char* message)
+void update_message_in_CHAT(int message_id, char* message);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
 void get_all_messages_from_CHAT_CONSOLE();
