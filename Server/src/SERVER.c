@@ -13,16 +13,16 @@ sqlite3* data_base;
 #include <sys/stat.h>
 /* 🥰😍🤭🤨😎😕😢😡🥱💩🤡🤖 */
 
-int main() {
-        if (argv != 2) {
+int main(int argc, char *argv[]) {
+        if (argc != 2) {
         mx_printerrln("usage : ./uchat_server [PORT]");
         return 0;
     }
-    /*
-    if ((PORT_CONTS = atoi(argc[1])) == 0) {
+    if ((PORT_CONTS = atoi(argv[1])) == 0) {
         mx_printerrln("port does not correct");
         return 0;
     }
+    /*
     pid_t pid = fork();
     if (!pid) {
         umask(0);
@@ -37,6 +37,7 @@ int main() {
         return 0;
     }
     */
+
     init_db();
 
     // Инициализируем сокет!
