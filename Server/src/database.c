@@ -502,7 +502,13 @@ void delete_user_from_USERS(char* login) {
 }
 
 void delete_message_from_CHAT(int message_id) {
-   char* statement = sqlite3_mprintf("DELETE FROM USERS WHERE ID=%i", message_id);
+   char* statement = sqlite3_mprintf("DELETE FROM CHAT WHERE ID=%i;", message_id);
+   exec_db(statement);
+   sqlite3_free(statement);
+}
+
+void update_message_in_CHAT(int message_id, char* message) {
+   char* statement = sqlite3_mprintf("UPDATE CHAT SET MESSAGE='%s' WHERE MESSAGE_ID=%i;",message ,message_id);
    exec_db(statement);
    sqlite3_free(statement);
 }
