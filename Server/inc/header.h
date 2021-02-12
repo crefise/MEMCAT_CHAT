@@ -56,6 +56,7 @@ int count_users_in_USERS(); // not ready
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
 int get_socket_from_ONLINE_USERS(char* login);
+void clear_ONLINE_USERS();
 
 int add_chat_to_CHATS(char* u1, char* u2);
 void get_chats_from_CHATS_CONSOLE(int id);
