@@ -384,6 +384,7 @@ char** get_chats_from_CHATS(char* login) {
 
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
+   /*
    if (!check_user_in_CHAT(chat_id, get_login_from_USERS(sender_id))) {
       set_console_color(RED);
       char* err = sqlite3_mprintf("😕 Failed to add message: User [%s] is not in this chat\n", get_login_from_USERS(sender_id));
@@ -392,6 +393,7 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
       sqlite3_free(err);
       return;
    }
+   */
    char* date_time = get_server_date();
    char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', 'message');", chat_id, sender_id, message, date_time);
    exec_db(statement);
