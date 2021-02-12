@@ -34,11 +34,15 @@ void log_func(char *buffer, int client_socket, bool *logined,  char **login, cha
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID);
 void send_chats_to_client(char** chats, int client_socket);
 void send_messages_to_client(char** messages, int client_socket); 
+void send_file(int sockfd, char* filename);
+void write_file(int sockfd);
+
 
 /* database */
 void open_db(char* path, sqlite3** db);
 void exec_db(char* statement);
 void close_db(); 
+void init_db();
 
 void add_user_to_USERS(char* login, char* password);
 void delete_user_from_USERS(char* login);
