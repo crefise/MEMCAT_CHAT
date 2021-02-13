@@ -37,8 +37,8 @@ void log_func(char *buffer, int client_socket, bool *logined,  char **login, cha
 void send_massage_to_client(char* message, char* sender_login, char* recipient_login,  int sender, int chat_ID);
 void send_chats_to_client(char** chats, int client_socket);
 void send_messages_to_client(char** messages, int client_socket); 
-void send_file(int sockfd, char* filename);
-void write_file(int sockfd);
+void mx_send_file(int sock, char* filename);
+void mx_write_file(int sock, char* filename);
 
 
 /* database */
@@ -75,6 +75,7 @@ int get_max_chat_id_from_CHATS();
 void double_free_for_CHATS(char** array);
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
+void add_file_to_CHAT(int chat_id, int sender_id, char* filename);
 void delete_message_from_CHAT(int message_id);
 void update_message_in_CHAT(int message_id, char* message);
 char** get_last_30_messages_from_CHAT(int chat_id);
@@ -82,6 +83,7 @@ char** get_messages_from_CHAT(int chat_id);
 void get_all_messages_from_CHAT_CONSOLE();
 int get_max_message_id_from_CHAT(int chat_id);
 char* get_message_from_CHAT(int chat_id, int message_id);
+char* get_reference_file_from_CHAT(message_id);
 int count_messages_from_CHAT(int chat_id);
 bool check_user_in_CHAT(int chat_id, char* user);
 
