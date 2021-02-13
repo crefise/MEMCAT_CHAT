@@ -190,7 +190,7 @@ char* ps_delete_text(char *buffer) {
 
 
 void ps_parse_file(char *buffer, int client_socket, char* login_my) {
-    char *temp = malloc(strlen(buffer) - 4 );
+    char *temp = mx_strnew(strlen(buffer) - 4 );
     temp = strncpy(temp, &buffer[4], strlen(buffer) - 4);
     mx_printerr("BUFFER TEMP:"); mx_printerrln(temp);
 
@@ -201,6 +201,8 @@ void ps_parse_file(char *buffer, int client_socket, char* login_my) {
     loogin_second = strncpy(loogin_second, temp, counter);
 
     char *filename = strncpy(filename, &temp[strlen(loogin_second)+1] ,strlen(temp) - strlen(loogin_second) - 1);
+    mx_printerr("Login_second :"); mx_printerrln(loogin_second);
+    mx_printerr("filename :"); mx_printerrln(filename);
 
     add_file_to_CHAT(get_chat_id_from_CHATS(login_my, loogin_second), get_id_from_USERS(login_my), filename);
     mx_write_file(client_socket, filename, get_chat_id_from_CHATS(login_my, loogin_second));
@@ -335,8 +337,9 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case -1: // ошибка сообщения
+                mx_strdel(&buffer);
                 write(2, "-1 ERROR\n",9);
-                exit = 1;
+                exit = 0;
                 break;
             default: // неизвесная ошибка
                 write(2, "UKNOWN ERROR\n",13);

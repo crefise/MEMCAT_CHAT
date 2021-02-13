@@ -47,7 +47,7 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
         if (send(sock, will_send, strlen(will_send), 0) == -1)
             return;
 
-      //  mx_send_file(sock, filepath);
+        mx_send_file(sock, filepath);
         mx_strdel(&will_send);
         g_free (filepath);
     }
