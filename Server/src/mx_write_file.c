@@ -1,18 +1,15 @@
 #include "../inc/header.h"
-void mx_write_file(int new_sock) {
+
+void mx_write_file(int sock, char* filename) {
+    //char* file_name = sqlite3_mprintf("Server/databases/files/%s" get_reference_file_in_CHAT(message_id));
+
     int size;
     read(new_sock, &size, sizeof(int));
-    //Read Picture Byte Array
-    printf("Reading Picture Byte Array\n");
     char p_array[size];
-        mx_printerrln("TEST1");
     read(new_sock, p_array, size);
-        mx_printerrln("TEST1-2");
-    //Convert it Back into Picture
-    FILE *image;
-    image = fopen("c1.zip", "w");
-        mx_printerrln("TEST2");
-    fwrite(p_array, 1, sizeof(p_array), image);
-    fclose(image);
-    mx_printerrln("TEST3");
+    FILE *file;
+    file = fopen(file_name, "w");
+    fwrite(p_array, 1, sizeof(p_array), file);
+    fclose(file);
+    //sqlite3_free(file_name);
 }
