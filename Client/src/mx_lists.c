@@ -1,13 +1,16 @@
 #include "../inc/header.h"
 
 void edit_func(GtkWidget *button, gpointer data)
-{   if (choosen_one == NULL) {
+{   
+    if (choosen_one == NULL) {
+        ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
         gtk_widget_set_name(button, "choosen_label");
         choosen_one = button;
     }
     else if (choosen_one == button){
+        ACTIVE_MESSAGE = NULL;
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
         gtk_widget_set_name(button, "message_my");
@@ -90,7 +93,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
             gtk_widget_set_name(GTK_WIDGET((*message)->message_text_box), "text_box_interlocutor");
         }
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), (*message)->message_text_box, TRUE, TRUE, 20);
-        g_signal_connect(G_OBJECT((*message)->key_label), "clicked", G_CALLBACK(edit_func), NULL);
+        g_signal_connect(G_OBJECT((*message)->key_label), "clicked", G_CALLBACK(edit_func), (gpointer)(*message));
     } 
     else {
         MESSAGE_T *temp = *message, *temp_1 = NULL;
@@ -124,7 +127,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
             gtk_widget_set_name(GTK_WIDGET(temp->message_text_box), "text_box_interlocutor");
         }
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), temp->message_text_box, FALSE, FALSE, 0);
-        g_signal_connect(G_OBJECT((temp)->key_label), "clicked", G_CALLBACK(edit_func), NULL);
+        g_signal_connect(G_OBJECT((temp)->key_label), "clicked", G_CALLBACK(edit_func), (gpointer)(temp));
     }
     scrolling();
 
