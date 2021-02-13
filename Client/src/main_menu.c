@@ -6,29 +6,33 @@
 
 
 
-void send_files(GtkWidget *button, gpointer window) {
-    /*
+void mx_select_file_to_send(GtkWidget *button, gpointer window) {
     GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    gint res;
 
-    dialog = gtk_file_chooser_dialog_new ("Open File",
-                                        window,
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+    dialog = gtk_file_chooser_dialog_new ("Open File", window, action,
+                                        ("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        ("_Open"),
+                                        GTK_RESPONSE_ACCEPT,
                                         NULL);
 
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    res = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (res == GTK_RESPONSE_ACCEPT)
     {
         char *filename;
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+        filename = gtk_file_chooser_get_filename (chooser);
+        mx_send_file();
+        mx_printerrln(filename);
+        //open_file (filename);
 
-        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-        open_file (filename);
+
         g_free (filename);
     }
 
     gtk_widget_destroy (dialog);
-      
-*/
 }
 
 
@@ -234,7 +238,7 @@ void main_menu() {
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
     
-     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(send_files), (gpointer)window);
+     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
           /* (Конец)Проверка сигналов */

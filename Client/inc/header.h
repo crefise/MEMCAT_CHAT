@@ -130,4 +130,6 @@ void mx_send_message(GtkWidget *button, gpointer data);
 void* mx_massage_check_in(void* socket);
 void select_chat(GtkWidget *button, gpointer data);
 char* mx_get_client_date();
+void mx_recv_file(int sockfd);
+void mx_send_file(int sockfd, char* filename);
 #endif

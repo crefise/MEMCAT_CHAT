@@ -20,6 +20,7 @@ CHAT_T *FAVORITE_CHAT = NULL;
 
 
 
+
 int main ( int argc, char* argv[] ) {
     if (argc != 3) {
         mx_printerrln("usage: ./uchat [IP] [PORT]");
