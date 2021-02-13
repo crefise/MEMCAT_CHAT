@@ -50,7 +50,7 @@ void login_connect(GtkWidget *button, gpointer data) {
             pthread_create(&pthreads[0], NULL, mx_massage_check_in, &sock);
             pthread_create(&pthreads[0], NULL, console_style, NULL);
             gtk_widget_hide(login_window);
-            main_menu();
+            main_menu(login_window);
         }
         mx_strdel(&buffer);
 
