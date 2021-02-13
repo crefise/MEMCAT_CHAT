@@ -202,9 +202,8 @@ void ps_parse_file(char *buffer, int client_socket, char* login_my) {
 
     char *filename = strncpy(filename, &temp[strlen(loogin_second)+1] ,strlen(temp) - strlen(loogin_second) - 1);
 
-
-
-   // mx_write_file(client_socket);
+    add_file_to_CHAT(get_chat_id_from_CHATS(login_my, loogin_second), get_id_from_USERS(login_my), filename);
+    mx_write_file(client_socket, filename, get_chat_id_from_CHATS(login_my, loogin_second));
 }
 
 

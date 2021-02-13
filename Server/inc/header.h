@@ -38,7 +38,7 @@ void send_massage_to_client(char* message, char* sender_login, char* recipient_l
 void send_chats_to_client(char** chats, int client_socket);
 void send_messages_to_client(char** messages, int client_socket); 
 void mx_send_file(int sock, char* filename);
-void mx_write_file(int sock, char* filename);
+void mx_write_file(int sock, char* filename, int chat_id);
 
 
 /* database */
@@ -63,6 +63,7 @@ int count_users_in_USERS(); // not ready
 void add_user_to_ONLINE_USERS(char* login, int socket);
 void delete_user_from_ONLINE_USERS(int socket);
 int get_socket_from_ONLINE_USERS(char* login);
+bool check_user_in_ONLINE_USERS(char* login);
 void clear_ONLINE_USERS();
 
 int add_chat_to_CHATS(char* u1, char* u2);
@@ -78,12 +79,13 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message);
 void add_file_to_CHAT(int chat_id, int sender_id, char* filename);
 void delete_message_from_CHAT(int message_id);
 void update_message_in_CHAT(int message_id, char* message);
+void update_reference_file_in_CHAT(int message_id, char* reference);
 char** get_last_30_messages_from_CHAT(int chat_id);
 char** get_messages_from_CHAT(int chat_id);
 void get_all_messages_from_CHAT_CONSOLE();
 int get_max_message_id_from_CHAT(int chat_id);
 char* get_message_from_CHAT(int chat_id, int message_id);
-char* get_reference_file_from_CHAT(message_id);
+char* get_reference_file_from_CHAT(int message_id);
 int count_messages_from_CHAT(int chat_id);
 bool check_user_in_CHAT(int chat_id, char* user);
 
@@ -114,8 +116,7 @@ void print_emoji(char* emoji);
 
 
 char* mx_ps_reconnect(char * buffer, int client_socket);
-void mx_write_file(int sock);
-void mx_send_file(int sock, char* filename);
+
 #endif
 
 

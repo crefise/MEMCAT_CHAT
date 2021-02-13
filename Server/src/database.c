@@ -395,7 +395,7 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
 
 void add_file_to_CHAT(int chat_id, int sender_id, char* filename) {
    char* date_time = get_server_date();
-   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE, REFERENCE_FILE) VALUES(%i, %i, '%s', '%s', '%s', '%s');", chat_id, sender_id, "file", date_time, "file", filename);
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', '%s', '%s');", chat_id, sender_id, filename, date_time, "file");
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
@@ -652,4 +652,33 @@ char* get_reference_file_from_CHAT(message_id) {
 
 void clear_ONLINE_USERS() {
    exec_db("DROP TABLE ONLINE_USERS;");
+}
+
+
+bool check_user_in_ONLINE_USERS(char* login) {
+   bool exist = false;
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT ID from ONLINE_USERS where LOGIN='%s';", login);
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);   
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+
+      sqlite3_close(data_base);
+      exist = false;
+   } 
+   rc = sqlite3_step(result);
+   if (rc == SQLITE_ROW) {
+      exist = true;
+   }
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+   return exist;
+}
+
+void update_reference_file_in_CHAT(int message_id, char* reference) {
+   char* statement = sqlite3_mprintf("UPDATE CHAT SET REFERENCE_FILE='%s' WHERE MESSAGE_ID=%i;", reference, message_id);
+   exec_db(statement);
+   sqlite3_free(statement);
 }
