@@ -7,18 +7,8 @@ void logout(GtkWidget *button, gpointer data)
 }
 
 
-void send_file(FILE *fp, int sockfd){
-  int n;
-  char data[1024] = {0};
 
-  while(fgets(data, 1024, fp) != NULL) {
-    if (send(sockfd, data, sizeof(data), 0) == -1) {
-      perror("[-]Error in sending file.");
-      exit(1);
-    }
-    bzero(data, 1024);
-  }
-}
+
 
 
 void mx_select_file_to_send(GtkWidget *button, gpointer window) {
@@ -49,17 +39,17 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
             return;
 
 
-        FILE *fp = fopen(filename, "rb");
-        if (fp == NULL) {
-            perror("[-]Error in reading file.");
-            exit(1);
-        }
-
-        send_file(fp, sock);
+       //FILE *fp = fopen(filename, "rb");
+    //    if (fp == NULL) {
+   //         perror("[-]Error in reading file.");
+     //       exit(1);
+     //   }
+        mx_send_file(sock, filename);
+       // send_file(filename, sock);
         printf("[+]File data sent successfully.\n");
 
         printf("[+]Closing the connection.\n");
-        close(sock);
+       // close(sock);
 
         g_free (filename);
     }

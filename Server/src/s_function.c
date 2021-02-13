@@ -179,7 +179,8 @@ void ps_isuser(char **login_1, char **login_2, char *text) { // isuser[login/log
     }
     */
 }
-      
+  
+
 
 char* ps_delete_text(char *buffer) {
     char *result = mx_strnew(strlen(buffer) - 5);
@@ -189,24 +190,6 @@ char* ps_delete_text(char *buffer) {
 
 
 
-void write_file(int sockfd){
-  int n;
-  FILE *fp;
-  char *filename = "13456.txt";
-  char buffer[1024];
-
-  fp = fopen(filename, "wb");
-  while (1) {
-    n = recv(sockfd, buffer, 1024, 0);
-    if (n <= 0){
-      break;
-      return;
-    }
-    fprintf(fp, "%s", buffer);
-    bzero(buffer, 1024);
-  }
-  return;
-}
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
     int *temp = sock;
@@ -327,9 +310,9 @@ void *user_connect(void* sock) {
                 #ifdef TEST
                     mx_printerrln("Trying take file...");
                 #endif
-
-                        write_file(client_socket);
-                        printf("[+]Data written in the file successfully.\n");
+                mx_write_file(client_socket);
+                       
+                       
 
                 exit = 0;
                 break;
@@ -444,48 +427,3 @@ void mx_del_strarr(char ***arr) {
     *arr = NULL;
 }
 
-#define MAXBUF  1024
-void mx_send_file(int sockfd, char* buf) {
-    /*
-    int     s;
-    int         sourse_fd;
-    //char        buf[MAXBUF];
-    int         file_name_len, read_len;
-    memset(buf, 0x00, MAXBUF);
-    printf("write file name to send to the server:  ");
-
-    file_name_len = strlen(buf);
-
-    send(sockfd, buf, file_name_len, 0);
-    sourse_fd = open(buf, O_RDONLY);
-    if(!sourse_fd) {
-        perror("Error : ");
-        return 1;
-    }
-
-    while(1) {
-        memset(buf, 0x00, MAXBUF);
-        read_len = read(sourse_fd, buf, MAXBUF);
-        send(s, buf, read_len, 0);
-        if(read_len == 0) {
-            break;
-        }
-
-    }
-    */
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>     // read, write
-#include <arpa/inet.h>
-#include <sys/types.h>  // socket, bind, accept, open
-#include <sys/socket.h> // socket, bind, listen, accept
-#include <sys/stat.h>   // open
-#include <fcntl.h>      // open
-#include <errno.h>
-
-void mx_recv_file(int sockfd) {
-
-}
