@@ -12,49 +12,44 @@ void logout(GtkWidget *button, gpointer data)
      }
  }
 
-
+char *mx_take_name_from_path_file(char *temp) {
+    int counter = 0;
+    for (int i = strlen(temp) - 1; temp[i] != '/'; i--) {
+        counter++;
+    }
+    char *result = mx_strnew(counter);
+    result = strcpy(result, &temp[strlen(temp) - counter]);
+    mx_printerrln("NAME : "); mx_printerrln(result);
+    return result;
+} 
 
 void mx_select_file_to_send(GtkWidget *button, gpointer window) {
     GtkWidget *dialog;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint res;
 
-    dialog = gtk_file_chooser_dialog_new ("Open File", window, action,
-                                        ("_Cancel"),
-                                        GTK_RESPONSE_CANCEL,
-                                        ("_Open"),
-                                        GTK_RESPONSE_ACCEPT,
-                                        NULL);
+    dialog = gtk_file_chooser_dialog_new ("Open File", window, action, ("_Cancel"), GTK_RESPONSE_CANCEL, ("_Open"), GTK_RESPONSE_ACCEPT, NULL);
 
     res = gtk_dialog_run (GTK_DIALOG (dialog));
     if (res == GTK_RESPONSE_ACCEPT)
     {
-        char *filename = "";
+        char *filepath = "";
         GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
-        filename = gtk_file_chooser_get_filename (chooser);
+        filepath = gtk_file_chooser_get_filename (chooser);
 
-
+        char* filename = mx_take_name_from_path_file(filepath);
 
         char *will_send = ""; 
-        will_send = concat(will_send, "find");
-        concat(will_send, mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat);
-        if (send(sock, "filecrefise", 11, 0) == -1)
+        will_send = concat(will_send, "find"); // findlogin/filename
+        will_send = concat(will_send, mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat);
+        will_send = concat(will_send, "/");
+        will_send = concat(will_send, filename);
+        if (send(sock, will_send, strlen(will_send), 0) == -1)
             return;
 
-
-       //FILE *fp = fopen(filename, "rb");
-    //    if (fp == NULL) {
-   //         perror("[-]Error in reading file.");
-     //       exit(1);
-     //   }
-        mx_send_file(sock, filename);
-       // send_file(filename, sock);
-        printf("[+]File data sent successfully.\n");
-
-        printf("[+]Closing the connection.\n");
-       // close(sock);
-
-        g_free (filename);
+      //  mx_send_file(sock, filepath);
+        mx_strdel(&will_send);
+        g_free (filepath);
     }
 
     gtk_widget_destroy (dialog);

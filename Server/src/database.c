@@ -386,18 +386,16 @@ char** get_chats_from_CHATS(char* login) {
 
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
-   /*
-   if (!check_user_in_CHAT(chat_id, get_login_from_USERS(sender_id))) {
-      set_console_color(RED);
-      char* err = sqlite3_mprintf("😕 Failed to add message: User [%s] is not in this chat\n", get_login_from_USERS(sender_id));
-      write(2, err, strlen(err));
-      set_console_color(NORMAL);
-      sqlite3_free(err);
-      return;
-   }
-   */
    char* date_time = get_server_date();
    char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', 'message');", chat_id, sender_id, message, date_time);
+   exec_db(statement);
+   free(date_time);
+   sqlite3_free(statement);
+}
+
+void add_file_to_CHAT(int chat_id, int sender_id, char* filename) {
+   char* date_time = get_server_date();
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE, REFERENCE_FILE) VALUES(%i, %i, '%s', '%s', '%s', '%s');", chat_id, sender_id, "file", date_time, "file", filename);
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
@@ -621,13 +619,35 @@ void get_all_messages_from_CHAT_CONSOLE() {
 
       char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
 
-      //mx_printerrln(temp);
-
       sqlite3_free(temp);
    }
    
    sqlite3_finalize(result);
    sqlite3_free(statement);
+}
+
+char* get_reference_file_from_CHAT(message_id) {
+   char* reference_file = "";
+   sqlite3_stmt *result;
+   char* statement = sqlite3_mprintf("SELECT REFERENE_FILE FROM CHAT WHERE MESSAGE_ID=%i", message_id);
+
+   int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
+   if (rc != SQLITE_OK) {
+      set_console_color(RED);
+      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      set_console_color(NORMAL);
+      sqlite3_close(data_base);
+   }
+   rc = sqlite3_step(result);
+   for(int i = 0; rc == SQLITE_ROW; i++, rc = sqlite3_step(result)) {
+      char* temp = sqlite3_mprintf("%s", (char*)sqlite3_column_text(result, 0));
+      reference_file = concat(reference_file, temp);
+      sqlite3_free(temp);
+   }
+   
+   sqlite3_finalize(result);
+   sqlite3_free(statement);
+   return reference_file;
 }
 
 void clear_ONLINE_USERS() {
