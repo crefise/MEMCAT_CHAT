@@ -5,9 +5,12 @@ void logout(GtkWidget *button, gpointer data)
     gtk_widget_hide(window);
     gtk_widget_show_all(login_window);
 }
-
-
-
+ void edit_message(GtkWidget *btn, gpointer data)
+ {
+     if (choosen_one != NULL) {
+        gtk_entry_set_text(GTK_ENTRY(data), gtk_button_get_label(GTK_BUTTON(choosen_one)));
+     }
+ }
 
 char *mx_take_name_from_path_file(char *temp) {
     int counter = 0;
@@ -86,8 +89,7 @@ void main_menu(GtkWidget *login_window) {
     GtkWidget* reconnect_animation_IMG;             // Картинка в которую будет загружена гиффка
     GtkWidget *reconect_label;                      // текст для реконекта
 
-
- 
+    edit = malloc(sizeof(struct edit_struct));
     gtk_init(NULL, NULL);
     load_css();                                     // Подгружаем CSS
     
@@ -96,6 +98,8 @@ void main_menu(GtkWidget *login_window) {
     gtk_window_set_title(GTK_WINDOW(window), "MEMCAT CHAT");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+
+    choosen_one = NULL;
 
 
 
@@ -135,6 +139,10 @@ void main_menu(GtkWidget *login_window) {
 
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new();
+
+    edit->edit_key = gtk_button_new_with_label("Edit");
+    edit->delete_key = gtk_button_new_with_label("Delete");
+
 
 
 
@@ -218,6 +226,8 @@ void main_menu(GtkWidget *login_window) {
 
     gtk_box_pack_start(GTK_BOX(setting_str), FAVORITE_CHAT->chat_button, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), setting_key, FALSE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(setting_str), edit->edit_key, FALSE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(setting_str), edit->delete_key, FALSE, TRUE, 5);
 
     for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
         gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
@@ -249,8 +259,10 @@ void main_menu(GtkWidget *login_window) {
         /* (END)Containing */
    mx_printerrln("test okay5...");
 
-
     gtk_widget_show_all(window);
+    
+    gtk_widget_hide(edit->edit_key);
+    gtk_widget_hide(edit->delete_key);
     gtk_widget_hide(reconnect_widget);
 
         /* Проверка сигналов */
@@ -264,6 +276,7 @@ void main_menu(GtkWidget *login_window) {
      g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
+    g_signal_connect(G_OBJECT(edit->edit_key), "clicked", G_CALLBACK(edit_message), (gpointer)input_str);
           /* (Конец)Проверка сигналов */
    mx_printerrln("test okay6...");
     gtk_main();

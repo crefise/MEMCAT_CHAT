@@ -43,7 +43,7 @@ typedef struct MESSAGE_S
     GtkWidget *message_text_box;
     char* message_text;
     char* sender;
-    GtkWidget *text_label;
+    GtkWidget *key_label;
     struct MESSAGE_S *next;
 }              MESSAGE_T;
 
@@ -57,6 +57,15 @@ typedef struct CHAT_S
     MESSAGE_T *messages;
     int CHAT_ID;
 }              CHAT_T;
+
+struct edit_struct
+{
+    GtkWidget* edit_key;
+    GtkWidget* delete_key;
+};
+
+struct edit_struct *edit;
+GtkWidget *choosen_one;
 
 extern char* USER_LOGIN;
 extern char *OPENED_DIALOG;
