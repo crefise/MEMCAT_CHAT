@@ -1,6 +1,10 @@
 #include "../inc/header.h"
 
-
+void logout(GtkWidget *button, gpointer data)
+{
+    gtk_widget_hide(window);
+    gtk_widget_show_all(login_window);
+}
 
 
 void send_file(FILE *fp, int sockfd){
@@ -35,6 +39,12 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
         char *filename = "";
         GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
         filename = gtk_file_chooser_get_filename (chooser);
+<<<<<<< HEAD
+=======
+        //mx_send_file();
+        mx_printerrln(filename);
+        //open_file (filename);
+>>>>>>> 7ff35b7a9c49298d558ecf6990abb41d73c6f015
 
 
 
@@ -65,8 +75,12 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
 
 
 
+<<<<<<< HEAD
 
 void main_menu() {
+=======
+void main_menu(GtkWidget *login_window) {
+>>>>>>> 7ff35b7a9c49298d558ecf6990abb41d73c6f015
    
     GtkWidget *input_box;                           // Бокс для строки сообщений
     GtkWidget *input_str;                           // Вводимая строка
@@ -268,6 +282,7 @@ void main_menu() {
         /* Проверка сигналов */
     g_signal_connect(input_key, "clicked", G_CALLBACK (mx_send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
+    g_signal_connect(setting_key, "clicked", G_CALLBACK (logout), NULL);
 
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));

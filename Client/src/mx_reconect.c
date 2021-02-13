@@ -1,5 +1,15 @@
 #include "../inc/header.h"
 
+
+static void* play_music() {
+    system("afplay Client/audio/reconnect_music.mp3");
+    return NULL;
+}
+
+static void stop_music() {
+    system("say done");
+}
+
 void mx_reconect() {
 
     gtk_widget_show_all(window);
@@ -7,7 +17,10 @@ void mx_reconect() {
 
     close(sock);
     sock = socket(AF_INET, SOCK_STREAM, 0); // Сокет который ведет к серверу
+    //pthread_t music;
+    //pthread_create(&music, NULL, play_music, NULL);
     while (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1) {
+        //play_music();
         close(sock);
         sock = socket(AF_INET, SOCK_STREAM, 0);
         mx_printerrln("reconecting..");
@@ -19,7 +32,9 @@ void mx_reconect() {
         write(2, "SERVER DONT CONNETCTED\n",23);
         return;
     }
-
+    //stop_music();
+    //pthread_cancel(music);
+    //
     gtk_widget_show_all(window);
     gtk_widget_hide(reconnect_widget);
 

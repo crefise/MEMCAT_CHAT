@@ -1,5 +1,9 @@
 #include "../inc/header.h"
 
+static void play_music() {
+    system("afplay Client/audio/ping_pong_cut.mp3");
+}
+
 void mx_send_message(GtkWidget *button, gpointer data) {
     char *buffer = NULL;
     //struct message_struct *messages = input;
@@ -14,6 +18,7 @@ void mx_send_message(GtkWidget *button, gpointer data) {
 
     char *text = strdup((char*)gtk_entry_get_text(GTK_ENTRY(input_str)));
     if(text && strlen(text) > 0) {
+        play_music();
         char *date = mx_get_client_date();
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text, date);
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
