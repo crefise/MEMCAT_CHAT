@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+
+#define TEST
 extern int count_users;
 extern sqlite3* data_base;
 

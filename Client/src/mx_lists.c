@@ -49,7 +49,7 @@ void set_label(MESSAGE_T **message, char *text, char *sender) {
         gtk_box_pack_start(GTK_BOX(temp->message_box), temp->message_text_box, FALSE, FALSE, 5);
         */
 void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **chat) {
-    char *date = "10.20.20 20:32";
+
     if (!text || !sender)
         return;
     if (*message == NULL) {
@@ -68,10 +68,14 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
             gtk_widget_set_halign((*message)->text_label,GTK_ALIGN_START);
             gtk_widget_set_halign((*message)->message_text_box,GTK_ALIGN_FILL);
         }
-        if (strcmp(sender, USER_LOGIN) == 0)
+        if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_my");
-        else
+            gtk_widget_set_name(GTK_WIDGET((*message)->message_text_box), "text_box_my");
+        }
+        else {
             gtk_widget_set_name(GTK_WIDGET((*message)->text_label), "message_interlocutor");
+            gtk_widget_set_name(GTK_WIDGET((*message)->message_text_box), "text_box_interlocutor");
+        }
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), (*message)->message_text_box, TRUE, TRUE, 20);
     } 
     else {
@@ -97,10 +101,14 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
         }
         temp_1->next = temp;
         temp->next = NULL;
-        if (strcmp(sender, USER_LOGIN) == 0)
+        if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_my");
-        else
+            gtk_widget_set_name(GTK_WIDGET(temp->message_text_box), "text_box_interlocutor");
+        }
+        else {
             gtk_widget_set_name(GTK_WIDGET(temp->text_label), "message_interlocutor");
+            gtk_widget_set_name(GTK_WIDGET(temp->message_text_box), "text_box_interlocutor");
+        }
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), temp->message_text_box, FALSE, FALSE, 0);
     }
 

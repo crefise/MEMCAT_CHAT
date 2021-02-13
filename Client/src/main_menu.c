@@ -6,7 +6,30 @@
 
 
 
+void send_files(GtkWidget *button, gpointer window) {
+    /*
+    GtkWidget *dialog;
 
+    dialog = gtk_file_chooser_dialog_new ("Open File",
+                                        window,
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                        NULL);
+
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        char *filename;
+
+        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+        open_file (filename);
+        g_free (filename);
+    }
+
+    gtk_widget_destroy (dialog);
+      
+*/
+}
 
 
 
@@ -15,6 +38,8 @@ void main_menu() {
     GtkWidget *input_box;                           // Бокс для строки сообщений
     GtkWidget *input_str;                           // Вводимая строка
     GtkWidget *input_key;                           // Кнопка ввода
+    GtkWidget *send_file_key;                       // Кнопка send file
+    GtkWidget *send_file_button_image;
     GtkWidget *send_message_button_image;           // Картинка для кнопки ввода
 
     GtkWidget *search_box;                          // Бокс для строки поиска
@@ -85,6 +110,7 @@ void main_menu() {
     input_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     input_key = gtk_button_new();
     input_str = gtk_entry_new();
+    send_file_key = gtk_button_new();
 
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new();
@@ -149,14 +175,14 @@ void main_menu() {
     gtk_box_pack_start(GTK_BOX(main_box), chats_box, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_box), message_box, TRUE, TRUE, 0);
 
-    
-
     gtk_box_pack_start(GTK_BOX(message_box), setting_str, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), scrool_massages, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(message_box), input_box, FALSE, FALSE, 0);
 
     gtk_box_pack_start(GTK_BOX(input_box), input_str, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(input_box), send_file_key, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(input_box), input_key, FALSE, FALSE, 0);
+
 
     gtk_box_pack_start(GTK_BOX(chats_box), search_box, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(chats_box), scrool_chats, TRUE, TRUE, 5);
@@ -208,6 +234,7 @@ void main_menu() {
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
     
+     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(send_files), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
           /* (Конец)Проверка сигналов */

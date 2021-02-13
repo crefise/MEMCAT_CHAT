@@ -195,7 +195,7 @@ void *user_connect(void* sock) {
     bool logined = 0;
 
     while (!exit) {
-        mx_printerr("--------ONLINE BASE NOW-----------\n");
+        mx_printerr("\n--------ONLINE BASE NOW-----------\n");
         exec_db("SELECT * FROM ONLINE_USERS");
         mx_printerr("----------------------------------\n");
 
@@ -287,9 +287,19 @@ void *user_connect(void* sock) {
                 exit = 0;
                 break;
             case 7:
+                #ifdef TEST
+                    mx_printerrln("Trying reconnect...");
+                #endif
+
                 login = mx_ps_reconnect(buffer, client_socket);
-                mx_printerr("ALL OK");
+                logined = 1;
                 mx_printerrln(login);
+
+                #ifdef TEST
+                    mx_printerr("Reconnect succsess login = \"");
+                    mx_printerr(login);
+                    mx_printerrln("\"");
+                #endif
                 exit = 0;
                 break;
             case -1: // ошибка сообщения
