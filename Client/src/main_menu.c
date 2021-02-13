@@ -12,6 +12,11 @@ void logout(GtkWidget *button, gpointer data)
      }
  }
 
+ void delete_message(GtkWidget *btn, gpointer data)
+ {
+     gtk_widget_destroy(choosen_one);
+ }
+
 char *mx_take_name_from_path_file(char *temp) {
     int counter = 0;
     for (int i = strlen(temp) - 1; temp[i] != '/'; i--) {
@@ -277,6 +282,7 @@ void main_menu(GtkWidget *login_window) {
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
     g_signal_connect(G_OBJECT(edit->edit_key), "clicked", G_CALLBACK(edit_message), (gpointer)input_str);
+    g_signal_connect(G_OBJECT(edit->delete_key), "clicked", G_CALLBACK(delete_message), NULL);
           /* (Конец)Проверка сигналов */
    mx_printerrln("test okay6...");
     gtk_main();

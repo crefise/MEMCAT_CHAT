@@ -82,7 +82,7 @@ extern GtkWidget *main_box;
 extern int sock;
 extern int PAUSE;
 extern GtkWidget *stack;
-
+extern MESSAGE_T *ACTIVE_MESSAGE;
 
 
 void load_css ( void );

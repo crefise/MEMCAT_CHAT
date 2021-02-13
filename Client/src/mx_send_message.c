@@ -5,6 +5,11 @@ static void play_music() {
 }
 
 void mx_send_message(GtkWidget *button, gpointer data) {
+    if (choosen_one != NULL) {
+        gtk_button_set_label(GTK_BUTTON(choosen_one), gtk_entry_get_text(GTK_ENTRY(data)));
+        mx_printerrln(ACTIVE_MESSAGE->message_text);
+        return;
+    }
     char *buffer = NULL;
     //struct message_struct *messages = input;
     GtkWidget *input_str = data;
