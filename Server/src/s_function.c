@@ -189,6 +189,24 @@ char* ps_delete_text(char *buffer) {
 }
 
 
+void ps_parse_file(char *buffer, int client_socket, char* login_my) {
+    char *temp = malloc(strlen(buffer) - 4 );
+    temp = strncpy(temp, &buffer[4], strlen(buffer) - 4);
+    mx_printerr("BUFFER TEMP:"); mx_printerrln(temp);
+
+    int counter = 0;
+   for (int i = 0; temp[i] != '/'; i++)
+        counter++;
+    char* loogin_second = mx_strnew(counter);
+    loogin_second = strncpy(loogin_second, temp, counter);
+
+    char *filename = strncpy(filename, &temp[strlen(loogin_second)+1] ,strlen(temp) - strlen(loogin_second) - 1);
+
+
+
+   // mx_write_file(client_socket);
+}
+
 
 void *user_connect(void* sock) {
     char *buffer = NULL; // Буфер для обмена сообщениями между клиентом и сервером
@@ -310,7 +328,8 @@ void *user_connect(void* sock) {
                 #ifdef TEST
                     mx_printerrln("Trying take file...");
                 #endif
-                mx_write_file(client_socket);
+                ps_parse_file(buffer,client_socket, login);
+
                        
                        
 
