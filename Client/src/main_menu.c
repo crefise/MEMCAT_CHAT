@@ -39,12 +39,6 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
         char *filename = "";
         GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
         filename = gtk_file_chooser_get_filename (chooser);
-<<<<<<< HEAD
-=======
-        //mx_send_file();
-        mx_printerrln(filename);
-        //open_file (filename);
->>>>>>> 7ff35b7a9c49298d558ecf6990abb41d73c6f015
 
 
 
@@ -75,12 +69,7 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
 
 
 
-<<<<<<< HEAD
-
-void main_menu() {
-=======
 void main_menu(GtkWidget *login_window) {
->>>>>>> 7ff35b7a9c49298d558ecf6990abb41d73c6f015
    
     GtkWidget *input_box;                           // Бокс для строки сообщений
     GtkWidget *input_str;                           // Вводимая строка
