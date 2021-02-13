@@ -433,7 +433,7 @@ void send_file(int sockfd, char* filename) {
   }
 }
 
-void write_file(int sockfd) {
+void recv_file(int sockfd) {
   int n;
   FILE *fp;
   char *filename = "recv.txt";
