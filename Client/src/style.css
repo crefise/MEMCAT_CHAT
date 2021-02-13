@@ -221,3 +221,11 @@ button
 #date_label {
     font-size: 10px;
 }
+#send_file_key {
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+}

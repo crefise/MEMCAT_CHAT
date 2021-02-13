@@ -3,7 +3,18 @@
 
 
 
+void send_file(FILE *fp, int sockfd){
+  int n;
+  char data[1024] = {0};
 
+  while(fgets(data, 1024, fp) != NULL) {
+    if (send(sockfd, data, sizeof(data), 0) == -1) {
+      perror("[-]Error in sending file.");
+      exit(1);
+    }
+    bzero(data, 1024);
+  }
+}
 
 
 void mx_select_file_to_send(GtkWidget *button, gpointer window) {
@@ -21,19 +32,37 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
     res = gtk_dialog_run (GTK_DIALOG (dialog));
     if (res == GTK_RESPONSE_ACCEPT)
     {
-        char *filename;
+        char *filename = "";
         GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
         filename = gtk_file_chooser_get_filename (chooser);
-        mx_send_file();
-        mx_printerrln(filename);
-        //open_file (filename);
 
+
+
+        char *will_send = ""; 
+        will_send = concat(will_send, "find");
+        concat(will_send, mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat);
+        if (send(sock, "filecrefise", 11, 0) == -1)
+            return;
+
+
+        FILE *fp = fopen(filename, "rb");
+        if (fp == NULL) {
+            perror("[-]Error in reading file.");
+            exit(1);
+        }
+
+        send_file(fp, sock);
+        printf("[+]File data sent successfully.\n");
+
+        printf("[+]Closing the connection.\n");
+        close(sock);
 
         g_free (filename);
     }
 
     gtk_widget_destroy (dialog);
 }
+
 
 
 
@@ -119,6 +148,8 @@ void main_menu() {
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new();
 
+
+
    mx_printerrln("test okay1...");
         /*  (КОНЕЦ)Инициализация обьектов для чата */
 
@@ -131,6 +162,8 @@ void main_menu() {
     search_key_image = gtk_image_new_from_file ("Client/img/search_img.png");
 
     reconnect_animation_GIF = gdk_pixbuf_animation_new_from_file ("Client/GIFS/reconnect.gif", NULL);
+
+    send_file_button_image = gtk_image_new_from_file ("Client/img/13456.png");
 
     reconnect_animation_IMG = gtk_image_new();
     gtk_image_set_from_animation (GTK_IMAGE(reconnect_animation_IMG), reconnect_animation_GIF);
@@ -154,6 +187,7 @@ void main_menu() {
     gtk_widget_set_name(GTK_WIDGET(input_str), "input_str");
     gtk_widget_set_name(GTK_WIDGET(input_key), "input_key");
     gtk_widget_set_name(GTK_WIDGET(send_message_button_image), "send_message_button_image");
+    gtk_widget_set_name(GTK_WIDGET(send_file_key), "send_file_key");
 
     gtk_widget_set_name(GTK_WIDGET(search_box), "search_box");
     gtk_widget_set_name(GTK_WIDGET(search_key), "search_key");
@@ -222,7 +256,7 @@ void main_menu() {
     gtk_container_add(GTK_CONTAINER(search_key), search_key_image);
     gtk_container_add(GTK_CONTAINER(FAVORITE_CHAT->chat_button), home_key_IMG);
     gtk_container_add(GTK_CONTAINER(setting_key), settings_key_IMG);
-    
+    gtk_container_add(GTK_CONTAINER(send_file_key),send_file_button_image);
    
         /* (END)Containing */
    mx_printerrln("test okay5...");

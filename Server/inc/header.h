@@ -112,6 +112,8 @@ void print_emoji(char* emoji);
 
 
 char* mx_ps_reconnect(char * buffer, int client_socket);
+void mx_recv_file(int sockfd);
+void mx_send_file(int sockfd, char* filename);
 #endif
 
 
