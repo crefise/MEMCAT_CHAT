@@ -233,7 +233,7 @@ void main_menu(GtkWidget *login_window) {
 
 
     gtk_box_pack_start(GTK_BOX(chats_box), search_box, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(chats_box), scrool_chats, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(chats_box), scrool_chats, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(search_box), search_str, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_box), search_key, FALSE, FALSE, 0);
