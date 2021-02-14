@@ -60,6 +60,8 @@ typedef struct CHAT_S
     int CHAT_ID;
 }              CHAT_T;
 
+
+
 struct edit_struct
 {
     GtkWidget* edit_key;
@@ -67,7 +69,7 @@ struct edit_struct
 };
 
 struct edit_struct *edit;
-GtkWidget *choosen_one;
+
 
 extern char* USER_LOGIN;
 extern char *OPENED_DIALOG;
