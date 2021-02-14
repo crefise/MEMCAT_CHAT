@@ -242,6 +242,17 @@ button
     padding: 10px;
 }
 
+#chosen_file
+{
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    background: #212E37;
+}
+
 message_file_interlocutor {
     border: none;
     background: none;
