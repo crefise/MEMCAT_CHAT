@@ -76,6 +76,15 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
     gtk_widget_destroy (dialog);
 }
 
+
+void mx_onen_file() {
+    mx_printerr("Test:"); mx_printerrln(ACTIVE_MESSAGE->message_text);
+    char* temp = sqlite3_mprintf("open Client/files/%s", ACTIVE_MESSAGE->message_text);
+    system(temp);
+    sqlite3_free(temp);
+}
+
+
 MESSAGE_T* ACTIVE_MESSAGE = NULL;
 void main_menu(GtkWidget *login_window) {
    
@@ -308,7 +317,7 @@ void main_menu(GtkWidget *login_window) {
 
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
-    
+     g_signal_connect(G_OBJECT(edit->open_key), "clicked", G_CALLBACK(mx_onen_file), NULL);
     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);

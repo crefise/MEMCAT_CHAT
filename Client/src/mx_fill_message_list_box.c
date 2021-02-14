@@ -101,11 +101,11 @@ void add_new_message_file(MESSAGE_T **message, char *text, char *sender, CHAT_T 
         temp->data_label = gtk_label_new(date);
         if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_halign(temp->key_label,GTK_ALIGN_END);
-            gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_END);
+            gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_FILL);
         }
         else {
             gtk_widget_set_halign(temp->key_label,GTK_ALIGN_START);
-            gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_START);
+            gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_FILL);
         }
         temp_1->next = temp;
         temp->next = NULL;

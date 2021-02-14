@@ -51,6 +51,7 @@ if (type == 'm')
     add_new_message(&(chat->messages), message, login, &chat, date);
 else {
     add_new_message_file(&(chat->messages), message, login, &chat, date);
+
     mx_printerrln("trying_to_read_file");
     mx_write_file(sock, message, 0);
     mx_printerrln("We took file succsess!");
@@ -61,10 +62,7 @@ else {
 
 
 
-    if (strcmp(login, USER_LOGIN) == 0)
-        gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_END);
-    else 
-        gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_START);
+
     //gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), chat->messages->data_label, FALSE, FALSE, 1);
 
 

@@ -30,14 +30,27 @@ void mx_ps_message_that_in(char *str) {
             gtk_container_add(GTK_CONTAINER(CONTAINER), used_chat->message_box);
             g_signal_connect(G_OBJECT(used_chat->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)used_chat);
             gtk_widget_show_all(window);
+            
+            if (ACTIVE_MESSAGE != NULL) {
+                if (ACTIVE_MESSAGE->type == 'f') {
+                    gtk_widget_hide(edit->edit_key);
+                } 
+                else {
+                    gtk_widget_hide(edit->edit_key);
+                    gtk_widget_hide(edit->delete_key);
+                }
 
+            } else {
+                gtk_widget_hide(edit->edit_key);
+                gtk_widget_hide(edit->delete_key);
+                gtk_widget_hide(edit->open_key);
+            }
+            gtk_widget_hide(reconnect_widget);
         }
-                mx_printerrln("TEST CHTOTO?");
         char *date = mx_get_client_date();
         mx_fill_message_file_list_box(&used_chat, login, login, filename, date);
-        mx_printerrln("TEST CHTOTO?");
         mx_write_file(sock, filename, 0);
-        if (strcmp(OPENED_DIALOG, login) == 0) 
+        if (strcmp(OPENED_DIALOG, login) == 0)
             mx_update_used_chat(used_chat);
         return;
     } 
@@ -69,6 +82,22 @@ void mx_ps_message_that_in(char *str) {
             gtk_container_add(GTK_CONTAINER(CONTAINER), used_chat->message_box);
             g_signal_connect(G_OBJECT(used_chat->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)used_chat);
             gtk_widget_show_all(window);
+
+            if (ACTIVE_MESSAGE != NULL) {
+                if (ACTIVE_MESSAGE->type == 'f') {
+                    gtk_widget_hide(edit->edit_key);
+                } 
+                else {
+                    gtk_widget_hide(edit->edit_key);
+                    gtk_widget_hide(edit->delete_key);
+                }
+
+            } else {
+                gtk_widget_hide(edit->edit_key);
+                gtk_widget_hide(edit->delete_key);
+                gtk_widget_hide(edit->open_key);
+            }
+            gtk_widget_hide(reconnect_widget);
 
         }
         char *date = mx_get_client_date();
