@@ -94,15 +94,46 @@ void send_messages_to_client(char** messages, int client_socket) {
             }
         }
         while (left > 0);
-
+        mx_printerrln("QWEREWFSDA");
         for (int i = 0; messages[i]; i++) {
             char* temp2 = sqlite3_mprintf("%s\0", messages[i]);
             if (send(client_socket, temp2, strlen(temp2), 0) == 0 ) {
                 mx_printerrln("Error");
             }
             if (temp2[0] == 'f') {
-                 mx_printerrln("try sending to client!");
-                mx_send_file(client_socket, "1.png");
+                
+                char *check_temp = strdup(temp2);
+                mx_printerrln(check_temp);
+                mx_printerrln("QWEREWFSDA");
+                int counter_1 =0 ; int counter_temp = 0;
+                for (int i = 0; 1 == 1; i++) {
+                    if (check_temp[i] == '/')
+                        counter_1++;
+                    if (counter_1 == 3) {
+                        counter_temp = i;
+                        counter_temp++;
+                        break;
+                    }
+                }
+                mx_printerrln("QWEREWFSDA");
+                counter_1 = 0;
+                mx_printerrln("QWEREWFSDA");
+                for (int i = counter_temp; check_temp[i] != '/'; i++)
+                   counter_1++;
+                   mx_printerrln("QWEREWFSDA");
+                char *message_id = mx_strnew(counter_1);
+                mx_printerr("COUNTER"); mx_printerrln(i_to_s(counter_1));
+                mx_printerrln("QWEREWFSDA");
+                message_id = strncpy(message_id, &check_temp[counter_temp], counter_1);
+                mx_printerr("WEE TAKE FILE NAME:::");
+                mx_printerrln(message_id);
+
+                
+
+                mx_printerrln("try sending to client!"); 
+                char *extension = get_extension_from_filename(check_temp);
+                char* temp3 = sqlite3_mprintf("%s%s", message_id, extension);
+                mx_send_file(client_socket, temp3);
                 mx_printerrln("sending okay!");
             }
             sqlite3_free(temp2);
