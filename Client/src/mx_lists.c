@@ -159,7 +159,10 @@ MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index){
     return NULL;
 }
 
-
+void mx_pop_message_from_message(MESSAGE_T **message, MESSAGE_T* message) {
+    MESSAGE_T *temp = *message;
+    while((temp != NULL) || temp.)
+}
 
 void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и выключения подсветки для чата
     if (strcmp(chat->name_chat, FAVORITE_CHAT_DEFINE) == 0) {
