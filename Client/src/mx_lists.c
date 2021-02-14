@@ -2,19 +2,19 @@
 
 void edit_func(GtkWidget *button, gpointer data)
 {   
-    if (choosen_one == NULL) {
+    if (choosen_one->key_label == NULL) {
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
         gtk_widget_set_name(button, "choosen_label");
-        choosen_one = button;
+        choosen_one->key_label = button;
     }
-    else if (choosen_one == button){
+    else if (choosen_one->key_label == button){
         ACTIVE_MESSAGE = NULL;
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
         gtk_widget_set_name(button, "message_my");
-        choosen_one = NULL;
+        choosen_one->key_label = NULL;
     }
 }
 

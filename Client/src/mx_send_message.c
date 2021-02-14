@@ -5,9 +5,14 @@ static void play_music() {
 }
 
 void mx_send_message(GtkWidget *button, gpointer data) {
-    if (choosen_one != NULL) {
-        gtk_button_set_label(GTK_BUTTON(choosen_one), gtk_entry_get_text(GTK_ENTRY(data)));
+    if (choosen_one->key_label != NULL) {
+        gtk_button_set_label(GTK_BUTTON(choosen_one->key_label), gtk_entry_get_text(GTK_ENTRY(data)));
         mx_printerrln(ACTIVE_MESSAGE->message_text);
+        gtk_widget_set_name(choosen_one->key_label, "message_my");
+        gtk_entry_set_text(GTK_ENTRY(data), "");
+        gtk_widget_hide(edit->edit_key);
+        gtk_widget_hide(edit->delete_key);
+        choosen_one->key_label = NULL;
         return;
     }
     char *buffer = NULL;
