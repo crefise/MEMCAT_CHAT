@@ -3,6 +3,10 @@
 void edit_func(GtkWidget *button, gpointer data)
 {  
     MESSAGE_T *temp = data;
+    if (strcmp(temp->sender, USER_LOGIN) != 0 && temp->type != 'f') {
+        ACTIVE_MESSAGE = NULL;
+        return;
+    }
     if (ACTIVE_MESSAGE == NULL && temp->type == 'f') {
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->delete_key);
