@@ -2,21 +2,21 @@
 
 void edit_func(GtkWidget *button, gpointer data)
 {   
-    if (choosen_one->key_label == NULL) {
+    if (ACTIVE_MESSAGE->key_label == NULL) {
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
         gtk_widget_show(edit->open_key);
         gtk_widget_set_name(button, "choosen_label");
-        choosen_one->key_label = button;
+        ACTIVE_MESSAGE->key_label = button;
     }
-    else if (choosen_one->key_label == button){
+    else if (ACTIVE_MESSAGE->key_label == button){
         ACTIVE_MESSAGE = NULL;
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
         gtk_widget_hide(edit->open_key);
         gtk_widget_set_name(button, "message_my");
-        choosen_one->key_label = NULL;
+        ACTIVE_MESSAGE->key_label = NULL;
     }
 }
 
@@ -76,6 +76,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
         (*message)->sender = strdup(sender);
         (*message)->next = NULL;
          (*message)->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+         (*message)->type = 'm';
         //(*message)->key_label = gtk_label_new(text);
         set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0) {

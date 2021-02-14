@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     */
 
     init_db();
+    add_file_to_CHAT(1, 2, "pohui.png");
 
     // Инициализируем сокет!
     int sock = socket(AF_INET, SOCK_STREAM, 0);

@@ -44,6 +44,8 @@ typedef struct MESSAGE_S
     char* message_text;
     char* sender;
     GtkWidget *key_label;
+    GtkWidget *data_label;
+    char type;
     struct MESSAGE_S *next;
 }              MESSAGE_T;
 
@@ -58,12 +60,7 @@ typedef struct CHAT_S
     int CHAT_ID;
 }              CHAT_T;
 
-typedef struct CLIENT_MASSAGE
-{
-    GtkWidget *key_label;
-    GtkWidget *date_label;
 
-}              CLIENT_MESSAGE;
 
 struct edit_struct
 {
@@ -73,7 +70,7 @@ struct edit_struct
 };
 
 struct edit_struct *edit;
-CLIENT_MESSAGE *choosen_one;
+
 
 extern char* USER_LOGIN;
 extern char *OPENED_DIALOG;
@@ -149,4 +146,9 @@ void select_chat(GtkWidget *button, gpointer data);
 char* mx_get_client_date();
 void mx_write_file(int sockfd);
 void mx_send_file(int sockfd, char* filename);
+void edit_func(GtkWidget *button, gpointer data);
+
+
+void mx_fill_message_file_list_box(CHAT_T **chat, char *login, char *sender, char* message, char *date);
+void add_new_message_file(MESSAGE_T **message, char *text, char *sender, CHAT_T **chat);
 #endif

@@ -7,18 +7,19 @@ void logout(GtkWidget *button, gpointer data)
 }
  void edit_message(GtkWidget *btn, gpointer data)
  {
-     if (choosen_one->key_label != NULL) {
-        gtk_entry_set_text(GTK_ENTRY(data), gtk_button_get_label(GTK_BUTTON(choosen_one->key_label)));
+     if (ACTIVE_MESSAGE->key_label != NULL) {
+        gtk_entry_set_text(GTK_ENTRY(data), gtk_button_get_label(GTK_BUTTON(ACTIVE_MESSAGE->key_label)));
 
      }
  }
 
  void delete_message(GtkWidget *btn, gpointer data)
  {
-    gtk_widget_destroy(choosen_one->key_label);
-    choosen_one->key_label = NULL;
-    gtk_widget_hide(edit->edit_key);
-    gtk_widget_hide(edit->delete_key);
+
+  //  gtk_widget_destroy(choosen_one->key_label);
+   // choosen_one->key_label = NULL;
+   // gtk_widget_hide(edit->edit_key);
+   // gtk_widget_hide(edit->delete_key);
  }
 
 char *mx_take_name_from_path_file(char *temp) {
@@ -108,8 +109,6 @@ void main_menu(GtkWidget *login_window) {
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 
-    choosen_one = malloc(sizeof(CLIENT_MESSAGE));
-    choosen_one->key_label = NULL;
 
 
 
