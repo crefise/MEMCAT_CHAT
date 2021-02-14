@@ -1,10 +1,5 @@
 #include "../inc/header.h"
 
-void logout(GtkWidget *button, gpointer data)
-{
-    gtk_widget_hide(window);
-    gtk_widget_show_all(login_window);
-}
  void edit_message(GtkWidget *btn, gpointer data)
  {
      if (ACTIVE_MESSAGE != NULL) {
@@ -313,7 +308,7 @@ void main_menu(GtkWidget *login_window) {
         /* Проверка сигналов */
     g_signal_connect(input_key, "clicked", G_CALLBACK (mx_send_message), input_str);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL); // Сигнал для завершения преложения
-    g_signal_connect(setting_key, "clicked", G_CALLBACK (logout), NULL);
+    g_signal_connect(setting_key, "clicked", G_CALLBACK (gtk_main_quit), NULL);
 
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
