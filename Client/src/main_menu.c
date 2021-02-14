@@ -95,6 +95,9 @@ void main_menu(GtkWidget *login_window) {
     GtkWidget* setting_key;                         // Кнопка настроек
     GtkWidget* home_key_IMG;                        // Картинка для кнопки
     GtkWidget* settings_key_IMG;                    // Картинка для кнопки настроек
+    GtkWidget* edit_key_IMG;
+    GtkWidget* delete_key_IMG;
+    GtkWidget* open_key_IMG;
     
     GtkWidget* main_menu_box;                       // Бокс в котором хранятся реконект и основное меню
 
@@ -153,9 +156,9 @@ void main_menu(GtkWidget *login_window) {
     setting_str  = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     setting_key = gtk_button_new();
 
-    edit->edit_key = gtk_button_new_with_label("Edit");
-    edit->delete_key = gtk_button_new_with_label("Delete");
-    edit->open_key = gtk_button_new_with_label("Open");
+    edit->edit_key = gtk_button_new();
+    edit->delete_key = gtk_button_new();
+    edit->open_key = gtk_button_new();
 
 
 
@@ -167,6 +170,10 @@ void main_menu(GtkWidget *login_window) {
         /*  Загрузка медиа */
     settings_key_IMG = gtk_image_new_from_file ("Client/img/setting_img.png");
     home_key_IMG = gtk_image_new_from_file ("Client/img/home_img.png");
+    edit_key_IMG = gtk_image_new_from_file ("Client/img/edit_img.png");
+    delete_key_IMG = gtk_image_new_from_file ("Client/img/delete_img.png");
+    open_key_IMG = gtk_image_new_from_file ("Client/img/open_img.png");
+
     
     send_message_button_image = gtk_image_new_from_file ("Client/img/send_img.png");
     search_key_image = gtk_image_new_from_file ("Client/img/search_img.png");
@@ -190,6 +197,9 @@ void main_menu(GtkWidget *login_window) {
 
     gtk_widget_set_name(GTK_WIDGET(setting_str), "setting_str");
     gtk_widget_set_name(GTK_WIDGET(setting_key), "main_menu_key");
+    gtk_widget_set_name(GTK_WIDGET(edit->edit_key), "main_menu_key");
+    gtk_widget_set_name(GTK_WIDGET(edit->open_key), "main_menu_key");
+    gtk_widget_set_name(GTK_WIDGET(edit->delete_key), "main_menu_key");
 
 
 
@@ -270,6 +280,9 @@ void main_menu(GtkWidget *login_window) {
     gtk_container_add(GTK_CONTAINER(search_key), search_key_image);
     gtk_container_add(GTK_CONTAINER(FAVORITE_CHAT->chat_button), home_key_IMG);
     gtk_container_add(GTK_CONTAINER(setting_key), settings_key_IMG);
+    gtk_container_add(GTK_CONTAINER(edit->edit_key), edit_key_IMG);
+    gtk_container_add(GTK_CONTAINER(edit->delete_key), delete_key_IMG);
+    gtk_container_add(GTK_CONTAINER(edit->open_key), open_key_IMG);
     gtk_container_add(GTK_CONTAINER(send_file_key),send_file_button_image);
    
         /* (END)Containing */
