@@ -241,3 +241,20 @@ button
     border-radius: 4px;
     padding: 10px;
 }
+
+message_file_interlocutor {
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+}
+message_file_my {
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+}

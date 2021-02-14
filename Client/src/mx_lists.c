@@ -74,6 +74,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
         (*message)->sender = strdup(sender);
         (*message)->next = NULL;
          (*message)->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+         (*message)->type = 'm';
         //(*message)->key_label = gtk_label_new(text);
         set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0) {

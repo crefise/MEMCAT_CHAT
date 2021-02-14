@@ -395,7 +395,7 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
 
 void add_file_to_CHAT(int chat_id, int sender_id, char* filename) {
    char* date_time = get_server_date();
-   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', '%s', '%s');", chat_id, sender_id, filename, date_time, "file");
+   char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', 'file');", chat_id, sender_id, filename, date_time);
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
@@ -471,7 +471,7 @@ char** get_messages_from_CHAT(int chat_id) {
    messages[messages_c] = NULL;
 
    char* statement = sqlite3_mprintf(
-   "SELECT MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE FROM CHAT WHERE CHAT_ID=%i ORDER BY MESSAGE_ID", 
+   "SELECT MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE, TYPE FROM CHAT WHERE CHAT_ID=%i ORDER BY MESSAGE_ID", 
    chat_id);
 
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
@@ -487,8 +487,9 @@ char** get_messages_from_CHAT(int chat_id) {
       int author_id = atoi((char*)sqlite3_column_text(result, 1));
       char* date_time = (char*)sqlite3_column_text(result, 2);
       char* message = (char*)sqlite3_column_text(result, 3);
+      char* type = (char*)sqlite3_column_text(result, 4);
 
-      char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
+      char* temp = sqlite3_mprintf("%s/%i/%s/%i/%s/%s",type , chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
 
       messages[i] = "";
       messages[i] = concat(messages[i], temp);
@@ -600,12 +601,12 @@ void get_all_chats_from_CHATS_CONSOLE() {
 void get_all_messages_from_CHAT_CONSOLE() {
    sqlite3_stmt *result;
 
-   char* statement = sqlite3_mprintf("SELECT CHAT_ID, MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE FROM CHAT");
+   char* statement = sqlite3_mprintf("SELECT CHAT_ID, MESSAGE_ID, AUTHOR_ID, DATE_TIME, MESSAGE, TYPE, REFERENCE_FILE FROM CHAT");
 
    int rc = sqlite3_prepare_v2(data_base, statement, -1, &result, 0);    
    if (rc != SQLITE_OK) {
       set_console_color(RED);
-      //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
+      fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(data_base));
       set_console_color(NORMAL);
       sqlite3_close(data_base);
    }
@@ -616,9 +617,11 @@ void get_all_messages_from_CHAT_CONSOLE() {
       int author_id = atoi((char*)sqlite3_column_text(result, 2));
       char* date_time = (char*)sqlite3_column_text(result, 3);
       char* message = (char*)sqlite3_column_text(result, 4);
+      char* type = (char*)sqlite3_column_text(result, 5);
+      char* ref = (char*)sqlite3_column_text(result, 6);
 
-      char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message);
-
+      char* temp = sqlite3_mprintf("%i/%s/%i/%s/%s/%s/%s", chat_id, get_login_from_USERS(author_id), message_id, date_time, message, type, ref);
+      mx_printerrln(temp);
       sqlite3_free(temp);
    }
    

@@ -45,10 +45,8 @@ void mx_download_message_in_chat(CHAT_T *chat) {
                 mx_printerrln("CLOSE CONNECTION");
             }
             mx_printerrln(buffer2);
-            mx_printerrln("begin...");
             mx_load_dowloaded_messages(buffer2, chat);
             mx_strdel(&buffer2);
-            mx_printerrln("end...");
         }
     }
 
