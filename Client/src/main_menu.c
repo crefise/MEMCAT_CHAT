@@ -21,6 +21,7 @@ void logout(GtkWidget *button, gpointer data)
 
     gtk_widget_hide(edit->edit_key);
     gtk_widget_hide(edit->delete_key);
+    gtk_widget_hide(edit->open_key);
 
     ACTIVE_MESSAGE = NULL;
     mx_printerrln("Deleting okay...");
