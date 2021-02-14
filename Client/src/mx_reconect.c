@@ -48,5 +48,9 @@ void mx_reconect() {
     else {
         gtk_widget_show_all(mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->message_box);
     }
+    gtk_widget_hide(edit->edit_key);
+    gtk_widget_hide(edit->delete_key);
+    gtk_widget_hide(edit->open_key);
+    ACTIVE_MESSAGE = NULL;
     return;
 }

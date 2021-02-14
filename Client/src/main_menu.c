@@ -287,7 +287,7 @@ void main_menu(GtkWidget *login_window) {
    for(int i = 0; mx_get_index_chat(MY_CHATS, i) != NULL; i++) 
         gtk_container_add(GTK_CONTAINER(CONTAINER), mx_get_index_chat(MY_CHATS, i)->message_box); 
           // gtk_widget_set_name(GTK_WIDGET(CONTAINER), "scrool_massages");
-    
+    gtk_container_add(GTK_CONTAINER(CONTAINER), FAVORITE_CHAT->message_box); 
     gtk_container_add(GTK_CONTAINER(scrool_massages), CONTAINER); 
     gtk_container_add(GTK_CONTAINER(scrool_chats), chats_list_box); // Загружаем чат(все сообщения)
     gtk_container_add(GTK_CONTAINER(window), main_menu_box);
@@ -317,7 +317,7 @@ void main_menu(GtkWidget *login_window) {
 
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
-     g_signal_connect(G_OBJECT(edit->open_key), "clicked", G_CALLBACK(mx_onen_file), NULL);
+    g_signal_connect(G_OBJECT(edit->open_key), "clicked", G_CALLBACK(mx_onen_file), NULL);
     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);

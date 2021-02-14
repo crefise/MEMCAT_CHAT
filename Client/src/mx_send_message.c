@@ -32,6 +32,7 @@ void mx_send_message(GtkWidget *button, gpointer data) {
     if(text && strlen(text) > 0) {
         play_music();
         char *date = mx_get_client_date();
+        mx_printerrln("TEEST?");
         mx_fill_message_list_box(&used_chat,OPENED_DIALOG, USER_LOGIN, text, date);
         gtk_entry_set_text(GTK_ENTRY(input_str), "");
         if (strcmp(FAVORITE_CHAT->name_chat, used_chat->name_chat) != 0) {
