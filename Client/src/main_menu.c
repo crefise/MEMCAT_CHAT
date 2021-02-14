@@ -151,6 +151,7 @@ void main_menu(GtkWidget *login_window) {
 
     edit->edit_key = gtk_button_new_with_label("Edit");
     edit->delete_key = gtk_button_new_with_label("Delete");
+    edit->open_key = gtk_button_new_with_label("Open");
 
 
 
@@ -237,6 +238,7 @@ void main_menu(GtkWidget *login_window) {
     gtk_box_pack_start(GTK_BOX(setting_str), setting_key, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), edit->edit_key, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), edit->delete_key, FALSE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(setting_str), edit->open_key, FALSE, TRUE, 5);
 
     for (int i = 0; mx_get_index_chat(MY_CHATS,i) != NULL; i++) {
         gtk_box_pack_start(GTK_BOX(chats_list_box), mx_get_index_chat(MY_CHATS,i)->chat_button, FALSE, FALSE, 1); // Пакуем все чаты
@@ -273,6 +275,7 @@ void main_menu(GtkWidget *login_window) {
     gtk_widget_hide(edit->edit_key);
     gtk_widget_hide(edit->delete_key);
     gtk_widget_hide(reconnect_widget);
+    gtk_widget_hide(edit->open_key);
 
         /* Проверка сигналов */
     g_signal_connect(input_key, "clicked", G_CALLBACK (mx_send_message), input_str);
