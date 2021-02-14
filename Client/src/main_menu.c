@@ -7,9 +7,8 @@ void logout(GtkWidget *button, gpointer data)
 }
  void edit_message(GtkWidget *btn, gpointer data)
  {
-     if (ACTIVE_MESSAGE->key_label != NULL) {
+     if (ACTIVE_MESSAGE != NULL) {
         gtk_entry_set_text(GTK_ENTRY(data), gtk_button_get_label(GTK_BUTTON(ACTIVE_MESSAGE->key_label)));
-        ACTIVE_MESSAGE = NULL;
      }
 
  }
@@ -18,9 +17,13 @@ void logout(GtkWidget *button, gpointer data)
  {
 
     gtk_widget_destroy(ACTIVE_MESSAGE->key_label);
-    ACTIVE_MESSAGE->key_label = NULL;
+    //gtk_widget_destroy(ACTIVE_MESSAGE->data_label);
+
     gtk_widget_hide(edit->edit_key);
     gtk_widget_hide(edit->delete_key);
+
+    ACTIVE_MESSAGE = NULL;
+    mx_printerrln("Deleting okay...");
  }
 
 char *mx_take_name_from_path_file(char *temp) {

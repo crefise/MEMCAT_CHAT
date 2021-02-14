@@ -55,13 +55,18 @@ else
     gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), mx_take_last_message(chat->messages)->key_label, FALSE, FALSE, 5);   
     
 
-    GtkWidget *date_label = gtk_label_new(date);
-    gtk_widget_set_name(date_label, "date_label");
+    chat->messages->data_label = gtk_label_new(date);
+    gtk_widget_set_name(chat->messages->data_label, "date_label");
+
     if (strcmp(login, USER_LOGIN) == 0)
-        gtk_widget_set_halign(date_label,GTK_ALIGN_END);
+        gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_END);
     else 
-        gtk_widget_set_halign(date_label,GTK_ALIGN_START);
-    gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), date_label, FALSE, FALSE, 1);
+        gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_START);
+    gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), chat->messages->data_label, FALSE, FALSE, 1);
+
+
+
+
 
     scrolling();
 

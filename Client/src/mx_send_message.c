@@ -13,7 +13,7 @@ void mx_send_message(GtkWidget *button, gpointer data) {
         gtk_entry_set_text(GTK_ENTRY(data), "");
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
-        ACTIVE_MESSAGE->key_label = NULL;
+        ACTIVE_MESSAGE = NULL;
         return;
     }
      mx_printerrln("HERE...");
