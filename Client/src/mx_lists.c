@@ -2,7 +2,7 @@
 
 void edit_func(GtkWidget *button, gpointer data)
 {   
-    if (ACTIVE_MESSAGE->key_label == NULL) {
+    if (ACTIVE_MESSAGE == NULL) {
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
@@ -14,7 +14,6 @@ void edit_func(GtkWidget *button, gpointer data)
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
         gtk_widget_set_name(button, "message_my");
-        ACTIVE_MESSAGE->key_label = NULL;
     }
 }
 
@@ -157,11 +156,6 @@ MESSAGE_T* mx_get_index_message(MESSAGE_T *message, int index){
     }
    // write(2, "Index error(mx_get_index_message())\n", 36);
     return NULL;
-}
-
-void mx_pop_message_from_message(MESSAGE_T **message, MESSAGE_T* message) {
-    MESSAGE_T *temp = *message;
-    while((temp != NULL) || temp.)
 }
 
 void select_chat_on_off(CHAT_T *chat, char mode) {  // Включение и выключения подсветки для чата

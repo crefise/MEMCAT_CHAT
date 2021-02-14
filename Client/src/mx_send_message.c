@@ -5,7 +5,8 @@ static void play_music() {
 }
 
 void mx_send_message(GtkWidget *button, gpointer data) {
-    if (ACTIVE_MESSAGE->key_label != NULL) {
+    mx_printerrln("HERE...");
+    if (ACTIVE_MESSAGE != NULL) {
         gtk_button_set_label(GTK_BUTTON(ACTIVE_MESSAGE->key_label), gtk_entry_get_text(GTK_ENTRY(data)));
         mx_printerrln(ACTIVE_MESSAGE->message_text);
         gtk_widget_set_name(ACTIVE_MESSAGE->key_label, "message_my");
@@ -15,6 +16,7 @@ void mx_send_message(GtkWidget *button, gpointer data) {
         ACTIVE_MESSAGE->key_label = NULL;
         return;
     }
+     mx_printerrln("HERE...");
     char *buffer = NULL;
     //struct message_struct *messages = input;
     GtkWidget *input_str = data;

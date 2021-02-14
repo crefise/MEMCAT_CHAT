@@ -9,17 +9,18 @@ void logout(GtkWidget *button, gpointer data)
  {
      if (ACTIVE_MESSAGE->key_label != NULL) {
         gtk_entry_set_text(GTK_ENTRY(data), gtk_button_get_label(GTK_BUTTON(ACTIVE_MESSAGE->key_label)));
-
+        ACTIVE_MESSAGE = NULL;
      }
+
  }
 
  void delete_message(GtkWidget *btn, gpointer data)
  {
 
-  //  gtk_widget_destroy(choosen_one->key_label);
-   // choosen_one->key_label = NULL;
-   // gtk_widget_hide(edit->edit_key);
-   // gtk_widget_hide(edit->delete_key);
+    gtk_widget_destroy(ACTIVE_MESSAGE->key_label);
+    ACTIVE_MESSAGE->key_label = NULL;
+    gtk_widget_hide(edit->edit_key);
+    gtk_widget_hide(edit->delete_key);
  }
 
 char *mx_take_name_from_path_file(char *temp) {
@@ -65,8 +66,7 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
     gtk_widget_destroy (dialog);
 }
 
-
-
+MESSAGE_T* ACTIVE_MESSAGE = NULL;
 void main_menu(GtkWidget *login_window) {
    
     GtkWidget *input_box;                           // Бокс для строки сообщений
@@ -282,7 +282,7 @@ void main_menu(GtkWidget *login_window) {
     for(int i =0; mx_get_index_chat(MY_CHATS,i); i++)
         g_signal_connect(G_OBJECT(mx_get_index_chat(MY_CHATS,i)->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)mx_get_index_chat(MY_CHATS,i));
     
-     g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
+    g_signal_connect(G_OBJECT(send_file_key), "clicked", G_CALLBACK(mx_select_file_to_send), (gpointer)window);
     g_signal_connect(G_OBJECT(FAVORITE_CHAT->chat_button), "clicked", G_CALLBACK(select_chat), (gpointer)FAVORITE_CHAT);    
     g_signal_connect(G_OBJECT(search_key), "clicked", G_CALLBACK(mx_search_dialog), (gpointer)search_str);
     g_signal_connect(G_OBJECT(edit->edit_key), "clicked", G_CALLBACK(edit_message), (gpointer)input_str);
