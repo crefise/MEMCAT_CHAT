@@ -54,7 +54,7 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
 
         char* filename = mx_take_name_from_path_file(filepath);
 
-
+    if (strcmp(OPENED_DIALOG, FAVORITE_CHAT_DEFINE) != 0) {
         char* will_send = sqlite3_mprintf("find%s/%s/", mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat, filename);
         /*
         char* will_send = mx_strnew(4+1+strlen(mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat)+strlen(filename));
@@ -67,9 +67,9 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
         if (send(sock, will_send, strlen(will_send), 0) == -1)
             return;
         usleep(1000);
-        mx_send_file(sock, filepath);
-        //mx_strdel(&will_send);
         sqlite3_free(will_send);
+    }
+        mx_send_file(sock, filepath);
         g_free (filepath);
     }
 

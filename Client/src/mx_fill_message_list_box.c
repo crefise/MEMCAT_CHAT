@@ -18,7 +18,7 @@ void mx_fill_message_file_list_box(CHAT_T **chat, char *login, char *sender, cha
 
     
     add_new_message_file(&(*chat)->messages, message, sender, chat, date);
-    gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), mx_take_last_message((*chat)->messages)->key_label, FALSE, FALSE, 5);
+   // gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), mx_take_last_message((*chat)->messages)->key_label, FALSE, FALSE, 5);
 
 
    
