@@ -3,7 +3,7 @@
 void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
     char *temp_1; char type;
     if (buffer[0] == 'm') {
-        temp_1 = mx_strncpy(temp_1,  &buffer[8], strlen(buffer) - 8); // Обрезаем file
+        temp_1 = mx_strncpy(temp_1,  &buffer[8], strlen(buffer) - 8); // Обрезаем message
         type = 'm';
     }
     else {
@@ -49,14 +49,17 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
 
 if (type == 'm')
     add_new_message(&(chat->messages), message, login, &chat, date);
-else
+else {
     add_new_message_file(&(chat->messages), message, login, &chat, date);
+    mx_printerrln("trying_to_read_file");
+    mx_write_file(sock, message, 0);
+    mx_printerrln("We took file succsess!");
+}
 
-    gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), mx_take_last_message(chat->messages)->key_label, FALSE, FALSE, 5);   
+   // gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), mx_take_last_message(chat->messages)->key_label, FALSE, FALSE, 5);   
     
 
 
-    gtk_widget_set_name(chat->messages->data_label, "date_label");
 
     if (strcmp(login, USER_LOGIN) == 0)
         gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_END);
@@ -76,7 +79,6 @@ else
     mx_strdel(&message_id);
     mx_strdel(&date);
     mx_strdel(&message);
-    
 }
 
 /*

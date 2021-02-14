@@ -76,7 +76,7 @@ int get_max_chat_id_from_CHATS();
 void double_free_for_CHATS(char** array);
 
 void add_message_to_CHAT(int chat_id, int sender_id, char* message);
-void add_file_to_CHAT(int chat_id, int sender_id, char* filename);
+int add_file_to_CHAT(int chat_id, int sender_id, char* filename);
 void delete_message_from_CHAT(int message_id);
 void update_message_in_CHAT(int message_id, char* message);
 void update_reference_file_in_CHAT(int message_id, char* reference);
@@ -116,7 +116,7 @@ void print_emoji(char* emoji);
 
 
 char* mx_ps_reconnect(char * buffer, int client_socket);
-
+char* get_extension_from_filename(char *buff);
 #endif
 
 

@@ -393,12 +393,13 @@ void add_message_to_CHAT(int chat_id, int sender_id, char* message) {
    sqlite3_free(statement);
 }
 
-void add_file_to_CHAT(int chat_id, int sender_id, char* filename) {
+int add_file_to_CHAT(int chat_id, int sender_id, char* filename) {
    char* date_time = get_server_date();
    char* statement = sqlite3_mprintf("INSERT INTO CHAT(CHAT_ID, AUTHOR_ID, MESSAGE, DATE_TIME, TYPE) VALUES(%i, %i, '%s', '%s', 'file');", chat_id, sender_id, filename, date_time);
    exec_db(statement);
    free(date_time);
    sqlite3_free(statement);
+   return get_max_message_id_from_CHAT(chat_id);
 }
 
 bool check_user_in_CHAT(int chat_id, char* user) {

@@ -100,6 +100,11 @@ void send_messages_to_client(char** messages, int client_socket) {
             if (send(client_socket, temp2, strlen(temp2), 0) == 0 ) {
                 mx_printerrln("Error");
             }
+            if (temp2[0] == 'f') {
+                 mx_printerrln("try sending to client!");
+                mx_send_file(client_socket, "1.png");
+                mx_printerrln("sending okay!");
+            }
             sqlite3_free(temp2);
             usleep(10000);
         }
@@ -200,12 +205,52 @@ void ps_parse_file(char *buffer, int client_socket, char* login_my) {
     char* loogin_second = mx_strnew(counter);
     loogin_second = strncpy(loogin_second, temp, counter);
 
-    char *filename = strncpy(filename, &temp[strlen(loogin_second)+1] ,strlen(temp) - strlen(loogin_second) - 1);
+    char *filename_temp = mx_strnew(strlen(temp) - strlen(loogin_second) - 1);
+    filename_temp = strncpy(filename_temp, &temp[strlen(loogin_second)+1] ,strlen(temp) - strlen(loogin_second) - 1);
     mx_printerr("Login_second :"); mx_printerrln(loogin_second);
-    mx_printerr("filename :"); mx_printerrln(filename);
+    mx_printerr("filename :"); mx_printerrln(filename_temp);
 
-    add_file_to_CHAT(get_chat_id_from_CHATS(login_my, loogin_second), get_id_from_USERS(login_my), filename);
-    mx_write_file(client_socket, filename, get_chat_id_from_CHATS(login_my, loogin_second));
+    counter = 0;
+    for (int i = 0; filename_temp[i] != '/'; i++)
+        counter++;
+    char *filename = mx_strnew(counter);
+    filename = strncpy(filename, filename_temp, counter);
+    mx_printerr("filename normal :"); mx_printerrln(filename);
+    int ID = add_file_to_CHAT(get_chat_id_from_CHATS(login_my, loogin_second), get_id_from_USERS(login_my), filename);
+
+
+   int temo = get_socket_from_ONLINE_USERS(loogin_second);
+    char *extension = get_extension_from_filename(filename);
+    char *new_filename = i_to_s(ID);
+    new_filename = concat(new_filename, extension);
+    mx_write_file(client_socket, new_filename, get_chat_id_from_CHATS(login_my, loogin_second));
+    mx_printerrln("mx_write_file_okay");
+/*
+       int send_sock = get_socket_from_ONLINE_USERS(loogin_second);
+        if (send_sock != 1) { // if ONLINE SENDING TO HIM
+
+        mx_printerr("IF OKAY!");
+        return;
+    } 
+    */
+
+    char *buff = strdup("file/");
+    buff = concat(buff, login_my);
+    buff = concat(buff, "/");
+    buff = concat(buff, filename);
+
+    if (send(temo, buff, strlen(buff), 0) == -1) { // send data to server
+                mx_printerrln("ERROR SENDING MESSAGE\n");
+    } 
+    usleep(1000);
+    mx_printerr("will use ");
+    mx_printerrln(new_filename);
+    mx_printerr("File name that will be used.:");
+    mx_printerrln(new_filename);
+    mx_printerrln("trying send file online");
+    usleep(1000);
+    mx_send_file(temo, new_filename);
+    mx_printerrln("Sinding file to client succsess!");
 }
 
 
@@ -333,7 +378,7 @@ void *user_connect(void* sock) {
 
                        
                        
-
+                mx_strdel(&buffer);
                 exit = 0;
                 break;
             case -1: // ошибка сообщения

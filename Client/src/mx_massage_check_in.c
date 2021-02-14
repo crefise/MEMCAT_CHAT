@@ -11,7 +11,7 @@ void* mx_massage_check_in(void* socket) {
                 mx_reconect();
                 continue;
             }
-            if (buffer[0] == 'm') {
+            if (buffer[0] == 'm' || buffer[0] == 'f') {
                 mx_printerr("CHECK IN : ");
                 mx_printerrln(buffer);
                 mx_ps_message_that_in(buffer);

@@ -26,13 +26,13 @@ void logout(GtkWidget *button, gpointer data)
     mx_printerrln("Deleting okay...");
  }
 
-char *mx_take_name_from_path_file(char *temp) {
+char *mx_take_name_from_path_file(char *temp) { // das/dassda
     int counter = 0;
     for (int i = strlen(temp) - 1; temp[i] != '/'; i--) {
         counter++;
     }
     char *result = mx_strnew(counter);
-    result = strcpy(result, &temp[strlen(temp) - counter]);
+    result = strncpy(result, &temp[strlen(temp) - counter], counter);
     mx_printerrln("NAME : "); mx_printerrln(result);
     return result;
 } 
@@ -53,16 +53,22 @@ void mx_select_file_to_send(GtkWidget *button, gpointer window) {
 
         char* filename = mx_take_name_from_path_file(filepath);
 
-        char *will_send = ""; 
+
+        char* will_send = sqlite3_mprintf("find%s/%s/", mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat, filename);
+        /*
+        char* will_send = mx_strnew(4+1+strlen(mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat)+strlen(filename));
         will_send = concat(will_send, "find"); // findlogin/filename
         will_send = concat(will_send, mx_find_name_chat(MY_CHATS, OPENED_DIALOG)->name_chat);
         will_send = concat(will_send, "/");
         will_send = concat(will_send, filename);
+        */
+
         if (send(sock, will_send, strlen(will_send), 0) == -1)
             return;
-
+        usleep(1000);
         mx_send_file(sock, filepath);
-        mx_strdel(&will_send);
+        //mx_strdel(&will_send);
+        sqlite3_free(will_send);
         g_free (filepath);
     }
 

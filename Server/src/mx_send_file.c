@@ -1,7 +1,8 @@
 #include "../inc/header.h"
 
 void mx_send_file(int sock, char* filename) {
-    char* path = sqlite3_mprintf("databases/files/%s", filename);
+    char* path = sqlite3_mprintf("Server/databases/files/%s", filename);
+    mx_printerr("PATH USED IN MX_SEND_FILE "); mx_printerrln(path);
     FILE *picture;
     picture = fopen(path, "r");
 
@@ -16,6 +17,6 @@ void mx_send_file(int sock, char* filename) {
         write(sock, send_buffer, sizeof(send_buffer));
         bzero(send_buffer, sizeof(send_buffer));
     }
-
+mx_printerrln("GERE SADLKaSs ");
     sqlite3_free(path);
 }

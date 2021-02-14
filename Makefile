@@ -16,7 +16,7 @@ comp_s:
 	@clang $(SERVER_FILES) -l sqlite3 -pthread -o server_run
 
 comp_c:
-	@clang $(CLIENT_FILES) -o client_run $(CLIENT_COMPILE_GLOBAL)
+	@clang $(CLIENT_FILES) -l sqlite3 -o client_run $(CLIENT_COMPILE_GLOBAL)
 
 compile_all: comp_s comp_c
 

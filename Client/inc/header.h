@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include "gtk/gtk.h"
 #include <sys/stat.h>
+#include <sqlite3.h>
 
 /*  (END)LIB INCLUDING */
 
@@ -144,7 +145,7 @@ void mx_send_message(GtkWidget *button, gpointer data);
 void* mx_massage_check_in(void* socket);
 void select_chat(GtkWidget *button, gpointer data);
 char* mx_get_client_date();
-void mx_write_file(int sockfd);
+void mx_write_file(int sock, char* filename, int chat_id);
 void mx_send_file(int sockfd, char* filename);
 void edit_func(GtkWidget *button, gpointer data);
 

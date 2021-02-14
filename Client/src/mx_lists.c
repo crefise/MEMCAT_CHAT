@@ -68,15 +68,15 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
 
     if (!text || !sender)
         return;
-    if (*message == NULL) {
+    if  (*message == NULL) {
         (*message) = malloc(sizeof(MESSAGE_T));
         (*message)->message_text = strdup(text);
         (*message)->sender = strdup(sender);
         (*message)->next = NULL;
-         (*message)->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-         (*message)->type = 'm';
+        (*message)->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        (*message)->type = 'm';
         //(*message)->key_label = gtk_label_new(text);
-         (*message)->data_label = gtk_label_new(date);
+        (*message)->data_label = gtk_label_new(date);
         set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_halign((*message)->key_label,GTK_ALIGN_END);

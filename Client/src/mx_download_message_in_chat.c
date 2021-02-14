@@ -44,6 +44,10 @@ void mx_download_message_in_chat(CHAT_T *chat) {
             if (recv(sock, &buffer2[0], 256, 0) == 0) {
                 mx_printerrln("CLOSE CONNECTION");
             }
+            if (strlen(buffer2) <= 1) {
+                i--;
+                continue;
+            }
             mx_printerrln(buffer2);
             mx_load_dowloaded_messages(buffer2, chat);
             mx_strdel(&buffer2);
