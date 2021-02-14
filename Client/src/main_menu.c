@@ -238,8 +238,9 @@ void main_menu(GtkWidget *login_window) {
     gtk_box_pack_start(GTK_BOX(search_box), search_str, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_box), search_key, FALSE, FALSE, 0);
 
-    gtk_box_pack_start(GTK_BOX(setting_str), FAVORITE_CHAT->chat_button, FALSE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(setting_str), setting_key, FALSE, TRUE, 5);
+    gtk_box_pack_end(GTK_BOX(setting_str), setting_key, FALSE, TRUE, 5);
+    gtk_box_pack_end(GTK_BOX(setting_str), FAVORITE_CHAT->chat_button, FALSE, TRUE, 5);
+    
     gtk_box_pack_start(GTK_BOX(setting_str), edit->edit_key, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), edit->delete_key, FALSE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(setting_str), edit->open_key, FALSE, TRUE, 5);
