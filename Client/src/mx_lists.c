@@ -6,6 +6,7 @@ void edit_func(GtkWidget *button, gpointer data)
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
+        gtk_widget_show(edit->open_key);
         gtk_widget_set_name(button, "choosen_label");
         choosen_one->key_label = button;
     }
@@ -13,6 +14,7 @@ void edit_func(GtkWidget *button, gpointer data)
         ACTIVE_MESSAGE = NULL;
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
+        gtk_widget_hide(edit->open_key);
         gtk_widget_set_name(button, "message_my");
         choosen_one->key_label = NULL;
     }

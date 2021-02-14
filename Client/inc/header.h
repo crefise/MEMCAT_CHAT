@@ -67,8 +67,9 @@ typedef struct CLIENT_MASSAGE
 
 struct edit_struct
 {
-    GtkWidget* edit_key;
-    GtkWidget* delete_key;
+    GtkWidget *edit_key;
+    GtkWidget *delete_key;
+    GtkWidget *open_key;
 };
 
 struct edit_struct *edit;
