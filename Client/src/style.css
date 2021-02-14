@@ -12,7 +12,7 @@ entry
     border-color: rgb(231, 223, 223);
     font-size:          15px;
     border-radius: 5px;
-    
+    color: rgb(231, 223, 223);
 
 
 }
@@ -240,6 +240,17 @@ button
     background: #212E37; 
     border-radius: 4px;
     padding: 10px;
+}
+
+#chosen_file
+{
+    border: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    background: #212E37;
 }
 
 message_file_interlocutor {

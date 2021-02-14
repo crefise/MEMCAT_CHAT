@@ -1,20 +1,33 @@
 #include "../inc/header.h"
 
 void edit_func(GtkWidget *button, gpointer data)
-{   
-    if (ACTIVE_MESSAGE == NULL) {
+{  
+    MESSAGE_T *temp = data;
+    if (ACTIVE_MESSAGE == NULL && temp->type == 'f') {
+        ACTIVE_MESSAGE = data;
+        gtk_widget_show(edit->delete_key);
+        gtk_widget_show(edit->open_key);
+        gtk_widget_set_name(button, "chosen_file");
+    }
+    else if (ACTIVE_MESSAGE == NULL && temp->type == 'm') {
         ACTIVE_MESSAGE = data;
         gtk_widget_show(edit->edit_key);
         gtk_widget_show(edit->delete_key);
-        gtk_widget_show(edit->open_key);
         gtk_widget_set_name(button, "choosen_label");
     }
     else if (ACTIVE_MESSAGE->key_label == button){
-        ACTIVE_MESSAGE = NULL;
         gtk_widget_hide(edit->edit_key);
         gtk_widget_hide(edit->delete_key);
         gtk_widget_hide(edit->open_key);
-        gtk_widget_set_name(button, "message_my");
+        if (ACTIVE_MESSAGE->type == 'f') {
+            if (strcmp(ACTIVE_MESSAGE->sender, "USER_LOGIN") == 0)
+                gtk_widget_set_name(button, "message_file_my");
+            else 
+                gtk_widget_set_name(button, "message_file_interlocutor");
+        }
+        else 
+            gtk_widget_set_name(button, "message_my");
+        ACTIVE_MESSAGE = NULL;
     }
 }
 
@@ -129,6 +142,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
         set_label(&temp, text, sender);
         temp->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
         temp->data_label = gtk_label_new(date);
+        temp->type = 'm';
         if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_halign(temp->key_label,GTK_ALIGN_END);
             gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_END);

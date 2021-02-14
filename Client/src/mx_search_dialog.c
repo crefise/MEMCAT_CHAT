@@ -48,5 +48,8 @@ void mx_search_dialog(GtkWidget *button, gpointer data) {
     mx_strdel(&text);
 
   }
-      PAUSE = 0;
+    PAUSE = 0;
+    gtk_widget_hide(edit->edit_key);
+    gtk_widget_hide(edit->delete_key);
+    gtk_widget_hide(edit->open_key);
 }
