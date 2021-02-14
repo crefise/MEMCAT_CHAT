@@ -48,21 +48,21 @@ void mx_load_dowloaded_messages (char *buffer, CHAT_T *chat) {
         return;
 
 if (type == 'm')
-    add_new_message(&(chat->messages), message, login, &chat);
+    add_new_message(&(chat->messages), message, login, &chat, date);
 else
-    add_new_message_file(&(chat->messages), message, login, &chat);
+    add_new_message_file(&(chat->messages), message, login, &chat, date);
 
     gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), mx_take_last_message(chat->messages)->key_label, FALSE, FALSE, 5);   
     
 
-    chat->messages->data_label = gtk_label_new(date);
+
     gtk_widget_set_name(chat->messages->data_label, "date_label");
 
     if (strcmp(login, USER_LOGIN) == 0)
         gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_END);
     else 
         gtk_widget_set_halign(chat->messages->data_label,GTK_ALIGN_START);
-    gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), chat->messages->data_label, FALSE, FALSE, 1);
+    //gtk_box_pack_start(GTK_BOX(chat->messages->message_text_box), chat->messages->data_label, FALSE, FALSE, 1);
 
 
 

@@ -8,7 +8,6 @@ void edit_func(GtkWidget *button, gpointer data)
         gtk_widget_show(edit->delete_key);
         gtk_widget_show(edit->open_key);
         gtk_widget_set_name(button, "choosen_label");
-        ACTIVE_MESSAGE->key_label = button;
     }
     else if (ACTIVE_MESSAGE->key_label == button){
         ACTIVE_MESSAGE = NULL;
@@ -65,7 +64,7 @@ void set_label(MESSAGE_T **message, char *text, char *sender) {
 
         gtk_box_pack_start(GTK_BOX(temp->message_box), temp->message_text_box, FALSE, FALSE, 5);
         */
-void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **chat) {
+void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **chat, char *date) {
 
     if (!text || !sender)
         return;
@@ -77,6 +76,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
          (*message)->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
          (*message)->type = 'm';
         //(*message)->key_label = gtk_label_new(text);
+         (*message)->data_label = gtk_label_new(date);
         set_label(message, text, sender);
         if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_halign((*message)->key_label,GTK_ALIGN_END);
@@ -94,7 +94,25 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
             gtk_widget_set_name(GTK_WIDGET((*message)->key_label), "message_interlocutor");
             gtk_widget_set_name(GTK_WIDGET((*message)->message_text_box), "text_box_interlocutor");
         }
+
+        gtk_widget_set_name((*message)->data_label, "date_label");
+        if (strcmp(sender, USER_LOGIN) == 0) {
+            #ifdef TEST 
+                mx_printerrln("we in my_message");
+            #endif
+            gtk_widget_set_halign((*message)->data_label,GTK_ALIGN_END);
+        }
+        else {
+            #ifdef TEST 
+                mx_printerrln("we in not my_message");
+            #endif
+            gtk_widget_set_halign((*message)->data_label,GTK_ALIGN_START);
+        }
+
+
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), (*message)->message_text_box, TRUE, TRUE, 20);
+        gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), mx_take_last_message((*chat)->messages)->key_label, FALSE, FALSE, 5);
+        gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), (*message)->data_label, FALSE, FALSE, 1);
         g_signal_connect(G_OBJECT((*message)->key_label), "clicked", G_CALLBACK(edit_func), (gpointer)(*message));
     } 
     else {
@@ -110,6 +128,7 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
         temp->sender = strdup(sender);
         set_label(&temp, text, sender);
         temp->message_text_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        temp->data_label = gtk_label_new(date);
         if (strcmp(sender, USER_LOGIN) == 0) {
             gtk_widget_set_halign(temp->key_label,GTK_ALIGN_END);
             gtk_widget_set_halign(temp->message_text_box,GTK_ALIGN_END);
@@ -128,7 +147,25 @@ void add_new_message(MESSAGE_T **message, char *text, char *sender, CHAT_T **cha
             gtk_widget_set_name(GTK_WIDGET(temp->key_label), "message_interlocutor");
             gtk_widget_set_name(GTK_WIDGET(temp->message_text_box), "text_box_interlocutor");
         }
+
+        gtk_widget_set_name(temp->data_label, "date_label");
+        if (strcmp(sender, USER_LOGIN) == 0) {
+            #ifdef TEST 
+                mx_printerrln("we in my_message");
+            #endif
+            gtk_widget_set_halign(temp->data_label,GTK_ALIGN_END);
+        }
+        else {
+            #ifdef TEST 
+                mx_printerrln("we in not my_message");
+            #endif
+            gtk_widget_set_halign(temp->data_label,GTK_ALIGN_START);
+        }
+
+
         gtk_box_pack_start(GTK_BOX((*chat)->message_box), temp->message_text_box, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), mx_take_last_message((*chat)->messages)->key_label, FALSE, FALSE, 5);
+        gtk_box_pack_start(GTK_BOX((*chat)->messages->message_text_box), temp->data_label, FALSE, FALSE, 1);
         g_signal_connect(G_OBJECT((temp)->key_label), "clicked", G_CALLBACK(edit_func), (gpointer)(temp));
     }
     scrolling();

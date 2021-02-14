@@ -17,7 +17,7 @@ void logout(GtkWidget *button, gpointer data)
  {
 
     gtk_widget_destroy(ACTIVE_MESSAGE->key_label);
-    //gtk_widget_destroy(ACTIVE_MESSAGE->data_label);
+    gtk_widget_destroy(ACTIVE_MESSAGE->data_label);
 
     gtk_widget_hide(edit->edit_key);
     gtk_widget_hide(edit->delete_key);
